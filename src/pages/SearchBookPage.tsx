@@ -40,13 +40,14 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const SearchText = styled.span`
+const SearchText = styled.div`
   font-weight: 500;
   font-size: 18px;
   line-height: 21px;
   color: rgb(48, 53, 56);
   margin: 10px 0px;
   overflow-wrap: break-word;
+  margin: 10px 0;
 `;
 
 const ResultList = styled.div`

@@ -60,6 +60,7 @@ const BookWrapper = styled.div`
   gap: 15px;
 
   & > img {
+    flex: 0 0 100px;
     width: 100px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   }
