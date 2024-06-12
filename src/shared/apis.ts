@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { parseBookXml } from './utils';
 
 const api = axios.create({
   baseURL: '',
@@ -28,6 +29,27 @@ export const searchBooks = (
       if (res.status === 200) {
         console.log(res.data.items);
         return res.data.items;
+      }
+    })
+    .catch();
+};
+
+/**
+ * isbn으로 책 검색
+ * @param {number} isbn
+ * @returns
+ */
+export const searchBookByIsbn = (isbn: number) => {
+  return api
+    .get('/search-book-by-isbn', {
+      params: { d_isbn: isbn },
+    })
+    .then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        console.log(res.data);
+
+        return parseBookXml(res.data);
       }
     })
     .catch();

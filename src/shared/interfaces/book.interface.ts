@@ -3,8 +3,9 @@ export interface SearchBook {
   link: string;
   image: string;
   author: string;
-  discount: number;
+  discount?: number;
   description: string;
   publisher: string;
   isbn: number;
+  pubdate: string;
 }

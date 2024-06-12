@@ -14,6 +14,14 @@ export default defineConfig({
         secure: false,
         ws: true,
       },
+      '/search-book-by-isbn': {
+        target: 'https://openapi.naver.com',
+        changeOrigin: true,
+        rewrite: (path) =>
+          path.replace(/^\/search-book-by-isbn/, '/v1/search/book_adv.xml'),
+        secure: false,
+        ws: true,
+      },
     },
   },
 });
