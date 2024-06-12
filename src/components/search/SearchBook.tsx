@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SearchBook } from '../../shared/interfaces/book.interface';
 
-import { Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { textOverflowStyles } from '../../shared/styles/\bcommon';
 import { changedMoneyFormat } from '../../shared/utils';
 
@@ -24,14 +24,19 @@ const HighlightedText = (target: string, search: string) => {
 function SearchResultBook({ bookInfo }: SearchResultBookProps) {
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search');
+  const navigate = useNavigate();
+
+  const goToSearchBookDetail = () => {
+    navigate(`/book/${bookInfo.isbn}`);
+  };
 
   // TODO: 작가, 출판사 누르면 검색하게 연결
 
   return (
     <BookWrapper key={bookInfo.isbn}>
-      <img src={bookInfo.image} width={100} />
+      <img src={bookInfo.image} width={100} onClick={goToSearchBookDetail} />
       <BookInfoContainer>
-        <BookTitle lines={2}>
+        <BookTitle lines={2} onClick={goToSearchBookDetail}>
           {HighlightedText(bookInfo.title, search as string)}
         </BookTitle>
         <BookAuthor>
@@ -45,7 +50,9 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
           ))}
         </BookAuthor>
         <BookPublisher>{bookInfo.publisher}</BookPublisher>
-        <BookDesc lines={3}>{bookInfo.description}</BookDesc>
+        <BookDesc lines={3} onClick={goToSearchBookDetail}>
+          {bookInfo.description}
+        </BookDesc>
         <BookDisCount>{changedMoneyFormat(bookInfo.discount)}원</BookDisCount>
       </BookInfoContainer>
     </BookWrapper>
@@ -63,6 +70,7 @@ const BookWrapper = styled.div`
     flex: 0 0 100px;
     width: 100px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    cursor: pointer;
   }
 `;
 
@@ -84,6 +92,8 @@ const BookTitle = styled.div<TextOverflowStylesParams>`
   white-space: normal;
   color: black;
   ${(props) => textOverflowStyles(props.lines)};
+  cursor: pointer;
+  // TODO; 마우스 호버 밑줄 넣기
 
   & > strong {
     font-weight: bolder;
@@ -112,6 +122,7 @@ const BookDesc = styled.div<TextOverflowStylesParams>`
   max-height: calc(4.5em);
   line-height: 1.5em;
   margin: 6px 0;
+  cursor: pointer;
 `;
 
 const BookDisCount = styled.div`

@@ -13,6 +13,7 @@ function SearchBookPage() {
 
   useEffect(() => {
     if (search) {
+      // TODO: 리액트 쿼리로 변경
       apis.searchBooks(search).then((res) => {
         console.log(res);
         setSearchResult(res);
