@@ -1,10 +1,8 @@
 @import './shared/styles/_reset.css';
+@import './shared/styles/variables.css';
 @import './shared/styles/font.css';
 
 * {
-  /* TODO: Chakra design system 정의 전에 사용 */
-  --main-color: rgb(31, 140, 230);
-
   box-sizing: border-box;
   font-family: 'pretendard', sans-serif !important;
   word-break: keep-all;

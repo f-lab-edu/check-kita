@@ -128,7 +128,7 @@ const BookDesc = styled.div<TextOverflowStylesParams>`
 `;
 
 const BookDisCount = styled.div`
-  color: var(--main-color);
+  color: var(--brand-color);
   font-weight: bold;
 `;
 

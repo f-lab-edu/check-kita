@@ -4,10 +4,13 @@ import { SearchBook } from '../shared/interfaces/book.interface';
 import * as api from '../shared/apis';
 import styled from 'styled-components';
 import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
+import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import ModalAddBook from '../components/search/ModalAddBook';
 
 function SearchBookDetailPage() {
   const { bookIsbn } = useParams();
   const [bookInfo, setBookInfo] = useState<SearchBook>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     bookIsbn &&
@@ -60,7 +63,7 @@ function SearchBookDetailPage() {
             </DiscountText>
             <div>
               <button>구매하러 가기</button>
-              <button>저장</button>
+              <button onClick={onOpen}>저장</button>
             </div>
           </BookDiscountBox>
         </BookInfoBox>
@@ -71,6 +74,10 @@ function SearchBookDetailPage() {
         <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
         <p>{bookInfo?.description}</p>
       </BookInfoBottom>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalAddBook />
+      </Modal>
     </div>
   );
 }
