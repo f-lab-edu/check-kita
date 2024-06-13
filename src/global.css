@@ -1,1 +1,9 @@
 @import './shared/styles/_reset.css';
+@import './shared/styles/variables.css';
+@import './shared/styles/font.css';
+
+* {
+  box-sizing: border-box;
+  font-family: 'pretendard', sans-serif !important;
+  word-break: keep-all;
+}
