@@ -4,6 +4,10 @@ export const changedMoneyFormat = (number: number): string => {
   return new Intl.NumberFormat('ko-KR').format(number);
 };
 
+export const splitBookAuthor = (author: string): string[] => {
+  return author.split('^');
+};
+
 /**
  * 책 xml 파싱
  * @param bookXml 책 정보 xml

@@ -3,7 +3,7 @@ import { SearchBook } from '../../shared/interfaces/book.interface';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { textOverflowStyles } from '../../shared/styles/\bcommon';
-import { changedMoneyFormat } from '../../shared/utils';
+import { changedMoneyFormat, splitBookAuthor } from '../../shared/utils';
 
 interface SearchResultBookProps {
   bookInfo: SearchBook;
@@ -40,7 +40,7 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
           {HighlightedText(bookInfo.title, search as string)}
         </BookTitle>
         <BookAuthor>
-          {bookInfo.author.split('^').map((bookAuthor, index) => (
+          {splitBookAuthor(bookInfo.author).map((bookAuthor, index) => (
             <span key={index}>
               <span>{bookAuthor}</span>
               {index !== bookInfo.author.split('^').length - 1 && (
@@ -53,7 +53,9 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
         <BookDesc lines={3} onClick={goToSearchBookDetail}>
           {bookInfo.description}
         </BookDesc>
-        <BookDisCount>{changedMoneyFormat(bookInfo.discount)}원</BookDisCount>
+        {bookInfo.discount && (
+          <BookDisCount>{changedMoneyFormat(bookInfo.discount)}원</BookDisCount>
+        )}
       </BookInfoContainer>
     </BookWrapper>
   );
