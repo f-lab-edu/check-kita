@@ -23,7 +23,7 @@ export const searchBooks = (
 ) => {
   return api
     .get('/search-books', {
-      params: { query: search, display: count, sort: 'sim' },
+      params: { query: search, display: count, start: page, sort: 'sim' },
     })
     .then((res) => {
       if (res.status === 200) {
