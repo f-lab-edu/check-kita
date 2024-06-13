@@ -11,9 +11,9 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function ModalAddBook() {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const changeTabIndex = (chageIndex) => {
+  const changeTabIndex = (chageIndex: number) => {
     setTabIndex(chageIndex);
   };
   return (
