@@ -13,8 +13,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 function ModalAddBook() {
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const changeTabIndex = (chageIndex: number) => {
-    setTabIndex(chageIndex);
+  const changeTabIndex = (changedIndex: number) => {
+    setTabIndex(changedIndex);
   };
   return (
     <ModalContent>
