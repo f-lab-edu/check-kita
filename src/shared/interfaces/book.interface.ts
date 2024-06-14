@@ -1,4 +1,4 @@
-import { BookRecordType } from '../enums/book.enum';
+import { BookReadingProgressType, BookRecordType } from '../enums/book.enum';
 
 export interface SearchBook {
   title: string;
@@ -16,10 +16,12 @@ export interface MyBook {
   title: string;
   author: string[];
   image: string;
-  readingRecord: {
-    recordType: BookRecordType;
-    recordDetail: AlreadyBook | IngBook | WantBook;
-  };
+  readingRecord: ReadingRecord;
+}
+// 책 기록
+export interface ReadingRecord {
+  recordType: BookRecordType;
+  recordDetail: AlreadyBook | IngBook | WantBook;
 }
 
 export interface AlreadyBook {
@@ -30,7 +32,7 @@ export interface AlreadyBook {
 
 export interface IngBook {
   startDate: Date;
-  readingProgressType: 'percentage' | 'pages';
+  readingProgressType: BookReadingProgressType;
   readingProgressCount: number;
 }
 

@@ -19,6 +19,7 @@ function ModalAddBook() {
   const changeTabIndex = (changedIndex: number) => {
     setTabIndex(changedIndex);
   };
+
   return (
     <ModalContent>
       <ModalHeader>어떤 책 인가요?</ModalHeader>
