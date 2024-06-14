@@ -1,7 +1,9 @@
 import {
+  Button,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -9,6 +11,7 @@ import styled from 'styled-components';
 import FlagIcon from '@mui/icons-material/Flag';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DateInput from './DateInput';
 
 function ModalAddBook() {
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -69,19 +72,17 @@ function ModalAddBook() {
           {tabIndex === 0 ? (
             <div>
               <LabelText>독서 기간</LabelText>
-              <label htmlFor="startDate">시작일</label>
-              <DateInput type="date" id="startDate"></DateInput>
-              <label htmlFor="endDate">종료일</label>
-              <DateInput type="date" id="endDate"></DateInput>
-              <div>평점을 남겨 주세요!</div>
+              <DateInput labelText={'시작일'} marginBottom={6}></DateInput>
+              <DateInput labelText={'종료일'} marginBottom={12}></DateInput>
+              <LabelText>평점을 남겨 주세요!</LabelText>
+              <div>TODO: 별점 UI</div>
             </div>
-          ) : tabIndex === 2 ? (
+          ) : tabIndex === 1 ? (
             <div>
               <div>독서량</div>
               <div>쪽수 또는 %로 입력받기</div>
               <div>독서 기간</div>
-              <label htmlFor="startDate">시작일</label>
-              <DateInput type="date" id="startDate"></DateInput>
+              <DateInput labelText={'시작일'}></DateInput>
             </div>
           ) : (
             <div>
@@ -93,6 +94,9 @@ function ModalAddBook() {
           )}
         </TabList>
       </ModalBody>
+      <ModalFooter>
+        <Button width={'100%'}>저장하기</Button>
+      </ModalFooter>
     </ModalContent>
   );
 }
@@ -138,11 +142,7 @@ const TabList = styled.div`
 
 const LabelText = styled.p`
   font-size: 13px;
-`;
-
-const DateInput = styled.input`
-  /* width: 0; */
-  /* height: 0; */
+  margin-bottom: 3px;
 `;
 
 export default ModalAddBook;

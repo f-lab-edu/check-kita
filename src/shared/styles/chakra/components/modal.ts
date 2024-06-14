@@ -7,7 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   // define the part you're going to style
   overlay: {
-    bg: 'blackAlpha.200', //change the background
+    bg: 'blackAlpha.500', //change the background
   },
   dialog: {
     borderRadius: '20px',
@@ -22,6 +22,7 @@ const baseStyle = definePartsStyle({
   body: {
     padding: '10px 20px',
   },
+  footer: { padding: '10px 20px' },
 });
 
 export const modalTheme = defineMultiStyleConfig({
