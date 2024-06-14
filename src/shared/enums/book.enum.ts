@@ -3,3 +3,8 @@ export enum BookRecordType {
   ing = 'ing',
   want = 'want',
 }
+
+export enum BookReadingProgressType {
+  pages = 'pages',
+  percentage = 'percentage',
+}

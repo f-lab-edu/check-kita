@@ -11,7 +11,7 @@ interface DateInputProps {
 
 function DateInput({ labelText, marginBottom }: DateInputProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
   const setDatePicker = () => {
     setIsOpen(!isOpen);
@@ -26,8 +26,8 @@ function DateInput({ labelText, marginBottom }: DateInputProps) {
       <DatePicker
         open={isOpen}
         selected={currentDate}
-        onChange={(date: Date) => {
-          setCurrentDate(date);
+        onChange={(date: Date | null) => {
+          date && setCurrentDate(date);
         }}
         dateFormat="yyyy년 MM월 dd일"
         shouldCloseOnSelect={true}
