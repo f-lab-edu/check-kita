@@ -1,23 +1,50 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SearchBook } from '../shared/interfaces/book.interface';
 import * as api from '../shared/apis';
 import styled from 'styled-components';
 import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
 import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/search/ModalAddBook';
+import { useAtom } from 'jotai';
+import {
+  selectedBookAuthorAtom,
+  selectedBookImageAtom,
+  selectedBookTitleAtom,
+} from '../store';
 
 function SearchBookDetailPage() {
+  const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const [bookInfo, setBookInfo] = useState<SearchBook>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [_bookTitle, setBookTitle] = useAtom(selectedBookTitleAtom);
+  const [_bookImage, setBookImage] = useAtom(selectedBookImageAtom);
+  const [_bookAuthor, setBookAuthor] = useAtom(selectedBookAuthorAtom);
 
   useEffect(() => {
     bookIsbn &&
       api
         .searchBookByIsbn(Number(bookIsbn))
-        .then((book) => setBookInfo(book))
-        .catch();
+        .then((book) => {
+          if (!book) {
+            // TODO: 에러 컨벤션 정해지면 throw
+            // TODO: 알럿 띄우기
+            navigate(-1);
+            return;
+          }
+
+          setBookTitle(book.title);
+          setBookImage(book.image);
+          const authors = splitBookAuthor(book.author);
+          setBookAuthor(authors);
+
+          setBookInfo(book);
+        })
+        .catch((e) => {
+          //TODO: 에러 핸들링
+        });
   }, []);
 
   return (
@@ -61,11 +88,12 @@ function SearchBookDetailPage() {
                 <strong>{changedMoneyFormat(bookInfo.discount)}</strong>
               )}
             </DiscountText>
-            <div>
-              <button>구매하러 가기</button>
-              <button onClick={onOpen}>저장</button>
-            </div>
+            <button>구매하러 가기</button>
           </BookDiscountBox>
+          {/* TODO: 이미 저장한 책일 경우 별점이랑 삭제 버튼 */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button onClick={onOpen}>저장</button>
+          </div>
         </BookInfoBox>
       </BookTopInfo>
       <HorizontalLine />

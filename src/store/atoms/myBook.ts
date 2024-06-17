@@ -8,6 +8,7 @@ import {
   IngBook,
   MyBook,
   WantBook,
+  ReadingRecord,
 } from '../../shared/interfaces/book.interface';
 import {
   selectedBookAuthorAtom,
@@ -38,7 +39,7 @@ export const readingRecordAtom = atom<ReadingRecord>((get) => ({
 // 읽은 책
 export const alreadyBookStartDateAtom = atom<Date>(new Date());
 export const alreadyBookEndDateAtom = atom<Date>(new Date());
-export const alreadyBookRatingAtom = atom<Date>(0);
+export const alreadyBookRatingAtom = atom<number>(0);
 export const alreadyBookAtom = atom<AlreadyBook>((get) => ({
   startDate: get(alreadyBookStartDateAtom),
   endDate: get(alreadyBookEndDateAtom),

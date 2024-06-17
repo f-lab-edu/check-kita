@@ -52,5 +52,7 @@ export const searchBookByIsbn = (isbn: number) => {
         return parseBookXml(res.data);
       }
     })
-    .catch();
+    .catch((e) => {
+      // TODO: 에러 핸들링
+    });
 };

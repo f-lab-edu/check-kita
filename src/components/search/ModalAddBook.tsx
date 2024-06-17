@@ -12,10 +12,25 @@ import FlagIcon from '@mui/icons-material/Flag';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DateInput from './DateInput';
+import { useAtomValue } from 'jotai';
+import {
+  selectedBookAuthorAtom,
+  selectedBookImageAtom,
+  selectedBookTitleAtom,
+} from '../../store';
+import Rating from './Rating';
+import { BookRecordType } from '../../shared/enums/book.enum';
 
 function ModalAddBook() {
   const [tabIndex, setTabIndex] = useState<number>(0);
+  const bookTitle = useAtomValue(selectedBookTitleAtom);
+  const bookAuthor = useAtomValue(selectedBookAuthorAtom);
+  const bookImage = useAtomValue(selectedBookImageAtom);
 
+  /**
+   * 저장할 책 타입 변경
+   * @param {number} changedIndex
+   */
   const changeTabIndex = (changedIndex: number) => {
     setTabIndex(changedIndex);
   };
@@ -76,7 +91,7 @@ function ModalAddBook() {
               <DateInput labelText={'시작일'} marginBottom={6}></DateInput>
               <DateInput labelText={'종료일'} marginBottom={12}></DateInput>
               <LabelText>평점을 남겨 주세요!</LabelText>
-              <div>TODO: 별점 UI</div>
+              <Rating recordType={BookRecordType.already} />
             </div>
           ) : tabIndex === 1 ? (
             <div>
