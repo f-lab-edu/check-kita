@@ -1,20 +1,13 @@
 import styled from 'styled-components';
-import { BookRecordType } from '../../shared/enums/book.enum';
-import {
-  alreadyBookRatingAtom,
-  readingRecordTypeAtom,
-  wantBookExpectationRatingAtom,
-} from '../../store';
-import { useAtom, useAtomValue } from 'jotai';
 
-function Rating() {
-  const recordType = useAtomValue(readingRecordTypeAtom);
-  const [score, setScore] = useAtom(
-    recordType === BookRecordType.already
-      ? alreadyBookRatingAtom
-      : wantBookExpectationRatingAtom
-  );
+import { setAtom } from 'jotai';
 
+interface RatingProps {
+  score: number;
+  setScore: setAtom;
+}
+
+function Rating({ score, setScore }: RatingProps) {
   /**
    * 별점을 눌렀을 때
    * @param {React.MouseEvent<HTMLDivElement, MouseEvent>} event

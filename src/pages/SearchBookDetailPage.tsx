@@ -121,6 +121,7 @@ const BookTopInfo = styled.div`
     width: 200px;
     height: fit-content;
     flex: 0 0 200px;
+    border-radius: 3px;
   }
 `;
 

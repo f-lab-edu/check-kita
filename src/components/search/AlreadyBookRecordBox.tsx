@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import DateInput from './DateInput';
 import Rating from './Rating';
-import { alreadyBookEndDateAtom, alreadyBookStartDateAtom } from '../../store';
+import {
+  alreadyBookEndDateAtom,
+  alreadyBookRatingAtom,
+  alreadyBookStartDateAtom,
+} from '../../store';
 import { useAtom } from 'jotai';
 
 function AlreadyBookRecordBox() {
@@ -11,6 +15,8 @@ function AlreadyBookRecordBox() {
   const [alreadyBookEndDate, setAlreadyBookEndDate] = useAtom(
     alreadyBookEndDateAtom
   );
+
+  const [rating, setRating] = useAtom(alreadyBookRatingAtom);
 
   return (
     <div>
@@ -31,8 +37,16 @@ function AlreadyBookRecordBox() {
           setValue: setAlreadyBookEndDate,
         }}
       ></DateInput>
-      <LabelText>평점을 남겨 주세요!</LabelText>
-      <Rating />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <LabelText>평점을 남겨 주세요!</LabelText>
+        <Rating score={rating} setScore={setRating} />
+      </div>
     </div>
   );
 }
