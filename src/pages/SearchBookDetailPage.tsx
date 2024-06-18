@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
 import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/search/ModalAddBook';
-import { useAtom, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import {
   selectedBookAuthorAtom,
   selectedBookIdAtom,
@@ -107,7 +107,7 @@ function SearchBookDetailPage() {
       </BookInfoBottom>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalAddBook />
+        <ModalAddBook onClose={onClose} />
       </Modal>
     </div>
   );

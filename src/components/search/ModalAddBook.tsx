@@ -30,7 +30,11 @@ import {
 } from '../../shared/interfaces/book.interface';
 import { addMyBook } from '../../shared/services/myBookService';
 
-function ModalAddBook() {
+interface ModalAddBookProps {
+  onClose: () => void;
+}
+
+function ModalAddBook({ onClose }: ModalAddBookProps) {
   const [recordType, setRecordType] = useAtom(readingRecordTypeAtom);
   const selectedBookInfo = useAtomValue(selectedBookAtom);
   const alreadyBook = useAtomValue(alreadyBookAtom);
@@ -77,6 +81,8 @@ function ModalAddBook() {
       };
 
       await addMyBook(saveBook);
+      onClose();
+      // TODO: 성공 알럿 띄우기
     } catch (e) {
       // TODO: 에러 핸들링
     }
