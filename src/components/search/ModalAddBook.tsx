@@ -14,7 +14,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import {
   alreadyBookAtom,
   ingBookAtom,
-  myBookInfoAtom,
+  selectedBookAtom,
   readingRecordTypeAtom,
   wantBookAtom,
 } from '../../store';
@@ -28,10 +28,11 @@ import {
   MyBook,
   WantBook,
 } from '../../shared/interfaces/book.interface';
+import { addMyBook } from '../../shared/services/myBookService';
 
 function ModalAddBook() {
   const [recordType, setRecordType] = useAtom(readingRecordTypeAtom);
-  const myBookInfo = useAtomValue(myBookInfoAtom);
+  const selectedBookInfo = useAtomValue(selectedBookAtom);
   const alreadyBook = useAtomValue(alreadyBookAtom);
   const ingBook = useAtomValue(ingBookAtom);
   const wantBook = useAtomValue(wantBookAtom);
@@ -51,28 +52,34 @@ function ModalAddBook() {
   /**
    * 책 기록 저장
    */
-  const saveBookRecord = () => {
-    let bookDetail: AlreadyBook | IngBook | WantBook;
+  const saveBookRecord = async () => {
+    try {
+      let bookDetail: AlreadyBook | IngBook | WantBook;
 
-    switch (recordType) {
-      case BookRecordType.already:
-        bookDetail = alreadyBook;
-        break;
-      case BookRecordType.ing:
-        bookDetail = ingBook;
-        break;
-      case BookRecordType.want:
-        bookDetail = wantBook;
-        break;
+      switch (recordType) {
+        case BookRecordType.already:
+          bookDetail = alreadyBook;
+          break;
+        case BookRecordType.ing:
+          bookDetail = ingBook;
+          break;
+        case BookRecordType.want:
+          bookDetail = wantBook;
+          break;
+      }
+
+      const saveBook: MyBook = {
+        ...selectedBookInfo,
+        readingRecord: {
+          recordType,
+          recordDetail: bookDetail,
+        },
+      };
+
+      await addMyBook(saveBook);
+    } catch (e) {
+      // TODO: 에러 핸들링
     }
-
-    const saveBook: MyBook = {
-      ...myBookInfo,
-      readingRecord: {
-        recordType,
-        recordDetail: bookDetail,
-      },
-    };
   };
 
   return (

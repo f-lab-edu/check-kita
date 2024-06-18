@@ -6,21 +6,8 @@ import {
 import {
   AlreadyBook,
   IngBook,
-  MyBook,
   WantBook,
 } from '../../shared/interfaces/book.interface';
-import {
-  selectedBookAuthorAtom,
-  selectedBookImageAtom,
-  selectedBookTitleAtom,
-} from './index';
-
-// 나의 책
-export const myBookInfoAtom = atom<MyBook>((get) => ({
-  title: get(selectedBookTitleAtom),
-  author: get(selectedBookAuthorAtom),
-  image: get(selectedBookImageAtom),
-}));
 
 // 기록 책 정보
 export const readingRecordTypeAtom = atom<BookRecordType>(

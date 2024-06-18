@@ -12,7 +12,15 @@ export interface SearchBook {
   pubdate: string;
 }
 
+export interface SelectedBookInfo {
+  id: number;
+  title: string;
+  author: string[];
+  image: string;
+}
+
 export interface MyBook {
+  id: number;
   title: string;
   author: string[];
   image: string;

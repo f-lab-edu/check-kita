@@ -6,9 +6,10 @@ import styled from 'styled-components';
 import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
 import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/search/ModalAddBook';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   selectedBookAuthorAtom,
+  selectedBookIdAtom,
   selectedBookImageAtom,
   selectedBookTitleAtom,
 } from '../store';
@@ -19,9 +20,10 @@ function SearchBookDetailPage() {
   const [bookInfo, setBookInfo] = useState<SearchBook>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [_bookTitle, setBookTitle] = useAtom(selectedBookTitleAtom);
-  const [_bookImage, setBookImage] = useAtom(selectedBookImageAtom);
-  const [_bookAuthor, setBookAuthor] = useAtom(selectedBookAuthorAtom);
+  const setBookId = useSetAtom(selectedBookIdAtom);
+  const setBookTitle = useSetAtom(selectedBookTitleAtom);
+  const setBookImage = useSetAtom(selectedBookImageAtom);
+  const setBookAuthor = useSetAtom(selectedBookAuthorAtom);
 
   useEffect(() => {
     bookIsbn &&
@@ -35,6 +37,7 @@ function SearchBookDetailPage() {
             return;
           }
 
+          setBookId(book.isbn);
           setBookTitle(book.title);
           setBookImage(book.image);
           const authors = splitBookAuthor(book.author);
