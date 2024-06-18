@@ -6,33 +6,73 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import styled from 'styled-components';
 import FlagIcon from '@mui/icons-material/Flag';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import DateInput from './DateInput';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
-  selectedBookAuthorAtom,
-  selectedBookImageAtom,
-  selectedBookTitleAtom,
+  alreadyBookAtom,
+  ingBookAtom,
+  myBookInfoAtom,
+  readingRecordTypeAtom,
+  wantBookAtom,
 } from '../../store';
-import Rating from './Rating';
 import { BookRecordType } from '../../shared/enums/book.enum';
+import AlreadyBookRecordBox from './AlreadyBookRecordBox';
+import IngBookRecordBox from './IngBookRecordBox';
+import WantBookRecordBox from './WantBookRecordBox';
+import {
+  AlreadyBook,
+  IngBook,
+  MyBook,
+  WantBook,
+} from '../../shared/interfaces/book.interface';
 
 function ModalAddBook() {
-  const [tabIndex, setTabIndex] = useState<number>(0);
-  const bookTitle = useAtomValue(selectedBookTitleAtom);
-  const bookAuthor = useAtomValue(selectedBookAuthorAtom);
-  const bookImage = useAtomValue(selectedBookImageAtom);
+  const [recordType, setRecordType] = useAtom(readingRecordTypeAtom);
+  const myBookInfo = useAtomValue(myBookInfoAtom);
+  const alreadyBook = useAtomValue(alreadyBookAtom);
+  const ingBook = useAtomValue(ingBookAtom);
+  const wantBook = useAtomValue(wantBookAtom);
 
   /**
    * 저장할 책 타입 변경
-   * @param {number} changedIndex
+   * @param changeBookRecordType
    */
-  const changeTabIndex = (changedIndex: number) => {
-    setTabIndex(changedIndex);
+  const changeRecordType = (changeBookRecordType: BookRecordType) => {
+    setRecordType(changeBookRecordType);
+  };
+
+  const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
+    return selectedRecordType === recordType;
+  };
+
+  /**
+   * 책 기록 저장
+   */
+  const saveBookRecord = () => {
+    let bookDetail: AlreadyBook | IngBook | WantBook;
+
+    switch (recordType) {
+      case BookRecordType.already:
+        bookDetail = alreadyBook;
+        break;
+      case BookRecordType.ing:
+        bookDetail = ingBook;
+        break;
+      case BookRecordType.want:
+        bookDetail = wantBook;
+        break;
+    }
+
+    const saveBook: MyBook = {
+      ...myBookInfo,
+      readingRecord: {
+        recordType,
+        recordDetail: bookDetail,
+      },
+    };
   };
 
   return (
@@ -43,75 +83,93 @@ function ModalAddBook() {
         <BookTypeButtonWrapper>
           <BookTypeButton
             onClick={() => {
-              changeTabIndex(0);
+              changeRecordType(BookRecordType.already);
             }}
-            isSelected={tabIndex === 0}
+            isSelected={getIsSameRecordType(BookRecordType.already)}
           >
-            <FlagIcon sx={{ color: tabIndex === 0 ? '#fff' : '#cecece' }} />
-            <TypeButtonMainText isSelected={tabIndex === 0}>
+            <FlagIcon
+              sx={{
+                color: getIsSameRecordType(BookRecordType.already)
+                  ? '#fff'
+                  : '#cecece',
+              }}
+            />
+            <TypeButtonMainText
+              isSelected={getIsSameRecordType(BookRecordType.already)}
+            >
               읽은 책
             </TypeButtonMainText>
-            <TypeButtonSubText isSelected={tabIndex === 0}>
+            <TypeButtonSubText
+              isSelected={getIsSameRecordType(BookRecordType.already)}
+            >
               다 읽은 책이에요
             </TypeButtonSubText>
           </BookTypeButton>
+
           <BookTypeButton
             onClick={() => {
-              changeTabIndex(1);
+              changeRecordType(BookRecordType.ing);
             }}
-            isSelected={tabIndex === 1}
+            isSelected={getIsSameRecordType(BookRecordType.ing)}
           >
-            <BookmarkIcon sx={{ color: tabIndex === 1 ? '#fff' : '#cecece' }} />
-            <TypeButtonMainText isSelected={tabIndex === 1}>
+            <BookmarkIcon
+              sx={{
+                color: getIsSameRecordType(BookRecordType.ing)
+                  ? '#fff'
+                  : '#cecece',
+              }}
+            />
+            <TypeButtonMainText
+              isSelected={getIsSameRecordType(BookRecordType.ing)}
+            >
               읽고 있는 책
             </TypeButtonMainText>
-            <TypeButtonSubText isSelected={tabIndex === 1}>
+            <TypeButtonSubText
+              isSelected={getIsSameRecordType(BookRecordType.ing)}
+            >
               열심히 읽고 있어요
             </TypeButtonSubText>
           </BookTypeButton>
+
           <BookTypeButton
             onClick={() => {
-              changeTabIndex(2);
+              changeRecordType(BookRecordType.want);
             }}
-            isSelected={tabIndex === 2}
+            isSelected={getIsSameRecordType(BookRecordType.want)}
           >
-            <FavoriteIcon sx={{ color: tabIndex === 2 ? '#fff' : '#cecece' }} />
-            <TypeButtonMainText isSelected={tabIndex === 2}>
+            <FavoriteIcon
+              sx={{
+                color: getIsSameRecordType(BookRecordType.want)
+                  ? '#fff'
+                  : '#cecece',
+              }}
+            />
+            <TypeButtonMainText
+              isSelected={getIsSameRecordType(BookRecordType.want)}
+            >
               읽고 싶은 책
             </TypeButtonMainText>
-            <TypeButtonSubText isSelected={tabIndex === 2}>
+            <TypeButtonSubText
+              isSelected={getIsSameRecordType(BookRecordType.want)}
+            >
               찜 해두고 싶어요
             </TypeButtonSubText>
           </BookTypeButton>
         </BookTypeButtonWrapper>
         <TabList>
-          {tabIndex === 0 ? (
-            <div>
-              <LabelText>독서 기간</LabelText>
-              <DateInput labelText={'시작일'} marginBottom={6}></DateInput>
-              <DateInput labelText={'종료일'} marginBottom={12}></DateInput>
-              <LabelText>평점을 남겨 주세요!</LabelText>
-              <Rating recordType={BookRecordType.already} />
-            </div>
-          ) : tabIndex === 1 ? (
-            <div>
-              <div>독서량</div>
-              <div>쪽수 또는 %로 입력받기</div>
-              <div>독서 기간</div>
-              <DateInput labelText={'시작일'}></DateInput>
-            </div>
+          {getIsSameRecordType(BookRecordType.already) ? (
+            <AlreadyBookRecordBox />
+          ) : getIsSameRecordType(BookRecordType.ing) ? (
+            <IngBookRecordBox />
           ) : (
-            <div>
-              <div>기대 지수</div>
-              <div>별점</div>
-              <div>기대평</div>
-              <textarea></textarea>
-            </div>
+            <WantBookRecordBox />
           )}
         </TabList>
       </ModalBody>
       <ModalFooter>
-        <Button width={'100%'}>저장하기</Button>
+        <Button width={'100%'} onClick={saveBookRecord}>
+          저장하기
+        </Button>
       </ModalFooter>
     </ModalContent>
   );
@@ -154,11 +212,6 @@ const TabList = styled.div`
   width: 100%;
   padding-top: 20px;
   color: var(--main-text);
-`;
-
-const LabelText = styled.p`
-  font-size: 13px;
-  margin-bottom: 3px;
 `;
 
 export default ModalAddBook;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import * as apis from '../shared/apis';
+import * as apis from '../shared/services/searchService';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { SearchBook } from '../shared/interfaces/book.interface';

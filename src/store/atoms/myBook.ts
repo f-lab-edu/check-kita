@@ -8,7 +8,6 @@ import {
   IngBook,
   MyBook,
   WantBook,
-  ReadingRecord,
 } from '../../shared/interfaces/book.interface';
 import {
   selectedBookAuthorAtom,
@@ -17,24 +16,16 @@ import {
 } from './index';
 
 // 나의 책
-export const myBookAtom = atom<MyBook>((get) => ({
+export const myBookInfoAtom = atom<MyBook>((get) => ({
   title: get(selectedBookTitleAtom),
   author: get(selectedBookAuthorAtom),
   image: get(selectedBookImageAtom),
-  readingRecord: get(readingRecordAtom),
 }));
 
 // 기록 책 정보
 export const readingRecordTypeAtom = atom<BookRecordType>(
   BookRecordType.already
 );
-export const readingRecordDetailAtom = atom<AlreadyBook>((get) =>
-  get(alreadyBookAtom)
-);
-export const readingRecordAtom = atom<ReadingRecord>((get) => ({
-  recordType: get(readingRecordTypeAtom),
-  recordDetail: get(readingRecordDetailAtom),
-}));
 
 // 읽은 책
 export const alreadyBookStartDateAtom = atom<Date>(new Date());

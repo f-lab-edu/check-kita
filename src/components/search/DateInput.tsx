@@ -3,31 +3,33 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TodayIcon from '@mui/icons-material/Today';
+import { setAtom } from 'jotai';
 
 interface DateInputProps {
   labelText: string;
   marginBottom?: number;
+  atom: { value: Date; setValue: setAtom };
 }
 
-function DateInput({ labelText, marginBottom }: DateInputProps) {
+function DateInput({ labelText, marginBottom, atom }: DateInputProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const { value, setValue } = atom;
 
-  const setDatePicker = () => {
+  const setDatePickerOpen = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <Wrapper onClick={setDatePicker} marginBottom={marginBottom}>
+    <Wrapper onClick={setDatePickerOpen} marginBottom={marginBottom}>
       <LabelWrapper>
         <TodayIcon fontSize="small" />
         <span>{labelText}</span>
       </LabelWrapper>
       <DatePicker
         open={isOpen}
-        selected={currentDate}
+        selected={value}
         onChange={(date: Date | null) => {
-          date && setCurrentDate(date);
+          date && setValue(date);
         }}
         dateFormat="yyyy년 MM월 dd일"
         shouldCloseOnSelect={true}
@@ -58,6 +60,7 @@ const Wrapper = styled.div<WrapperProps>`
 
   .react-datepicker-wrapper {
     input {
+      cursor: pointer;
       font-size: 14px;
       width: 120px;
       outline: none;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { parseBookXml } from './utils';
+import { parseBookXml } from '../utils';
 
 const api = axios.create({
   baseURL: '',

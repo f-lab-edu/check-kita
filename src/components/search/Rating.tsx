@@ -2,15 +2,13 @@ import styled from 'styled-components';
 import { BookRecordType } from '../../shared/enums/book.enum';
 import {
   alreadyBookRatingAtom,
+  readingRecordTypeAtom,
   wantBookExpectationRatingAtom,
 } from '../../store';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
-interface RatingProps {
-  recordType: BookRecordType;
-}
-
-function Rating({ recordType }: RatingProps) {
+function Rating() {
+  const recordType = useAtomValue(readingRecordTypeAtom);
   const [score, setScore] = useAtom(
     recordType === BookRecordType.already
       ? alreadyBookRatingAtom
@@ -63,7 +61,6 @@ const Wrapper = styled.div`
   width: fit-content;
   display: flex;
   gap: 8px;
-  border: 1px solid red;
 
   &:hover {
     // TODO: 마우스 오버일 때 별점 보여주기

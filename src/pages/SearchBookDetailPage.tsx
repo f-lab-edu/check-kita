@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SearchBook } from '../shared/interfaces/book.interface';
-import * as api from '../shared/apis';
+import * as api from '../shared/services/searchService';
 import styled from 'styled-components';
 import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
 import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
