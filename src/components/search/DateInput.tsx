@@ -53,11 +53,6 @@ const Wrapper = styled.div<WrapperProps>`
   margin-bottom: ${(props) =>
     props.marginBottom ? props.marginBottom + 'px' : 0};
 
-  & > span {
-    font-size: 13px;
-    line-height: 13px;
-  }
-
   .react-datepicker-wrapper {
     input {
       cursor: pointer;
@@ -77,6 +72,11 @@ const LabelWrapper = styled.div`
   align-items: center;
   gap: 3px;
   color: var(--main-text-color);
+
+  & > span {
+    font-size: 13px;
+    line-height: 13px;
+  }
 `;
 
 export default DateInput;
