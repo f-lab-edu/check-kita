@@ -1,10 +1,10 @@
+import { SetStateAction } from 'jotai';
+import { Dispatch } from 'react';
 import styled from 'styled-components';
-
-import { setAtom } from 'jotai';
 
 interface RatingProps {
   score: number;
-  setScore: setAtom;
+  setScore: Dispatch<SetStateAction<number>>;
 }
 
 function Rating({ score, setScore }: RatingProps) {

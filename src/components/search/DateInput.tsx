@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { Dispatch, useState } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TodayIcon from '@mui/icons-material/Today';
-import { setAtom } from 'jotai';
+import { SetStateAction } from 'jotai';
 
 interface DateInputProps {
   labelText: string;
   marginBottom?: number;
-  atom: { value: Date; setValue: setAtom };
+  atom: { value: Date; setValue: Dispatch<SetStateAction<Date>> };
 }
 
 function DateInput({ labelText, marginBottom, atom }: DateInputProps) {
