@@ -93,9 +93,30 @@ const outlineGray = defineStyle({
   },
 });
 
+const clear = defineStyle({
+  backgroundColor: 'gray.0',
+  color: 'gray.1000',
+
+  _hover: {
+    backgroundColor: '#F5F5F5',
+  },
+
+  _disabled: {
+    opacity: 1,
+    backgroundColor: 'gray.0',
+    color: 'gray.300',
+    pointerEvents: 'none',
+  },
+
+  _loading: {
+    backgroundColor: 'gray.0',
+    color: 'gray.300',
+  },
+});
+
 export const buttonTheme = defineStyleConfig({
   sizes: { md, mdIcon },
-  variants: { solid, outline, outlineGray },
+  variants: { solid, outline, outlineGray, clear },
   defaultProps: {
     size: 'md',
     variant: 'solid',

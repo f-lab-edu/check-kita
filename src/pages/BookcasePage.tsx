@@ -39,6 +39,17 @@ function BookcasePage() {
           <AddIcon />
         </Button>
       </div>
+      <div>
+        <Button variant="clear" size="mdIcon">
+          <AddIcon />
+        </Button>
+        <Button variant="clear" size="mdIcon" isDisabled={true}>
+          <AddIcon />
+        </Button>
+        <Button variant="clear" size="mdIcon" isLoading={true}>
+          <AddIcon />
+        </Button>
+      </div>
     </div>
   );
 }
