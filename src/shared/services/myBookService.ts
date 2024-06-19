@@ -9,7 +9,8 @@ export async function addMyBook(saveBook: MyBook) {
     setDoc(doc(db, 'myBooks', String(id)), saveBook).catch((e) => {
       // TODO: 에러 핸들링
     });
-  } catch () {
+  } catch (e) {
+    console.log(e);
     // TODO: 에러 핸들링
   }
 }
