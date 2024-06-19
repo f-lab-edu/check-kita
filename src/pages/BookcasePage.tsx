@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 function BookcasePage() {
   return (
     <div>
-      책장 페이지 - 내가 등록한 책 보는 목록 여기 three.js 써서 책장 만들고 싶음
+      책장 페이지 - 스크롤 인터랙티브로 변경
       <div>
         <Button>Button</Button>
         <Button isDisabled={true}>Button</Button>
