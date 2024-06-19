@@ -49,6 +49,10 @@ const outline = defineStyle({
   backgroundColor: 'gray.0',
   color: 'brand.500',
 
+  _hover: {
+    backgroundColor: '#F5F5F5',
+  },
+
   _disabled: {
     opacity: 1,
     borderColor: 'gray.50',
@@ -69,6 +73,10 @@ const outlineGray = defineStyle({
   borderColor: 'gray.50',
   backgroundColor: 'gray.0',
   color: 'gray.1000',
+
+  _hover: {
+    backgroundColor: '#F5F5F5',
+  },
 
   _disabled: {
     opacity: 1,
