@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { SelectedBookInfo } from '../../shared/interfaces/book.interface';
 
 export const selectedBookIdAtom = atom<number>(-1);
 export const selectedBookTitleAtom = atom<string>('');

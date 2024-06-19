@@ -45,7 +45,7 @@ function SearchBookDetailPage() {
 
           setBookInfo(book);
         })
-        .catch((e) => {
+        .catch(() => {
           //TODO: 에러 핸들링
         });
   }, []);
