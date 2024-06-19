@@ -7,6 +7,7 @@ export async function addMyBook(saveBook: MyBook) {
     const { id } = saveBook;
 
     setDoc(doc(db, 'myBooks', String(id)), saveBook).catch((e) => {
+      console.log(e);
       // TODO: 에러 핸들링
     });
   } catch (e) {
