@@ -6,19 +6,23 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/search-books': {
+      '/api/search-books': {
         target: 'https://openapi.naver.com',
         changeOrigin: true,
         rewrite: (path) =>
-          path.replace(/^\/search-books/, '/v1/search/book.json'),
+          path.replace(/^\/api\/search-books/, '/v1/search/book.json'),
+
         secure: false,
         ws: true,
       },
-      '/search-book-by-isbn': {
+      '/api/search-book-by-isbn': {
         target: 'https://openapi.naver.com',
         changeOrigin: true,
         rewrite: (path) =>
-          path.replace(/^\/search-book-by-isbn/, '/v1/search/book_adv.xml'),
+          path.replace(
+            /^\/api\/search-book-by-isbn/,
+            '/v1/search/book_adv.xml'
+          ),
         secure: false,
         ws: true,
       },

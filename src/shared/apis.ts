@@ -2,7 +2,7 @@ import axios from 'axios';
 import { parseBookXml } from './utils';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'api',
   headers: {
     'X-Naver-Client-Id': import.meta.env.VITE_APP_NAVER_CLIENT_ID,
     'X-Naver-Client-Secret': import.meta.env.VITE_APP_NAVER_CLIENT_SECRET,
