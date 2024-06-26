@@ -21,6 +21,8 @@ export const searchBooks = (
   count: number = 20,
   page: number = 1
 ) => {
+  console.log(search, count, page);
+
   return api
     .get('/search-books', {
       params: { query: search, display: count, start: page, sort: 'sim' },
@@ -31,7 +33,9 @@ export const searchBooks = (
         return res.data.items;
       }
     })
-    .catch();
+    .catch((e) => {
+      console.log('[API ERROR] searchBooks: ', e);
+    });
 };
 
 /**
