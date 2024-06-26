@@ -1,9 +1,9 @@
 {
   "rewrites": [
-    { "source": "/api/search-books", "destination": "/api/search-books.js" },
+    { "source": "/api/search-books", "destination": "/api/search-books.ts" },
     {
       "source": "/api/search-book-by-isbn",
-      "destination": "/api/search-book-by-isbn.js"
+      "destination": "/api/search-book-by-isbn.ts"
     }
   ]
 }
