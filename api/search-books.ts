@@ -1,5 +1,3 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
-
 module.exports = (req, res) => {
   const proxy = createProxyMiddleware({
     target: 'https://openapi.naver.com',
