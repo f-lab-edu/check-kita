@@ -1,6 +1,6 @@
 "rewrites": [
   {
-    "source": "/(.*)", // SPA 라우팅 설정
+    "source": "/(.*)",
     "destination": "/index.html"
   },
   { "source": "/api/search-books", "destination": "/api/search-books.ts" },
