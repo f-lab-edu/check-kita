@@ -1,3 +1,5 @@
+import { createProxyMiddleware } from 'http-proxy-middleware';
+
 module.exports = (req, res) => {
   console.log('Request received for /api/search-books');
 
