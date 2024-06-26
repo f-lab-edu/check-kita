@@ -2,7 +2,7 @@
   {
     "source": "/(.*)", // SPA 라우팅 설정
     "destination": "/index.html"
-  }
+  },
   { "source": "/api/search-books", "destination": "/api/search-books.ts" },
   {
     "source": "/api/search-book-by-isbn",
