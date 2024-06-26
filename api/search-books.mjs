@@ -1,6 +1,6 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-module.exports = (req, res) => {
+export default async function handler(req, res) {
   console.log('Request received for /api/search-books');
 
   const proxy = createProxyMiddleware({
@@ -29,5 +29,6 @@ module.exports = (req, res) => {
       res.status(500).json({ message: 'Proxy error', error: err.message });
     },
   });
-  return proxy(req, res);
-};
+
+  await proxy(req, res);
+}
