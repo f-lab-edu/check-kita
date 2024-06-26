@@ -16,7 +16,7 @@ function SearchBookPage() {
       // TODO: 리액트 쿼리로 변경
       apis.searchBooks(search).then((res) => {
         console.log(res);
-        setSearchResult(res);
+        if (res) setSearchResult(res);
       });
     }
   }, [search]);
@@ -25,7 +25,7 @@ function SearchBookPage() {
     <Wrapper>
       <SearchText>'{search}' 검색 결과</SearchText>
       <ResultList>
-        {searchResult.map((bookInfo) => (
+        {searchResult?.map((bookInfo) => (
           <SearchResultBook bookInfo={bookInfo} key={bookInfo.isbn} />
         ))}
       </ResultList>
