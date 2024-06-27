@@ -1,13 +1,12 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
 export default async function handler(req, res) {
-  console.log('Request received for /api/search-books');
-
   const proxy = createProxyMiddleware({
     target: 'https://openapi.naver.com',
     changeOrigin: true,
     pathRewrite: {
       '^/api/search-books': '/v1/search/book.json',
+      '^/api/search-book-by-isbn': '/v1/search/book_adv.xml',
     },
     onProxyReq: (proxyReq, req, res) => {
       proxyReq.setHeader(

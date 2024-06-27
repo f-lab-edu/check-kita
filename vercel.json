@@ -1,9 +1,9 @@
 {
   "rewrites": [
-    { "source": "/api/search-books", "destination": "/api/search-books.mjs" },
+    { "source": "/api/search-books", "destination": "/api/search-book.mjs" },
     {
       "source": "/api/search-book-by-isbn",
-      "destination": "/api/search-book-by-isbn.mjs"
+      "destination": "/api/search-book.mjs"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
