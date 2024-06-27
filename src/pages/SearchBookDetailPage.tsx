@@ -13,7 +13,7 @@ function SearchBookDetailPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    bookIsbn &&
+    !!bookIsbn &&
       api
         .searchBookByIsbn(Number(bookIsbn))
         .then((book) => setBookInfo(book))
