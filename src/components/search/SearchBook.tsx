@@ -34,7 +34,12 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
 
   return (
     <BookWrapper key={bookInfo.isbn}>
-      <img src={bookInfo.image} width={100} onClick={goToSearchBookDetail} />
+      <img
+        src={bookInfo.image}
+        width={100}
+        onClick={goToSearchBookDetail}
+        onKeyDown={goToSearchBookDetail}
+      />
       <BookInfoContainer>
         <BookTitle lines={2} onClick={goToSearchBookDetail}>
           {HighlightedText(bookInfo.title, search as string)}
