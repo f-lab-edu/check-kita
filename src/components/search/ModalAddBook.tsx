@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import FlagIcon from '@mui/icons-material/Flag';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { match } from 'ts-pattern';
 
 function ModalAddBook() {
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -66,31 +67,34 @@ function ModalAddBook() {
           </BookTypeButton>
         </BookTypeButtonWrapper>
         <TabList>
-          {tabIndex === 0 ? (
-            <div>
-              <LabelText>독서 기간</LabelText>
-              <label htmlFor="startDate">시작일</label>
-              <DateInput type="date" id="startDate"></DateInput>
-              <label htmlFor="endDate">종료일</label>
-              <DateInput type="date" id="endDate"></DateInput>
-              <div>평점을 남겨 주세요!</div>
-            </div>
-          ) : tabIndex === 2 ? (
-            <div>
-              <div>독서량</div>
-              <div>쪽수 또는 %로 입력받기</div>
-              <div>독서 기간</div>
-              <label htmlFor="startDate">시작일</label>
-              <DateInput type="date" id="startDate"></DateInput>
-            </div>
-          ) : (
-            <div>
-              <div>기대 지수</div>
-              <div>별점</div>
-              <div>기대평</div>
-              <textarea></textarea>
-            </div>
-          )}
+          {match(tabIndex)
+            .with(0, () => (
+              <div>
+                <LabelText>독서 기간</LabelText>
+                <label htmlFor="startDate">시작일</label>
+                <DateInput type="date" id="startDate" />
+                <label htmlFor="endDate">종료일</label>
+                <DateInput type="date" id="endDate" />
+                <div>평점을 남겨 주세요!</div>
+              </div>
+            ))
+            .with(2, () => (
+              <div>
+                <div>독서량</div>
+                <div>쪽수 또는 %로 입력받기</div>
+                <div>독서 기간</div>
+                <label htmlFor="startDate">시작일</label>
+                <DateInput type="date" id="startDate" />
+              </div>
+            ))
+            .otherwise(() => (
+              <div>
+                <div>기대 지수</div>
+                <div>별점</div>
+                <div>기대평</div>
+                <textarea></textarea>
+              </div>
+            ))}
         </TabList>
       </ModalBody>
     </ModalContent>
