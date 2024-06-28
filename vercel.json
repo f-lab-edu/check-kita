@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "sorce": "/api/search-books",
+      "source": "/api/search-books",
       "destination": "https://openapi.naver.com/v1/search/book.json"
     },
     { "source": "/(.*)", "destination": "/index.html" }
