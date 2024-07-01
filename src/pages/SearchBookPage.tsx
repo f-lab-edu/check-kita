@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import * as apis from '../shared/apis';
+import * as apis from '../shared/services/searchService';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { SearchBook } from '../shared/interfaces/book.interface';
@@ -16,7 +16,9 @@ function SearchBookPage() {
       // TODO: 리액트 쿼리로 변경
       apis.searchBooks(search).then((res) => {
         console.log(res);
-        if (res) setSearchResult(res);
+        setSearchResult(res);
+
+        // TODO: 타이틀, link. image 아톰에 저장
       });
     }
   }, [search]);

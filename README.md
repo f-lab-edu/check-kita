@@ -1,30 +1,16 @@
-# React + TypeScript + Vite
+# checkKita : 독서 기록 플랫폼
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 개발
 
-Currently, two official plugins are available:
+## Git Commit Convention
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- feat : 새로운 기능 추가
+- fix : 버그 수정
+- docs : 문서 관련
+- style : 스타일 변경 (포매팅 수정, 들여쓰기 추가, …)
+- refactor : 코드 리팩토링
+- test : 테스트 관련 코드
+- build : 빌드 관련 파일 수정
+- ci : CI 설정 파일 수정
+- perf : 성능 개선
+- chore : 그 외 자잘한 수정
