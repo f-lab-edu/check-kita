@@ -1,4 +1,5 @@
 import { defineStyle, defineStyleConfig } from '@chakra-ui/react';
+import { ButtonOutline } from './classes/ButtonOutline';
 
 // size
 const md = defineStyle({
@@ -43,55 +44,13 @@ const solid = defineStyle({
   },
 });
 
-const outline = defineStyle({
-  border: '1px solid',
-  borderColor: 'brand.500',
-  backgroundColor: 'gray.0',
-  color: 'brand.500',
+const outline = defineStyle(
+  new ButtonOutline('brand.500', 'brand.500').getOutlineTheme()
+);
 
-  _hover: {
-    backgroundColor: '#F5F5F5',
-  },
-
-  _disabled: {
-    opacity: 1,
-    borderColor: 'gray.50',
-    backgroundColor: 'gray.0',
-    color: 'gray.300',
-    pointerEvents: 'none',
-  },
-
-  _loading: {
-    borderColor: 'brand.500',
-    backgroundColor: 'gray.0',
-    color: 'gray.300',
-  },
-});
-
-const outlineGray = defineStyle({
-  border: '1px solid',
-  borderColor: 'gray.50',
-  backgroundColor: 'gray.0',
-  color: 'gray.1000',
-
-  _hover: {
-    backgroundColor: '#F5F5F5',
-  },
-
-  _disabled: {
-    opacity: 1,
-    borderColor: 'gray.50',
-    backgroundColor: 'gray.0',
-    color: 'gray.300',
-    pointerEvents: 'none',
-  },
-
-  _loading: {
-    borderColor: 'gray.50',
-    backgroundColor: 'gray.0',
-    color: 'gray.300',
-  },
-});
+const outlineGray = defineStyle(
+  new ButtonOutline('gray.50', 'gray.1000').getOutlineTheme()
+);
 
 const clear = defineStyle({
   backgroundColor: 'gray.0',
