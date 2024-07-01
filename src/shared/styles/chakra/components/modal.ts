@@ -5,9 +5,8 @@ const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(parts.keys);
 
 const baseStyle = definePartsStyle({
-  // define the part you're going to style
   overlay: {
-    bg: 'blackAlpha.500', //change the background
+    bg: 'blackAlpha.500',
   },
   dialog: {
     borderRadius: '20px',

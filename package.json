@@ -18,12 +18,14 @@
     "axios": "^1.7.2",
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.10",
+    "http-proxy-middleware": "^3.0.0",
     "jotai": "^2.8.3",
     "react": "^18.2.0",
     "react-datepicker": "^7.0.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "ts-pattern": "^4.3.0"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.45.0",

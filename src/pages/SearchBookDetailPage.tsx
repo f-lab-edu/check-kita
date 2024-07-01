@@ -26,7 +26,7 @@ function SearchBookDetailPage() {
   const setBookAuthor = useSetAtom(selectedBookAuthorAtom);
 
   useEffect(() => {
-    bookIsbn &&
+    !!bookIsbn &&
       api
         .searchBookByIsbn(Number(bookIsbn))
         .then((book) => {

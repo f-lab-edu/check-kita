@@ -2,10 +2,10 @@ import axios from 'axios';
 import { parseBookXml } from '../utils';
 
 const api = axios.create({
-  baseURL: '',
+  baseURL: '/api',
   headers: {
-    'X-Naver-Client-Id': import.meta.env.VITE_APP_NAVER_CLIENT_ID,
-    'X-Naver-Client-Secret': import.meta.env.VITE_APP_NAVER_CLIENT_SECRET,
+    'X-Naver-Client-Id': import.meta.env.VITE_APP_NAVER_CLIENT_ID ?? '',
+    'X-Naver-Client-Secret': import.meta.env.VITE_APP_NAVER_CLIENT_SECRET ?? '',
   },
 });
 
@@ -21,17 +21,21 @@ export const searchBooks = (
   count: number = 20,
   page: number = 1
 ) => {
+  console.log(search, count, page);
+
   return api
     .get('/search-books', {
       params: { query: search, display: count, start: page, sort: 'sim' },
     })
     .then((res) => {
       if (res.status === 200) {
-        console.log(res.data.items);
+        console.log(res);
         return res.data.items;
       }
     })
-    .catch();
+    .catch((e) => {
+      console.log('[API ERROR] searchBooks: ', e);
+    });
 };
 
 /**

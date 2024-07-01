@@ -27,7 +27,7 @@ function SearchBookPage() {
     <Wrapper>
       <SearchText>'{search}' 검색 결과</SearchText>
       <ResultList>
-        {searchResult.map((bookInfo) => (
+        {searchResult?.map((bookInfo) => (
           <SearchResultBook bookInfo={bookInfo} key={bookInfo.isbn} />
         ))}
       </ResultList>
