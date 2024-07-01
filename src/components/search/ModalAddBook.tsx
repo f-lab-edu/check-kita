@@ -29,6 +29,7 @@ import {
   WantBook,
 } from '../../shared/interfaces/book.interface';
 import { addMyBook } from '../../shared/services/myBookService';
+import { match } from 'ts-pattern';
 
 interface ModalAddBookProps {
   onClose: () => void;
@@ -170,13 +171,12 @@ function ModalAddBook({ onClose }: ModalAddBookProps) {
           </BookTypeButton>
         </BookTypeButtonWrapper>
         <TabList>
-          {getIsSameRecordType(BookRecordType.already) ? (
-            <AlreadyBookRecordBox />
-          ) : getIsSameRecordType(BookRecordType.ing) ? (
-            <IngBookRecordBox />
-          ) : (
-            <WantBookRecordBox />
-          )}
+          {match(recordType)
+            .with(BookRecordType.already, () => <AlreadyBookRecordBox />)
+            .with(BookRecordType.ing, () => <IngBookRecordBox />)
+            .otherwise(() => (
+              <WantBookRecordBox />
+            ))}
         </TabList>
       </ModalBody>
       <ModalFooter>
