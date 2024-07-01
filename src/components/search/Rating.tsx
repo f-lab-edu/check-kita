@@ -1,6 +1,7 @@
 import { SetStateAction } from 'jotai';
 import { Dispatch } from 'react';
 import styled from 'styled-components';
+import { match } from 'ts-pattern';
 
 interface RatingProps {
   score: number;
@@ -34,13 +35,17 @@ function Rating({ score, setScore }: RatingProps) {
   function setStarScore(score: number, index: number) {
     const scoreMinusIndex = score - index;
 
-    return scoreMinusIndex === 0.5 ? (
-      <HalfStar key={index} onClick={starClicked} id={String(index)} />
-    ) : scoreMinusIndex > 0 ? (
-      <OneStar key={index} onClick={starClicked} id={String(index)} />
-    ) : (
-      <ZeroStar key={index} onClick={starClicked} id={String(index)} />
-    );
+    return match(scoreMinusIndex)
+      .with(0.5, () => (
+        <HalfStar key={index} onClick={starClicked} id={String(index)} />
+      ))
+      .when(
+        (n) => n > 0,
+        () => <OneStar key={index} onClick={starClicked} id={String(index)} />
+      )
+      .otherwise(() => (
+        <ZeroStar key={index} onClick={starClicked} id={String(index)} />
+      ));
   }
 
   return (
