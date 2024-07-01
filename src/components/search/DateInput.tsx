@@ -1,4 +1,4 @@
-import { Dispatch, useState } from 'react';
+import { Dispatch, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -11,16 +11,28 @@ interface DateInputProps {
   atom: { value: Date; setValue: Dispatch<SetStateAction<Date>> };
 }
 
+const actionTypes = {
+  TOGGLE: 'TOGGLE',
+};
+
 function DateInput({ labelText, marginBottom, atom }: DateInputProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { value, setValue } = atom;
 
-  const setDatePickerOpen = () => {
-    setIsOpen(!isOpen);
+  const openReducer = (state: boolean, action: any) => {
+    switch (action.type) {
+      case actionTypes.TOGGLE:
+        return !state;
+      default:
+        return state;
+    }
+  };
+  const [isOpen, dispatchOpen] = useReducer(openReducer, false);
+  const toggleDatePicker = () => {
+    dispatchOpen({ type: actionTypes.TOGGLE });
   };
 
   return (
-    <Wrapper onClick={setDatePickerOpen} marginBottom={marginBottom}>
+    <Wrapper onClick={toggleDatePicker} marginBottom={marginBottom}>
       <LabelWrapper>
         <TodayIcon fontSize="small" />
         <span>{labelText}</span>
