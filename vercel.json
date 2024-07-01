@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/search-books",
+      "destination": "https://openapi.naver.com/v1/search/book.json"
+    },
+    {
+      "source": "/api/search-book-by-isbn",
+      "destination": "https://openapi.naver.com/v1/search/book_adv.xml"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
