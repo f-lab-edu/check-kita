@@ -6,6 +6,7 @@ import {
   query,
   where,
   getDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MyBook } from '../interfaces/book.interface';
@@ -74,5 +75,20 @@ export async function getMyBookInfoByBookId(bookId: string) {
     }
   } catch (e) {
     console.log(e);
+  }
+}
+
+/**
+ * 책 아이디로 책기록 삭제하기
+ * @param {string} bookId
+ * @return {Promise<boolean>}
+ */
+export async function deleteRecordByBookId(bookId: string): Promise<boolean> {
+  try {
+    await deleteDoc(doc(db, 'myBooks', bookId));
+
+    return true;
+  } catch (e) {
+    return false;
   }
 }
