@@ -19,9 +19,9 @@ import {
   wantBookAtom,
 } from '../../store';
 import { BookRecordType } from '../../shared/enums/book.enum';
-import AlreadyBookRecordBox from './AlreadyBookRecordBox';
-import IngBookRecordBox from './IngBookRecordBox';
-import WantBookRecordBox from './WantBookRecordBox';
+import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
+import IngBookRecordBox from '../search/IngBookRecordBox';
+import WantBookRecordBox from '../search/WantBookRecordBox';
 import {
   AlreadyBook,
   IngBook,

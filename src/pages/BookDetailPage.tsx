@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SearchBook } from '../shared/interfaces/book.interface';
 import * as api from '../shared/services/searchService';
 import styled from 'styled-components';
-import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
+import { splitBookAuthor } from '../shared/utils';
 import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
-import ModalAddBook from '../components/search/ModalAddBook';
+import ModalAddBook from '../components/bookDetail/ModalAddBook';
 import { useSetAtom } from 'jotai';
 import {
   selectedBookAuthorAtom,
@@ -13,6 +13,10 @@ import {
   selectedBookImageAtom,
   selectedBookTitleAtom,
 } from '../store';
+import { useQuery } from '@tanstack/react-query';
+import { getMyBookInfoByBookId } from '../shared/services/myBookService';
+import { match } from 'ts-pattern';
+import BookRecordBox from '../components/bookDetail/BookRecordBox';
 
 function BookDetailPage() {
   const navigate = useNavigate();
@@ -25,6 +29,12 @@ function BookDetailPage() {
   const setBookImage = useSetAtom(selectedBookImageAtom);
   const setBookAuthor = useSetAtom(selectedBookAuthorAtom);
 
+  const { data: myBook, isLoading } = useQuery({
+    queryKey: ['myBook', bookIsbn],
+    queryFn: () => getMyBookInfoByBookId(bookIsbn as string),
+  });
+
+  // TODO: react-query로 수정하기
   useEffect(() => {
     !!bookIsbn &&
       api
@@ -84,22 +94,26 @@ function BookDetailPage() {
             </InfoBox>
           </BookPublisingInfoBottom>
           <HorizontalLine />
-          <BookDiscountBox>
-            <DiscountText>
-              <span>판매가</span>
-              {bookInfo?.discount && (
-                <strong>{changedMoneyFormat(bookInfo.discount)}</strong>
-              )}
-            </DiscountText>
-            <Button>구매하러 가기</Button>
-          </BookDiscountBox>
-          {/* TODO: 이미 저장한 책일 경우 별점이랑 삭제 버튼 */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button onClick={onOpen}>저장</button>
+          <div>
+            {myBook && <BookRecordBox bookRecord={myBook.readingRecord} />}
+            <MyBookButtonBox>
+              {match({ isLoading, myBook })
+                .with({ isLoading: true }, () => (
+                  <Button onClick={onOpen}>저장하기</Button>
+                ))
+                .with({ isLoading: false, myBookInfo: null }, () => (
+                  <Button onClick={onOpen}>저장하기</Button>
+                ))
+                .otherwise(() => (
+                  <>
+                    <Button>수정하기</Button>
+                    <Button>삭제하기</Button>
+                  </>
+                ))}
+            </MyBookButtonBox>
           </div>
         </BookInfoBox>
       </BookTopInfo>
-      <HorizontalLine />
       <BookInfoBottom>
         <DescriptionTitle>작품 소개</DescriptionTitle>
         <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
@@ -184,25 +198,8 @@ const HorizontalLine = styled.div<HorizontalLineProps>`
   margin: ${(props) => (props.margin ? props.margin : '20px 0')};
 `;
 
-const BookDiscountBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const DiscountText = styled.p`
-  font-size: 13px;
-  color: #808991;
-
-  & > strong {
-    margin-left: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    color: #1e9eff;
-  }
-`;
-
 const BookInfoBottom = styled.div`
+  margin-top: 20px;
   & > p {
     font-size: 15px;
     line-height: 1.74em;
@@ -217,6 +214,14 @@ const DescriptionTitle = styled.div`
   letter-spacing: -0.03em;
   line-height: 24px;
   padding: 10px 0 8px;
+`;
+
+const MyBookButtonBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
 `;
 
 export default BookDetailPage;
