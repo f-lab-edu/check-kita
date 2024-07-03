@@ -11,7 +11,7 @@ interface BookRecordBoxProps {
 }
 
 function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
-  const { recordType, recordDetail } = bookRecord;
+  const { recordType } = bookRecord;
 
   return (
     <Wrapper>
