@@ -1,14 +1,21 @@
 import styled from 'styled-components';
 import { MyBook } from '../../shared/interfaces/book.interface';
 import { textOverflowStyles } from '../../shared/styles/\bcommon';
+import { useNavigate } from 'react-router-dom';
 
 interface BookProps {
   myBook: MyBook;
 }
 
 function Book({ myBook }: BookProps) {
+  const navigate = useNavigate();
+
+  const goToBookDetail = () => {
+    navigate(`/book/${myBook.id}`);
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onClick={goToBookDetail}>
       <BookImgWrapper>
         <img src={myBook.image} />
       </BookImgWrapper>
@@ -30,6 +37,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const BookImgWrapper = styled.div`
