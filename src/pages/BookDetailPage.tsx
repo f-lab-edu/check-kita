@@ -4,7 +4,7 @@ import { SearchBook } from '../shared/interfaces/book.interface';
 import * as api from '../shared/services/searchService';
 import styled from 'styled-components';
 import { changedMoneyFormat, splitBookAuthor } from '../shared/utils';
-import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/search/ModalAddBook';
 import { useSetAtom } from 'jotai';
 import {
@@ -14,7 +14,7 @@ import {
   selectedBookTitleAtom,
 } from '../store';
 
-function SearchBookDetailPage() {
+function BookDetailPage() {
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const [bookInfo, setBookInfo] = useState<SearchBook>();
@@ -91,7 +91,7 @@ function SearchBookDetailPage() {
                 <strong>{changedMoneyFormat(bookInfo.discount)}</strong>
               )}
             </DiscountText>
-            <button>구매하러 가기</button>
+            <Button>구매하러 가기</Button>
           </BookDiscountBox>
           {/* TODO: 이미 저장한 책일 경우 별점이랑 삭제 버튼 */}
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -219,4 +219,4 @@ const DescriptionTitle = styled.div`
   padding: 10px 0 8px;
 `;
 
-export default SearchBookDetailPage;
+export default BookDetailPage;
