@@ -15,14 +15,14 @@ function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
 
   return (
     <Wrapper>
-      <RecordType>{BookRecordTypeLabel[recordType]}</RecordType>
       <RecordBox>
+        <RecordType>{BookRecordTypeLabel[recordType]}</RecordType>
         {/* TODO: 책 기록 퍼블리싱 */}
         {match(recordType)
-          .with(BookRecordType.already, () => <div>Already</div>)
-          .with(BookRecordType.ing, () => <div>In Progress</div>)
+          .with(BookRecordType.already, () => <div></div>)
+          .with(BookRecordType.ing, () => <div></div>)
           .otherwise(() => (
-            <div>Want</div>
+            <div></div>
           ))}
       </RecordBox>
     </Wrapper>
@@ -32,17 +32,17 @@ function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
 const Wrapper = styled.div``;
 
 const RecordType = styled.p`
-  font-size: 20px;
+  font-size: 15px;
   color: #59667a;
   font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 24px;
+  line-height: 120%;
 `;
 
 const RecordBox = styled.div`
   margin-top: 10px;
   border: solid 4px #f2f4f5;
-  padding: 20px 26px 13px;
+  padding: 20px 26px;
 `;
 
 export default BookRecordBox;

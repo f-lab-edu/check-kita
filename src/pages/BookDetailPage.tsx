@@ -1,20 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SearchBook } from '../shared/interfaces/book.interface';
-import * as api from '../shared/services/searchService';
+import * as api from '../shared/services';
 import styled from 'styled-components';
 import { splitBookAuthor } from '../shared/utils';
 import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/bookDetail/ModalAddBook';
 import { useSetAtom } from 'jotai';
-import {
-  selectedBookAuthorAtom,
-  selectedBookIdAtom,
-  selectedBookImageAtom,
-  selectedBookTitleAtom,
-} from '../store';
+import * as atom from '../store/atoms';
 import { useQuery } from '@tanstack/react-query';
-import { getMyBookInfoByBookId } from '../shared/services/myBookService';
 import { match } from 'ts-pattern';
 import BookRecordBox from '../components/bookDetail/BookRecordBox';
 
@@ -24,15 +18,25 @@ function BookDetailPage() {
   const [bookInfo, setBookInfo] = useState<SearchBook>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const setBookId = useSetAtom(selectedBookIdAtom);
-  const setBookTitle = useSetAtom(selectedBookTitleAtom);
-  const setBookImage = useSetAtom(selectedBookImageAtom);
-  const setBookAuthor = useSetAtom(selectedBookAuthorAtom);
+  const setBookId = useSetAtom(atom.selectedBookIdAtom);
+  const setBookTitle = useSetAtom(atom.selectedBookTitleAtom);
+  const setBookImage = useSetAtom(atom.selectedBookImageAtom);
+  const setBookAuthor = useSetAtom(atom.selectedBookAuthorAtom);
 
   const { data: myBook, isLoading } = useQuery({
     queryKey: ['myBook', bookIsbn],
-    queryFn: () => getMyBookInfoByBookId(bookIsbn as string),
+    queryFn: () => api.getMyBookInfoByBookId(bookIsbn as string),
   });
+
+  const deleteRecord = async () => {
+    const isDeleted = await api.deleteRecordByBookId(bookIsbn as string);
+
+    // TODO: 화면 재렌더링 안됨
+
+    // TODO: 내 책 기록 삭제 alert 수정하기
+    if (isDeleted) alert('삭제 성공!');
+    else alert('삭제 실패!');
+  };
 
   // TODO: react-query로 수정하기
   useEffect(() => {
@@ -101,13 +105,13 @@ function BookDetailPage() {
                 .with({ isLoading: true }, () => (
                   <Button onClick={onOpen}>저장하기</Button>
                 ))
-                .with({ isLoading: false, myBookInfo: null }, () => (
+                .with({ isLoading: false, myBook: null }, () => (
                   <Button onClick={onOpen}>저장하기</Button>
                 ))
                 .otherwise(() => (
                   <>
                     <Button>수정하기</Button>
-                    <Button>삭제하기</Button>
+                    <Button onClick={deleteRecord}>삭제하기</Button>
                   </>
                 ))}
             </MyBookButtonBox>
