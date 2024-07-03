@@ -5,11 +5,16 @@ import {
   collection,
   query,
   where,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { MyBook } from '../interfaces/book.interface';
 import { BookRecordType } from '../enums/book.enum';
 
+/**
+ * 책 추가하기
+ * @param {MyBook} saveBook
+ */
 export async function addMyBook(saveBook: MyBook) {
   try {
     const { id } = saveBook;
@@ -24,6 +29,11 @@ export async function addMyBook(saveBook: MyBook) {
   }
 }
 
+/**
+ * 추가한 책 가져오기
+ * @param {BookRecordType | 'all'} recordType
+ * @returns
+ */
 export async function getAllMyBooks(
   recordType: BookRecordType | 'all' = 'all'
 ): Promise<MyBook[]> {
@@ -45,4 +55,24 @@ export async function getAllMyBooks(
   }));
 
   return books;
+}
+
+/**
+ * 책 아이디로 내 책 정보 가져오기
+ * @param {number} bookId
+ */
+export async function getMyBookInfoByBookId(bookId: string) {
+  try {
+    const docRef = doc(db, 'myBooks', bookId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      // MEMO: 뭘 리턴하면 좋을까요??
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }
