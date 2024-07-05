@@ -8,9 +8,10 @@ import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/bookDetail/ModalAddBook';
 import { useSetAtom } from 'jotai';
 import * as atom from '../store/atoms';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { match } from 'ts-pattern';
 import BookRecordBox from '../components/bookDetail/BookRecordBox';
+import { queryClient } from '../main';
 
 function BookDetailPage() {
   const navigate = useNavigate();
@@ -28,15 +29,16 @@ function BookDetailPage() {
     queryFn: () => api.getMyBookInfoByBookId(bookIsbn as string),
   });
 
-  const deleteRecord = async () => {
-    const isDeleted = await api.deleteRecordByBookId(bookIsbn as string);
-
-    // TODO: 화면 재렌더링 안됨
-
-    // TODO: 내 책 기록 삭제 alert 수정하기
-    if (isDeleted) alert('삭제 성공!');
-    else alert('삭제 실패!');
-  };
+  const deleteRecord = useMutation({
+    mutationFn: () => api.deleteRecordByBookId(bookIsbn as string),
+    onSuccess: () => {
+      alert('삭제 성공!');
+      queryClient.invalidateQueries({ queryKey: ['myBook', bookIsbn] });
+    },
+    onError: () => {
+      alert('삭제 실패!');
+    },
+  });
 
   // TODO: react-query로 수정하기
   useEffect(() => {
@@ -111,7 +113,13 @@ function BookDetailPage() {
                 .otherwise(() => (
                   <>
                     <Button>수정하기</Button>
-                    <Button onClick={deleteRecord}>삭제하기</Button>
+                    <Button
+                      onClick={() => {
+                        deleteRecord.mutate();
+                      }}
+                    >
+                      삭제하기
+                    </Button>
                   </>
                 ))}
             </MyBookButtonBox>

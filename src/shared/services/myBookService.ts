@@ -66,6 +66,8 @@ export async function getMyBookInfoByBookId(bookId: string) {
     const docRef = doc(db, 'myBooks', bookId);
     const docSnap = await getDoc(docRef);
 
+    if (!docSnap.exists()) return null;
+
     return docSnap.data();
   } catch (e) {
     return null;
