@@ -1,5 +1,3 @@
-import { BookReadingProgressType } from '../enums/book.enum';
-
 export interface SearchBook {
   title: string;
   link: string;
@@ -41,6 +39,8 @@ export interface AlreadyBook {
   endDate: Date;
   rating: number;
 }
+
+export type BookReadingProgressType = 'pages' | 'percentage';
 
 // 읽는 중 책
 export interface IngBook {

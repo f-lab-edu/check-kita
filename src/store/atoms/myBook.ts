@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
-import { BookReadingProgressType } from '../../shared/enums/book.enum';
 import {
   AlreadyBook,
+  BookReadingProgressType,
   BookRecordType,
   IngBook,
   WantBook,
@@ -22,9 +22,8 @@ export const alreadyBookAtom = atom<AlreadyBook>((get) => ({
 
 // 읽고 있는 책
 export const ingBookStartDateAtom = atom<Date>(new Date());
-export const ingBookReadingProgressTypeAtom = atom<BookReadingProgressType>(
-  BookReadingProgressType.pages
-);
+export const ingBookReadingProgressTypeAtom =
+  atom<BookReadingProgressType>('pages');
 export const ingBookReadingProgressCountAtom = atom<number>(0);
 export const ingBookAtom = atom<IngBook>((get) => ({
   startDate: get(ingBookStartDateAtom),

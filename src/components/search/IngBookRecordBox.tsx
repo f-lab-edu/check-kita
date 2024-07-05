@@ -7,7 +7,7 @@ import {
 } from '../../store';
 import styled from 'styled-components';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { BookReadingProgressType } from '../../shared/enums/book.enum';
+import { BookReadingProgressType } from '../../shared/interfaces/book.interface';
 
 function IngBookRecordBox() {
   const [ingBookStartDate, setIngBookStartDate] = useAtom(ingBookStartDateAtom);
@@ -44,18 +44,8 @@ function IngBookRecordBox() {
       >
         <LabelText marginBottom={'0px'}>독서량</LabelText>
         <ProgressTypeSelector>
-          <button
-            onClick={() => progressTypeChange(BookReadingProgressType.pages)}
-          >
-            쪽
-          </button>
-          <button
-            onClick={() =>
-              progressTypeChange(BookReadingProgressType.percentage)
-            }
-          >
-            %
-          </button>
+          <button onClick={() => progressTypeChange('pages')}>쪽</button>
+          <button onClick={() => progressTypeChange('percentage')}>%</button>
         </ProgressTypeSelector>
       </div>
       <ProgressTypeInputBox>
@@ -69,9 +59,7 @@ function IngBookRecordBox() {
             value={progressCount}
             onChange={(e) => progressCountChange(e)}
           />
-          <span>
-            {progressType === BookReadingProgressType.pages ? '쪽' : '%'}
-          </span>
+          <span>{progressType === 'pages' ? '쪽' : '%'}</span>
         </ProgressTypeInput>
       </ProgressTypeInputBox>
 
