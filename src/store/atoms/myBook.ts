@@ -1,18 +1,14 @@
 import { atom } from 'jotai';
-import {
-  BookReadingProgressType,
-  BookRecordType,
-} from '../../shared/enums/book.enum';
+import { BookReadingProgressType } from '../../shared/enums/book.enum';
 import {
   AlreadyBook,
+  BookRecordType,
   IngBook,
   WantBook,
 } from '../../shared/interfaces/book.interface';
 
 // 기록 책 정보
-export const readingRecordTypeAtom = atom<BookRecordType>(
-  BookRecordType.already
-);
+export const readingRecordTypeAtom = atom<BookRecordType>('already');
 
 // 읽은 책
 export const alreadyBookStartDateAtom = atom<Date>(new Date());

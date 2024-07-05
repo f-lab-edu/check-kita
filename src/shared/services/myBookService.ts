@@ -9,8 +9,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase';
-import { MyBook } from '../interfaces/book.interface';
-import { BookRecordType } from '../enums/book.enum';
+import { BookRecordType, MyBook } from '../interfaces/book.interface';
 
 /**
  * 책 추가하기

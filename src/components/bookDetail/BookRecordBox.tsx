@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import { ReadingRecord } from '../../shared/interfaces/book.interface';
-import {
-  BookRecordType,
-  BookRecordTypeLabel,
-} from '../../shared/enums/book.enum';
+import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
 import { match } from 'ts-pattern';
 
 interface BookRecordBoxProps {
@@ -19,8 +16,8 @@ function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
         <RecordType>{BookRecordTypeLabel[recordType]}</RecordType>
         {/* TODO: 책 기록 퍼블리싱 */}
         {match(recordType)
-          .with(BookRecordType.already, () => <div></div>)
-          .with(BookRecordType.ing, () => <div></div>)
+          .with('already', () => <div></div>)
+          .with('ing', () => <div></div>)
           .otherwise(() => (
             <div></div>
           ))}

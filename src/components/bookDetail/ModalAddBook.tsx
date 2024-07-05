@@ -18,12 +18,12 @@ import {
   readingRecordTypeAtom,
   wantBookAtom,
 } from '../../store';
-import { BookRecordType } from '../../shared/enums/book.enum';
 import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 import IngBookRecordBox from '../search/IngBookRecordBox';
 import WantBookRecordBox from '../search/WantBookRecordBox';
 import {
   AlreadyBook,
+  BookRecordType,
   IngBook,
   MyBook,
   WantBook,
@@ -62,13 +62,13 @@ function ModalAddBook({ onClose }: ModalAddBookProps) {
       let bookDetail: AlreadyBook | IngBook | WantBook;
 
       switch (recordType) {
-        case BookRecordType.already:
+        case 'already':
           bookDetail = alreadyBook;
           break;
-        case BookRecordType.ing:
+        case 'ing':
           bookDetail = ingBook;
           break;
-        case BookRecordType.want:
+        case 'want':
           bookDetail = wantBook;
           break;
       }
@@ -97,83 +97,65 @@ function ModalAddBook({ onClose }: ModalAddBookProps) {
         <BookTypeButtonWrapper>
           <BookTypeButton
             onClick={() => {
-              changeRecordType(BookRecordType.already);
+              changeRecordType('already');
             }}
-            isSelected={getIsSameRecordType(BookRecordType.already)}
+            isSelected={getIsSameRecordType('already')}
           >
             <FlagIcon
               sx={{
-                color: getIsSameRecordType(BookRecordType.already)
-                  ? '#fff'
-                  : '#cecece',
+                color: getIsSameRecordType('already') ? '#fff' : '#cecece',
               }}
             />
-            <TypeButtonMainText
-              isSelected={getIsSameRecordType(BookRecordType.already)}
-            >
+            <TypeButtonMainText isSelected={getIsSameRecordType('already')}>
               읽은 책
             </TypeButtonMainText>
-            <TypeButtonSubText
-              isSelected={getIsSameRecordType(BookRecordType.already)}
-            >
+            <TypeButtonSubText isSelected={getIsSameRecordType('already')}>
               다 읽은 책이에요
             </TypeButtonSubText>
           </BookTypeButton>
 
           <BookTypeButton
             onClick={() => {
-              changeRecordType(BookRecordType.ing);
+              changeRecordType('ing');
             }}
-            isSelected={getIsSameRecordType(BookRecordType.ing)}
+            isSelected={getIsSameRecordType('ing')}
           >
             <BookmarkIcon
               sx={{
-                color: getIsSameRecordType(BookRecordType.ing)
-                  ? '#fff'
-                  : '#cecece',
+                color: getIsSameRecordType('ing') ? '#fff' : '#cecece',
               }}
             />
-            <TypeButtonMainText
-              isSelected={getIsSameRecordType(BookRecordType.ing)}
-            >
+            <TypeButtonMainText isSelected={getIsSameRecordType('ing')}>
               읽고 있는 책
             </TypeButtonMainText>
-            <TypeButtonSubText
-              isSelected={getIsSameRecordType(BookRecordType.ing)}
-            >
+            <TypeButtonSubText isSelected={getIsSameRecordType('ing')}>
               열심히 읽고 있어요
             </TypeButtonSubText>
           </BookTypeButton>
 
           <BookTypeButton
             onClick={() => {
-              changeRecordType(BookRecordType.want);
+              changeRecordType('want');
             }}
-            isSelected={getIsSameRecordType(BookRecordType.want)}
+            isSelected={getIsSameRecordType('want')}
           >
             <FavoriteIcon
               sx={{
-                color: getIsSameRecordType(BookRecordType.want)
-                  ? '#fff'
-                  : '#cecece',
+                color: getIsSameRecordType('want') ? '#fff' : '#cecece',
               }}
             />
-            <TypeButtonMainText
-              isSelected={getIsSameRecordType(BookRecordType.want)}
-            >
+            <TypeButtonMainText isSelected={getIsSameRecordType('want')}>
               읽고 싶은 책
             </TypeButtonMainText>
-            <TypeButtonSubText
-              isSelected={getIsSameRecordType(BookRecordType.want)}
-            >
+            <TypeButtonSubText isSelected={getIsSameRecordType('want')}>
               찜 해두고 싶어요
             </TypeButtonSubText>
           </BookTypeButton>
         </BookTypeButtonWrapper>
         <TabList>
           {match(recordType)
-            .with(BookRecordType.already, () => <AlreadyBookRecordBox />)
-            .with(BookRecordType.ing, () => <IngBookRecordBox />)
+            .with('already', () => <AlreadyBookRecordBox />)
+            .with('ing', () => <IngBookRecordBox />)
             .otherwise(() => (
               <WantBookRecordBox />
             ))}
