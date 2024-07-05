@@ -32,7 +32,7 @@ function Rating({ score, setScore }: RatingProps) {
    * @param {number} index
    * @returns
    */
-  function setStarScore(score: number, index: number) {
+  function starScore(score: number, index: number) {
     const scoreMinusIndex = score - index;
 
     return match(scoreMinusIndex)
@@ -50,7 +50,7 @@ function Rating({ score, setScore }: RatingProps) {
 
   return (
     <Wrapper>
-      {Array.from({ length: 5 }).map((_, index) => setStarScore(score, index))}
+      {Array.from({ length: 5 }).map((_, index) => starScore(score, index))}
     </Wrapper>
   );
 }
