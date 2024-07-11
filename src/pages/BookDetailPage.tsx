@@ -8,7 +8,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { match } from 'ts-pattern';
 import BookRecordBox from '../components/bookDetail/BookRecordBox';
 import { queryClient } from '../main';
-import { NOT_EXISTS } from '../shared/constants';
 
 function BookDetailPage() {
   const navigate = useNavigate();
