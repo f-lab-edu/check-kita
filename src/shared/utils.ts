@@ -6,11 +6,9 @@ export const changedMoneyFormat = (number: number): string => {
 
 export const splitBookAuthor = (author: string): string[] => {
   try {
-    console.log('splitBookAuthor', author);
-
     return author.split('^');
   } catch (e) {
-    console.log(author);
+    return [];
   }
 };
 
