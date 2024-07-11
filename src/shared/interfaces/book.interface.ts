@@ -27,10 +27,12 @@ export interface MyBook {
 
 export type BookRecordType = 'already' | 'ing' | 'want';
 
+export type BookRecordDetail = AlreadyBook | IngBook | WantBook;
+
 // 책 기록
 export interface ReadingRecord {
   recordType: BookRecordType;
-  recordDetail: AlreadyBook | IngBook | WantBook;
+  recordDetail: BookRecordDetail;
 }
 
 // 이미 읽은 책

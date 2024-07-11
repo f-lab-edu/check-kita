@@ -21,17 +21,15 @@ import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 import IngBookRecordBox from '../search/IngBookRecordBox';
 import WantBookRecordBox from '../search/WantBookRecordBox';
 import {
-  AlreadyBook,
+  BookRecordDetail,
   BookRecordType,
-  IngBook,
   MyBook,
   SearchBook,
-  WantBook,
 } from '../../shared/interfaces/book.interface';
 import * as api from '../../shared/services/myBookService';
 import { match } from 'ts-pattern';
 import { queryClient } from '../../main';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 interface ModalAddBookProps {
@@ -48,26 +46,10 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     'book',
     bookIsbn,
   ]);
-
-  useEffect(() => {
-    if (!!!bookInfo) {
-      // TODO: 알럿 띄우기
-      onClose();
-      return;
-    }
-  }, [bookInfo]);
-
-  /**
-   * 저장할 책 타입 변경
-   * @param changeBookRecordType
-   */
-  const changeRecordType = (changeBookRecordType: BookRecordType) => {
-    setRecordType(changeBookRecordType);
-  };
-
-  const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
-    return selectedRecordType === recordType;
-  };
+  const bookRecord: MyBook | undefined = queryClient.getQueryData([
+    'record',
+    bookIsbn,
+  ]);
 
   const addRecord = useMutation({
     mutationFn: (saveBook: MyBook) => api.addMyBook(saveBook),
@@ -80,6 +62,28 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     },
   });
 
+  useEffect(() => {
+    if (!!!bookInfo) {
+      // TODO: 알럿 띄우기
+      onClose();
+      return;
+    }
+  }, [bookInfo]);
+
+  useEffect(() => {
+    if (!!!bookRecord) return;
+
+    const {
+      readingRecord: { recordType },
+    } = bookRecord;
+
+    setRecordType(recordType);
+  }, [bookRecord]);
+
+  const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
+    return selectedRecordType === recordType;
+  };
+
   /**
    * 책 기록 저장
    */
@@ -91,7 +95,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         return;
       }
 
-      let bookDetail: AlreadyBook | IngBook | WantBook;
+      let bookDetail: BookRecordDetail;
 
       switch (recordType) {
         case 'already':
@@ -135,7 +139,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         <BookTypeButtonWrapper>
           <BookTypeButton
             onClick={() => {
-              changeRecordType('already');
+              setRecordType('already');
             }}
             isSelected={getIsSameRecordType('already')}
           >
@@ -154,7 +158,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
 
           <BookTypeButton
             onClick={() => {
-              changeRecordType('ing');
+              setRecordType('ing');
             }}
             isSelected={getIsSameRecordType('ing')}
           >
@@ -173,7 +177,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
 
           <BookTypeButton
             onClick={() => {
-              changeRecordType('want');
+              setRecordType('want');
             }}
             isSelected={getIsSameRecordType('want')}
           >

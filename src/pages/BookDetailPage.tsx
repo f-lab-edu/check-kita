@@ -20,22 +20,12 @@ function BookDetailPage() {
     queryFn: async () => {
       const result = await api.getMyBookInfoByBookId(bookIsbn as string);
 
-      if (!result) return NOT_EXISTS;
+      if (!result) throw new Error('No book data found');
+
       return result;
     },
     enabled: !!bookIsbn,
     retry: false,
-  });
-
-  const deleteRecord = useMutation({
-    mutationFn: () => api.deleteRecordByBookId(bookIsbn as string),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
-      alert('삭제 성공!');
-    },
-    onError: () => {
-      alert('삭제 실패!');
-    },
   });
 
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
@@ -59,6 +49,17 @@ function BookDetailPage() {
       };
 
       return bookInfo;
+    },
+  });
+
+  const deleteRecord = useMutation({
+    mutationFn: () => api.deleteRecordByBookId(bookIsbn as string),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
+      alert('삭제 성공!');
+    },
+    onError: () => {
+      alert('삭제 실패!');
     },
   });
 
@@ -99,20 +100,18 @@ function BookDetailPage() {
               </BookPublisingInfoBottom>
               <HorizontalLine />
               <div>
-                {myBook && myBook !== NOT_EXISTS && (
-                  <BookRecordBox bookRecord={myBook.readingRecord} />
-                )}
+                {myBook && <BookRecordBox bookRecord={myBook.readingRecord} />}
                 <MyBookButtonBox>
                   {match({ isLoading, myBook })
                     .with({ isLoading: true }, () => (
                       <Button onClick={onOpen}>저장하기</Button>
                     ))
-                    .with({ isLoading: false, myBook: NOT_EXISTS }, () => (
+                    .with({ isLoading: false, myBook: undefined }, () => (
                       <Button onClick={onOpen}>저장하기</Button>
                     ))
                     .otherwise(() => (
                       <>
-                        <Button>수정하기</Button>
+                        <Button onClick={onOpen}>수정하기</Button>
                         <Button
                           onClick={() => {
                             deleteRecord.mutate();
