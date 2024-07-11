@@ -1,140 +1,144 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SearchBook } from '../shared/interfaces/book.interface';
 import * as api from '../shared/services';
 import styled from 'styled-components';
 import { splitBookAuthor } from '../shared/utils';
 import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/bookDetail/ModalAddBook';
-import { useSetAtom } from 'jotai';
-import * as atom from '../store/atoms';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { match } from 'ts-pattern';
 import BookRecordBox from '../components/bookDetail/BookRecordBox';
 import { queryClient } from '../main';
+import { NOT_EXISTS } from '../shared/constants';
 
 function BookDetailPage() {
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
-  const [bookInfo, setBookInfo] = useState<SearchBook>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const setBookId = useSetAtom(atom.selectedBookIdAtom);
-  const setBookTitle = useSetAtom(atom.selectedBookTitleAtom);
-  const setBookImage = useSetAtom(atom.selectedBookImageAtom);
-  const setBookAuthor = useSetAtom(atom.selectedBookAuthorAtom);
-
   const { data: myBook, isLoading } = useQuery({
-    queryKey: ['myBook', bookIsbn],
-    queryFn: () => api.getMyBookInfoByBookId(bookIsbn as string),
+    queryKey: ['record', bookIsbn],
+    queryFn: async () => {
+      const result = await api.getMyBookInfoByBookId(bookIsbn as string);
+
+      if (!result) return NOT_EXISTS;
+      return result;
+    },
+    enabled: !!bookIsbn,
+    retry: false,
   });
 
   const deleteRecord = useMutation({
     mutationFn: () => api.deleteRecordByBookId(bookIsbn as string),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
       alert('삭제 성공!');
-      queryClient.invalidateQueries({ queryKey: ['myBook', bookIsbn] });
     },
     onError: () => {
       alert('삭제 실패!');
     },
   });
 
-  // TODO: react-query로 수정하기
-  useEffect(() => {
-    !!bookIsbn &&
-      api
-        .searchBookByIsbn(Number(bookIsbn))
-        .then((book) => {
-          if (!book) {
-            // TODO: 에러 컨벤션 정해지면 throw
-            // TODO: 알럿 띄우기
-            navigate(-1);
-            return;
-          }
+  const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
+    queryKey: ['book', bookIsbn],
+    queryFn: async () => {
+      const result = await api.searchBookByIsbn(bookIsbn as string);
 
-          setBookId(book.isbn);
-          setBookTitle(book.title);
-          setBookImage(book.image);
-          const authors = splitBookAuthor(book.author);
-          setBookAuthor(authors);
+      if (result === null) {
+        alert('데이터 불러오기 실패!');
+        navigate(-1);
+        throw new Error('[BookDetailPage] searchBookByIsbn failed');
+      }
 
-          setBookInfo(book);
-        })
-        .catch(() => {
-          //TODO: 에러 핸들링
-        });
-  }, []);
+      const author = Array.isArray(result.author)
+        ? result.author
+        : splitBookAuthor(result.author);
+
+      const bookInfo = {
+        ...result,
+        author,
+      };
+
+      return bookInfo;
+    },
+  });
 
   return (
     <div>
-      <BookTopInfo>
-        <img src={bookInfo?.image} width={200} />
-        <BookInfoBox>
-          <BookTitle>{bookInfo?.title}</BookTitle>
-          <BookPublisingInfoTop>
-            <p>
-              {bookInfo?.author &&
-                splitBookAuthor(bookInfo?.author).map((bookAuthor, index) => (
-                  <span key={index}>
-                    <strong>{bookAuthor}</strong>
-                    {index !== bookInfo?.author.split('^').length - 1 && (
-                      <span>, </span>
-                    )}
-                  </span>
-                ))}{' '}
-              저
-            </p>
-            <p>
-              <strong>{bookInfo?.publisher}</strong> 출판
-            </p>
-          </BookPublisingInfoTop>
-          <BookPublisingInfoBottom>
-            <InfoBox>
-              <p>출간일</p>
-              <p>{bookInfo?.pubdate}</p>
-            </InfoBox>
-            <InfoBox>
-              <p>ISBN</p>
-              <p>{bookInfo?.isbn}</p>
-            </InfoBox>
-          </BookPublisingInfoBottom>
-          <HorizontalLine />
-          <div>
-            {myBook && <BookRecordBox bookRecord={myBook.readingRecord} />}
-            <MyBookButtonBox>
-              {match({ isLoading, myBook })
-                .with({ isLoading: true }, () => (
-                  <Button onClick={onOpen}>저장하기</Button>
-                ))
-                .with({ isLoading: false, myBook: null }, () => (
-                  <Button onClick={onOpen}>저장하기</Button>
-                ))
-                .otherwise(() => (
-                  <>
-                    <Button>수정하기</Button>
-                    <Button
-                      onClick={() => {
-                        deleteRecord.mutate();
-                      }}
-                    >
-                      삭제하기
-                    </Button>
-                  </>
-                ))}
-            </MyBookButtonBox>
-          </div>
-        </BookInfoBox>
-      </BookTopInfo>
-      <BookInfoBottom>
-        <DescriptionTitle>작품 소개</DescriptionTitle>
-        <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
-        <p>{bookInfo?.description}</p>
-      </BookInfoBottom>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalAddBook onClose={onClose} />
-      </Modal>
+      {!bookInfoIsLoading && (
+        <>
+          <BookTopInfo>
+            <img src={bookInfo?.image} width={200} />
+            <BookInfoBox>
+              <BookTitle>{bookInfo?.title}</BookTitle>
+              <BookPublisingInfoTop>
+                <p>
+                  {bookInfo?.author &&
+                    (bookInfo?.author).map((bookAuthor, index) => (
+                      <span key={index}>
+                        <strong>{bookAuthor}</strong>
+                        {index !== bookInfo?.author.length - 1 && (
+                          <span>, </span>
+                        )}
+                      </span>
+                    ))}{' '}
+                  저
+                </p>
+                <p>
+                  <strong>{bookInfo?.publisher}</strong> 출판
+                </p>
+              </BookPublisingInfoTop>
+              <BookPublisingInfoBottom>
+                <InfoBox>
+                  <p>출간일</p>
+                  <p>{bookInfo?.pubdate}</p>
+                </InfoBox>
+                <InfoBox>
+                  <p>ISBN</p>
+                  <p>{bookInfo?.isbn}</p>
+                </InfoBox>
+              </BookPublisingInfoBottom>
+              <HorizontalLine />
+              <div>
+                {myBook && myBook !== NOT_EXISTS && (
+                  <BookRecordBox bookRecord={myBook.readingRecord} />
+                )}
+                <MyBookButtonBox>
+                  {match({ isLoading, myBook })
+                    .with({ isLoading: true }, () => (
+                      <Button onClick={onOpen}>저장하기</Button>
+                    ))
+                    .with({ isLoading: false, myBook: NOT_EXISTS }, () => (
+                      <Button onClick={onOpen}>저장하기</Button>
+                    ))
+                    .otherwise(() => (
+                      <>
+                        <Button>수정하기</Button>
+                        <Button
+                          onClick={() => {
+                            deleteRecord.mutate();
+                          }}
+                        >
+                          삭제하기
+                        </Button>
+                      </>
+                    ))}
+                </MyBookButtonBox>
+              </div>
+            </BookInfoBox>
+          </BookTopInfo>
+          <BookInfoBottom>
+            <DescriptionTitle>작품 소개</DescriptionTitle>
+            <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
+            <p>{bookInfo?.description}</p>
+          </BookInfoBottom>
+          {!!bookIsbn && (
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalAddBook onClose={onClose} bookIsbn={bookIsbn} />
+            </Modal>
+          )}
+        </>
+      )}
     </div>
   );
 }

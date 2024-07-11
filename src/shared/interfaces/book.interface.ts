@@ -2,7 +2,7 @@ export interface SearchBook {
   title: string;
   link: string;
   image: string;
-  author: string;
+  author: string | string[];
   discount?: number;
   description: string;
   publisher: string;

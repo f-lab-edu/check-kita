@@ -3,3 +3,5 @@ export const INIT_RECORD_DETAIL = {
   endDate: new Date(),
   rating: 0,
 };
+
+export const NOT_EXISTS = 'NOT_EXISTS';

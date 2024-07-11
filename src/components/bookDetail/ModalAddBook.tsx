@@ -14,7 +14,6 @@ import { useAtom, useAtomValue } from 'jotai';
 import {
   alreadyBookAtom,
   ingBookAtom,
-  selectedBookAtom,
   readingRecordTypeAtom,
   wantBookAtom,
 } from '../../store';
@@ -26,21 +25,37 @@ import {
   BookRecordType,
   IngBook,
   MyBook,
+  SearchBook,
   WantBook,
 } from '../../shared/interfaces/book.interface';
-import { addMyBook } from '../../shared/services/myBookService';
+import * as api from '../../shared/services/myBookService';
 import { match } from 'ts-pattern';
+import { queryClient } from '../../main';
+import { useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 interface ModalAddBookProps {
   onClose: () => void;
+  bookIsbn: string;
 }
 
-function ModalAddBook({ onClose }: ModalAddBookProps) {
+function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   const [recordType, setRecordType] = useAtom(readingRecordTypeAtom);
-  const selectedBookInfo = useAtomValue(selectedBookAtom);
   const alreadyBook = useAtomValue(alreadyBookAtom);
   const ingBook = useAtomValue(ingBookAtom);
   const wantBook = useAtomValue(wantBookAtom);
+  const bookInfo: SearchBook | undefined = queryClient.getQueryData([
+    'book',
+    bookIsbn,
+  ]);
+
+  useEffect(() => {
+    if (!!!bookInfo) {
+      // TODO: 알럿 띄우기
+      onClose();
+      return;
+    }
+  }, [bookInfo]);
 
   /**
    * 저장할 책 타입 변경
@@ -54,11 +69,28 @@ function ModalAddBook({ onClose }: ModalAddBookProps) {
     return selectedRecordType === recordType;
   };
 
+  const addRecord = useMutation({
+    mutationFn: (saveBook: MyBook) => api.addMyBook(saveBook),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
+      alert('추가 성공!');
+    },
+    onError: () => {
+      alert('추가 실패!');
+    },
+  });
+
   /**
    * 책 기록 저장
    */
   const saveBookRecord = async () => {
     try {
+      if (!!!bookInfo) {
+        // TODO: 알럿띄우기
+        onClose();
+        return;
+      }
+
       let bookDetail: AlreadyBook | IngBook | WantBook;
 
       switch (recordType) {
@@ -73,6 +105,13 @@ function ModalAddBook({ onClose }: ModalAddBookProps) {
           break;
       }
 
+      const selectedBookInfo = {
+        id: bookInfo.isbn,
+        title: bookInfo.title,
+        author: bookInfo.author as string[],
+        image: bookInfo.image,
+      };
+
       const saveBook: MyBook = {
         ...selectedBookInfo,
         readingRecord: {
@@ -80,8 +119,7 @@ function ModalAddBook({ onClose }: ModalAddBookProps) {
           recordDetail: bookDetail,
         },
       };
-
-      await addMyBook(saveBook);
+      addRecord.mutate(saveBook);
       onClose();
       // TODO: 성공 알럿 띄우기
     } catch (e) {

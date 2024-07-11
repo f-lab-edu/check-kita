@@ -61,14 +61,16 @@ export async function getAllMyBooks(
  * 책 아이디로 내 책 정보 가져오기
  * @param {number} bookId
  */
-export async function getMyBookInfoByBookId(bookId: string) {
+export async function getMyBookInfoByBookId(
+  bookId: string
+): Promise<null | MyBook> {
   try {
     const docRef = doc(db, 'myBooks', bookId);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) return null;
 
-    return docSnap.data();
+    return docSnap.data() as MyBook;
   } catch (e) {
     return null;
   }
