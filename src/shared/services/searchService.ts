@@ -21,7 +21,7 @@ export const searchBooks = (
   search: string,
   count: number = 20,
   page: number = 1
-): Promise<SearchBook> => {
+): Promise<SearchBook[]> => {
   return api
     .get('/search-books', {
       params: { query: search, display: count, start: page, sort: 'sim' },

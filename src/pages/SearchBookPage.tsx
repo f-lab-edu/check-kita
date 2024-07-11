@@ -15,7 +15,6 @@ function SearchBookPage() {
     if (search) {
       // TODO: 리액트 쿼리로 변경
       apis.searchBooks(search).then((res) => {
-        console.log(res);
         setSearchResult(res);
 
         // TODO: 타이틀, link. image 아톰에 저장
