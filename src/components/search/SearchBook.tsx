@@ -45,14 +45,17 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
           {HighlightedText(bookInfo.title, search as string)}
         </BookTitle>
         <BookAuthor>
-          {splitBookAuthor(bookInfo.author).map((bookAuthor, index) => (
-            <span key={index}>
-              <span>{bookAuthor}</span>
-              {index !== bookInfo.author.split('^').length - 1 && (
-                <span>, </span>
-              )}
-            </span>
-          ))}
+          {splitBookAuthor(bookInfo.author as string).map(
+            (bookAuthor, index) => (
+              <span key={index}>
+                <span>{bookAuthor}</span>
+                {index !==
+                  (bookInfo.author as string).split('^').length - 1 && (
+                  <span>, </span>
+                )}
+              </span>
+            )
+          )}
         </BookAuthor>
         <BookPublisher>{bookInfo.publisher}</BookPublisher>
         <BookDesc lines={3} onClick={goToSearchBookDetail}>
