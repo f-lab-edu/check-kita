@@ -42,6 +42,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   const alreadyBook = useAtomValue(alreadyBookAtom);
   const ingBook = useAtomValue(ingBookAtom);
   const wantBook = useAtomValue(wantBookAtom);
+
   const bookInfo: SearchBook | undefined = queryClient.getQueryData([
     'book',
     bookIsbn,
@@ -73,10 +74,10 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   useEffect(() => {
     if (!!!bookRecord) return;
 
-    const {
-      readingRecord: { recordType },
-    } = bookRecord;
+    const { readingRecord } = bookRecord;
+    if (!!!readingRecord) return;
 
+    const { recordType } = readingRecord;
     setRecordType(recordType);
   }, [bookRecord]);
 
@@ -112,7 +113,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
       const selectedBookInfo = {
         id: bookInfo.isbn,
         title: bookInfo.title,
-        author: bookInfo.author as string[],
+        author: bookInfo.author,
         image: bookInfo.image,
       };
 
@@ -123,6 +124,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
           recordDetail: bookDetail,
         },
       };
+
       addRecord.mutate(saveBook);
       onClose();
       // TODO: 성공 알럿 띄우기
@@ -196,10 +198,12 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         </BookTypeButtonWrapper>
         <TabList>
           {match(recordType)
-            .with('already', () => <AlreadyBookRecordBox />)
-            .with('ing', () => <IngBookRecordBox />)
+            .with('already', () => (
+              <AlreadyBookRecordBox bookRecord={bookRecord} />
+            ))
+            .with('ing', () => <IngBookRecordBox bookRecord={bookRecord} />)
             .otherwise(() => (
-              <WantBookRecordBox />
+              <WantBookRecordBox bookRecord={bookRecord} />
             ))}
         </TabList>
       </ModalBody>
