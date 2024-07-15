@@ -33,7 +33,7 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
 
   useEffect(() => {
     if (!!bookInfo.author) {
-      setAuthors(bookInfo.author.split('^'));
+      setAuthors(splitBookAuthor(bookInfo.author));
     }
   }, [bookInfo.author]);
 

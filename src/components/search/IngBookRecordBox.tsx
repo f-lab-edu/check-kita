@@ -7,9 +7,18 @@ import {
 } from '../../store';
 import styled from 'styled-components';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { BookReadingProgressType } from '../../shared/interfaces/book.interface';
+import {
+  BookReadingProgressType,
+  BookRecordDetail,
+  IngBook,
+} from '../../shared/interfaces/book.interface';
+import { useEffect } from 'react';
 
-function IngBookRecordBox() {
+interface IngBookRecordBoxProps {
+  recordDetail: BookRecordDetail | undefined;
+}
+
+function IngBookRecordBox({ recordDetail }: IngBookRecordBoxProps) {
   const [ingBookStartDate, setIngBookStartDate] = useAtom(ingBookStartDateAtom);
   const [progressType, setProgressType] = useAtom(
     ingBookReadingProgressTypeAtom
@@ -31,6 +40,17 @@ function IngBookRecordBox() {
 
     setProgressCount(+eventTarget.value);
   };
+
+  useEffect(() => {
+    if (!!!recordDetail) return;
+
+    const { startDate, readingProgressType, readingProgressCount } =
+      recordDetail as IngBook;
+
+    setIngBookStartDate(startDate);
+    setProgressType(readingProgressType);
+    setProgressCount(readingProgressCount);
+  }, [recordDetail]);
 
   return (
     <div>

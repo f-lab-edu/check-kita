@@ -29,8 +29,9 @@ import {
 import * as api from '../../shared/services/myBookService';
 import { match } from 'ts-pattern';
 import { queryClient } from '../../main';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { splitBookAuthor } from '../../shared/utils';
 
 interface ModalAddBookProps {
   onClose: () => void;
@@ -42,6 +43,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   const alreadyBook = useAtomValue(alreadyBookAtom);
   const ingBook = useAtomValue(ingBookAtom);
   const wantBook = useAtomValue(wantBookAtom);
+  const [recordDetail, setRecordDetail] = useState<BookRecordDetail>();
 
   const bookInfo: SearchBook | undefined = queryClient.getQueryData([
     'book',
@@ -77,8 +79,9 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     const { readingRecord } = bookRecord;
     if (!!!readingRecord) return;
 
-    const { recordType } = readingRecord;
+    const { recordType, recordDetail } = readingRecord;
     setRecordType(recordType);
+    setRecordDetail(recordDetail);
   }, [bookRecord]);
 
   const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
@@ -113,7 +116,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
       const selectedBookInfo = {
         id: bookInfo.isbn,
         title: bookInfo.title,
-        author: bookInfo.author,
+        author: splitBookAuthor(bookInfo.author),
         image: bookInfo.image,
       };
 
@@ -199,17 +202,17 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         <TabList>
           {match(recordType)
             .with('already', () => (
-              <AlreadyBookRecordBox bookRecord={bookRecord} />
+              <AlreadyBookRecordBox recordDetail={recordDetail} />
             ))
-            .with('ing', () => <IngBookRecordBox bookRecord={bookRecord} />)
+            .with('ing', () => <IngBookRecordBox recordDetail={recordDetail} />)
             .otherwise(() => (
-              <WantBookRecordBox bookRecord={bookRecord} />
+              <WantBookRecordBox recordDetail={recordDetail} />
             ))}
         </TabList>
       </ModalBody>
       <ModalFooter>
         <Button width={'100%'} onClick={saveBookRecord}>
-          저장하기
+          {!!!bookRecord?.id ? '저장하기' : '수정하기'}
         </Button>
       </ModalFooter>
     </ModalContent>
