@@ -1,25 +1,26 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import * as api from '../shared/services';
 import styled from 'styled-components';
-import { splitBookAuthor } from '../shared/utils';
 import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/bookDetail/ModalAddBook';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { match } from 'ts-pattern';
 import BookRecordBox from '../components/bookDetail/BookRecordBox';
 import { queryClient } from '../main';
+import { SearchBook } from '../shared/interfaces/book.interface';
+import { useEffect, useState } from 'react';
+import { splitBookAuthor } from '../shared/utils';
 
 function BookDetailPage() {
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [authors, setAuthors] = useState<string[]>([]);
 
   const { data: myBook, isLoading } = useQuery({
     queryKey: ['record', bookIsbn],
     queryFn: async () => {
       const result = await api.getMyBookInfoByBookId(bookIsbn as string);
-
-      if (!result) throw new Error('No book data found');
 
       return result;
     },
@@ -29,7 +30,7 @@ function BookDetailPage() {
 
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
     queryKey: ['book', bookIsbn],
-    queryFn: async () => {
+    queryFn: async (): Promise<SearchBook> => {
       const result = await api.searchBookByIsbn(bookIsbn as string);
 
       if (result === null) {
@@ -38,16 +39,7 @@ function BookDetailPage() {
         throw new Error('[BookDetailPage] searchBookByIsbn failed');
       }
 
-      const author = Array.isArray(result.author)
-        ? result.author
-        : splitBookAuthor(result.author);
-
-      const bookInfo = {
-        ...result,
-        author,
-      };
-
-      return bookInfo;
+      return result;
     },
   });
 
@@ -62,6 +54,12 @@ function BookDetailPage() {
     },
   });
 
+  useEffect(() => {
+    if (!!bookInfo?.author) {
+      setAuthors(splitBookAuthor(bookInfo.author));
+    }
+  }, [bookInfo?.author]);
+
   return (
     <div>
       {!bookInfoIsLoading && (
@@ -72,13 +70,11 @@ function BookDetailPage() {
               <BookTitle>{bookInfo?.title}</BookTitle>
               <BookPublisingInfoTop>
                 <p>
-                  {bookInfo?.author &&
-                    (bookInfo?.author).map((bookAuthor, index) => (
+                  {!!authors &&
+                    authors.map((bookAuthor, index) => (
                       <span key={index}>
                         <strong>{bookAuthor}</strong>
-                        {index !== bookInfo?.author.length - 1 && (
-                          <span>, </span>
-                        )}
+                        {index !== authors.length - 1 && <span>, </span>}
                       </span>
                     ))}{' '}
                   저
@@ -99,7 +95,9 @@ function BookDetailPage() {
               </BookPublisingInfoBottom>
               <HorizontalLine />
               <div>
-                {myBook && <BookRecordBox bookRecord={myBook.readingRecord} />}
+                {!!myBook?.readingRecord && (
+                  <BookRecordBox bookRecord={myBook.readingRecord} />
+                )}
                 <MyBookButtonBox>
                   {match({ isLoading, myBook })
                     .with({ isLoading: true }, () => (
