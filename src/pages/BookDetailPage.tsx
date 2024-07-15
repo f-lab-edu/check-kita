@@ -106,6 +106,10 @@ function BookDetailPage() {
                     .with({ isLoading: false, myBook: undefined }, () => (
                       <Button onClick={onOpen}>저장하기</Button>
                     ))
+                    .with(
+                      { isLoading: false, myBook: { id: undefined } },
+                      () => <Button onClick={onOpen}>저장하기</Button>
+                    )
                     .otherwise(() => (
                       <>
                         <Button onClick={onOpen}>수정하기</Button>

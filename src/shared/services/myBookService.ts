@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
+import { INIT_NOT_EXISTS_RECORD } from '../constants';
 
 /**
  * 책 추가하기
@@ -61,18 +62,15 @@ export async function getAllMyBooks(
  * 책 아이디로 내 책 정보 가져오기
  * @param {number} bookId
  */
-export async function getMyBookInfoByBookId(
-  bookId: string
-): Promise<null | MyBook> {
+export async function getMyBookInfoByBookId(bookId: string): Promise<MyBook> {
   try {
     const docRef = doc(db, 'myBooks', bookId);
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) return null;
-
+    if (!docSnap.exists()) return INIT_NOT_EXISTS_RECORD;
     return docSnap.data() as MyBook;
   } catch (e) {
-    return null;
+    return INIT_NOT_EXISTS_RECORD;
   }
 }
 
