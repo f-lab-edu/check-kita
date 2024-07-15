@@ -11,6 +11,7 @@ import {
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
 import { INIT_NOT_EXISTS_RECORD } from '../constants';
+import { convertTimestampsToDate } from '../utils';
 
 /**
  * 책 추가하기
@@ -68,7 +69,11 @@ export async function getMyBookInfoByBookId(bookId: string): Promise<MyBook> {
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) return INIT_NOT_EXISTS_RECORD;
-    return docSnap.data() as MyBook;
+
+    const result = docSnap.data() as MyBook;
+    if (!!!result) return INIT_NOT_EXISTS_RECORD;
+
+    return convertTimestampsToDate(result);
   } catch (e) {
     return INIT_NOT_EXISTS_RECORD;
   }

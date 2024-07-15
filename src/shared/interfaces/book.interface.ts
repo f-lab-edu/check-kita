@@ -18,11 +18,11 @@ export interface SelectedBookInfo {
 }
 
 export interface MyBook {
-  id: number;
-  title: string;
-  author: string[];
-  image: string;
-  readingRecord: ReadingRecord;
+  id?: number;
+  title?: string;
+  author?: string[];
+  image?: string;
+  readingRecord?: ReadingRecord;
 }
 
 export type BookRecordType = 'already' | 'ing' | 'want';
