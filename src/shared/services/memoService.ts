@@ -1,11 +1,11 @@
-import { Memos } from './../interfaces/memo.interface';
+import { Memo, Memos } from './../interfaces/memo.interface';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 /**
  * 메모 추가하기, 수정하기
  */
-export async function updateBookMemo(bookId: number, memo: string) {
+export async function updateBookMemo(bookId: number, memo: Memo) {
   try {
     // get 헤서 가져와서
     const docRef = doc(db, 'memos', String(bookId));

@@ -1,4 +1,9 @@
+export interface Memo {
+  memoId: number;
+  content: string;
+}
+
 export interface Memos {
   bookId: number;
-  memos: string[];
+  memos: Memo[];
 }

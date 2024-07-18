@@ -10,13 +10,15 @@ import ModalUpdateMemo from './ModalUpdateMemo';
 import { useQuery } from '@tanstack/react-query';
 import * as api from '../../shared/services/memoService';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 function MemoBox() {
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showedMemoIndex, setShowedMemoIndex] = useState<Number>(-1);
   // TODO: 메모 수정의 경우 selectedMemo에 담아서 전달
 
-  const { data: memos, isLoading } = useQuery({
+  const { data: memoList, isLoading } = useQuery({
     queryKey: ['memos', bookIsbn],
     queryFn: async () => {
       const result = await api.getMemosAsBookId(Number(bookIsbn));
@@ -36,8 +38,24 @@ function MemoBox() {
         </Flex>
         <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
         <MemoList>
-          {!!memos &&
-            memos.memos.map((memo, index) => <div key={index}>{memo}</div>)}
+          {!!memoList &&
+            memoList.memos.map((memo, index) => (
+              <MemoContainer
+                key={index}
+                onMouseEnter={() => {
+                  setShowedMemoIndex(index);
+                }}
+                onMouseLeave={() => {
+                  setShowedMemoIndex(-1);
+                }}
+              >
+                {memo.content}
+                <ButtonWrapper show={index === showedMemoIndex}>
+                  <Button>수정</Button>
+                  <Button>식제</Button>
+                </ButtonWrapper>
+              </MemoContainer>
+            ))}
         </MemoList>
       </Wrapper>
       {/* 메모 업데이트 모달 */}
@@ -77,6 +95,21 @@ const MemoList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+`;
+
+const MemoContainer = styled.div`
+  border: 1px solid blue;
+  display: flex;
+  gap: 4px;
+`;
+
+interface ButtonWrapperProps {
+  show: boolean;
+}
+
+const ButtonWrapper = styled.div<ButtonWrapperProps>`
+  display: ${(props) => (props.show ? 'flex' : 'none')};
+  gap: 4px;
 `;
 
 export default MemoBox;

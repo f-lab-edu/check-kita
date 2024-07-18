@@ -71,3 +71,13 @@ export const convertTimestampsToDate = (obj: any): any => {
   }
   return obj;
 };
+
+/**
+ *
+ * @return {number}
+ */
+export const generateMemoId = (): number => {
+  const currentDate = new Date();
+
+  return currentDate.getMilliseconds();
+};

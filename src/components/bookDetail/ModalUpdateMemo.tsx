@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as api from '../../shared/services/memoService';
 import { queryClient } from '../../main';
+import { generateMemoId } from '../../shared/utils';
 
 interface ModalUpdateMemoProps {
   onClose: () => void;
@@ -21,7 +22,11 @@ function ModalUpdateMemo({ onClose }: ModalUpdateMemoProps) {
   const [memo, setMemo] = useState<string>('');
 
   const updateMemo = useMutation({
-    mutationFn: () => api.updateBookMemo(Number(bookIsbn), memo),
+    mutationFn: () =>
+      api.updateBookMemo(Number(bookIsbn), {
+        memoId: generateMemoId(),
+        content: memo,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
       alert('추가 성공!');
