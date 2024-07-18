@@ -7,10 +7,25 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import ModalUpdateMemo from './ModalUpdateMemo';
+import { useQuery } from '@tanstack/react-query';
+import * as api from '../../shared/services/memoService';
+import { useParams } from 'react-router-dom';
 
 function MemoBox() {
+  const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   // TODO: 메모 수정의 경우 selectedMemo에 담아서 전달
+
+  const { data: memos, isLoading } = useQuery({
+    queryKey: ['memos', bookIsbn],
+    queryFn: async () => {
+      const result = await api.getMemosAsBookId(Number(bookIsbn));
+
+      return result;
+    },
+    enabled: !!bookIsbn,
+    retry: false,
+  });
 
   return (
     <>
@@ -20,6 +35,10 @@ function MemoBox() {
           <Button onClick={onOpen}>메모하기</Button>
         </Flex>
         <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
+        <MemoList>
+          {!!memos &&
+            memos.memos.map((memo, index) => <div key={index}>{memo}</div>)}
+        </MemoList>
       </Wrapper>
       {/* 메모 업데이트 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -52,6 +71,12 @@ const HorizontalLine = styled.div<HorizontalLineProps>`
   width: 100%;
   border: 1px solid ${(props) => (props.color ? props.color : '#e6e8eb')};
   margin: ${(props) => (props.margin ? props.margin : '20px 0')};
+`;
+
+const MemoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export default MemoBox;

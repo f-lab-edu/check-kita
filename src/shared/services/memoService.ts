@@ -27,3 +27,15 @@ export async function updateBookMemo(bookId: number, memo: string) {
     // TODO: 에러 핸들링
   }
 }
+
+/**
+ * 책 메모 정보 가져오기
+ */
+export async function getMemosAsBookId(bookId: number): Promise<Memos> {
+  const docRef = doc(db, 'memos', String(bookId));
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) return docSnap.data() as Memos;
+
+  return { bookId, memos: [] };
+}
