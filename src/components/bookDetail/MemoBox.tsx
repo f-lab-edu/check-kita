@@ -12,12 +12,13 @@ import * as api from '../../shared/services/memoService';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { queryClient } from '../../main';
+import { Memo } from '../../shared/interfaces/memo.interface';
 
 function MemoBox() {
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showedMemoIndex, setShowedMemoIndex] = useState<Number>(-1);
-  // TODO: 메모 수정의 경우 selectedMemo에 담아서 전달
+  const [updateTarget, setUpdateTarget] = useState<Memo>();
 
   const { data: memoList, isLoading } = useQuery({
     queryKey: ['memos', bookIsbn],
@@ -43,6 +44,11 @@ function MemoBox() {
     },
   });
 
+  const setUpdateMemo = (targetMemo: Memo) => {
+    setUpdateTarget(targetMemo);
+    onOpen();
+  };
+
   return (
     <>
       <Wrapper>
@@ -65,7 +71,7 @@ function MemoBox() {
               >
                 {memo.content}
                 <ButtonWrapper show={index === showedMemoIndex}>
-                  <Button>수정</Button>
+                  <Button onClick={() => setUpdateMemo(memo)}>수정</Button>
                   <Button
                     onClick={() => {
                       deleteMemo.mutate(memo.memoId);
@@ -81,7 +87,10 @@ function MemoBox() {
       {/* 메모 업데이트 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalUpdateMemo onClose={onClose}></ModalUpdateMemo>
+        <ModalUpdateMemo
+          onClose={onClose}
+          updateTarget={updateTarget}
+        ></ModalUpdateMemo>
       </Modal>
     </>
   );
