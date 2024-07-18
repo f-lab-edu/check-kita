@@ -7,10 +7,11 @@ import {
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import ModalUpdateMemo from './ModalUpdateMemo';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import * as api from '../../shared/services/memoService';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { queryClient } from '../../main';
 
 function MemoBox() {
   const { bookIsbn } = useParams();
@@ -21,12 +22,25 @@ function MemoBox() {
   const { data: memoList, isLoading } = useQuery({
     queryKey: ['memos', bookIsbn],
     queryFn: async () => {
-      const result = await api.getMemosAsBookId(Number(bookIsbn));
+      const result = await api.getMemosByBookId(Number(bookIsbn));
 
       return result;
     },
     enabled: !!bookIsbn,
     retry: false,
+  });
+
+  const deleteMemo = useMutation({
+    mutationFn: (memoId: number) =>
+      api.deleteMemoByMemoId(Number(bookIsbn), memoId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
+      alert('제거 성공!');
+      onClose();
+    },
+    onError: () => {
+      alert('제거 실패!');
+    },
   });
 
   return (
@@ -52,7 +66,13 @@ function MemoBox() {
                 {memo.content}
                 <ButtonWrapper show={index === showedMemoIndex}>
                   <Button>수정</Button>
-                  <Button>식제</Button>
+                  <Button
+                    onClick={() => {
+                      deleteMemo.mutate(memo.memoId);
+                    }}
+                  >
+                    식제
+                  </Button>
                 </ButtonWrapper>
               </MemoContainer>
             ))}
