@@ -7,17 +7,14 @@ import {
   alreadyBookStartDateAtom,
 } from '../../store';
 import { useAtom } from 'jotai';
-import {
-  AlreadyBook,
-  BookRecordDetail,
-} from '../../shared/interfaces/book.interface';
+import { AlreadyBook, MyBook } from '../../shared/interfaces/book.interface';
 import { useEffect } from 'react';
 
 interface AlreadyBookRecordBoxProps {
-  recordDetail: BookRecordDetail | undefined;
+  bookRecord: MyBook | undefined;
 }
 
-function AlreadyBookRecordBox({ recordDetail }: AlreadyBookRecordBoxProps) {
+function AlreadyBookRecordBox({ bookRecord }: AlreadyBookRecordBoxProps) {
   const [alreadyBookStartDate, setAlreadyBookStartDate] = useAtom(
     alreadyBookStartDateAtom
   );
@@ -27,14 +24,20 @@ function AlreadyBookRecordBox({ recordDetail }: AlreadyBookRecordBoxProps) {
   const [rating, setRating] = useAtom(alreadyBookRatingAtom);
 
   useEffect(() => {
-    if (!!!recordDetail) return;
+    if (!!!bookRecord) return;
+    const { readingRecord } = bookRecord;
+
+    if (!!!readingRecord) return;
+    const { recordType, recordDetail } = readingRecord;
+
+    if (recordType !== 'already') return;
 
     const { startDate, endDate, rating } = recordDetail as AlreadyBook;
 
     setAlreadyBookStartDate(startDate);
     setAlreadyBookEndDate(endDate);
     setRating(rating);
-  }, [recordDetail]);
+  }, [bookRecord]);
 
   return (
     <div>

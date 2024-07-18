@@ -17,7 +17,7 @@ import { convertTimestampsToDate } from '../utils';
  * 책 추가하기
  * @param {MyBook} saveBook
  */
-export async function addMyBook(saveBook: MyBook) {
+export async function updateMyBook(saveBook: MyBook) {
   try {
     const { id } = saveBook;
 

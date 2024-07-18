@@ -5,17 +5,14 @@ import {
 } from '../../store';
 import Rating from './Rating';
 import { useAtom } from 'jotai';
-import {
-  BookRecordDetail,
-  WantBook,
-} from '../../shared/interfaces/book.interface';
+import { MyBook, WantBook } from '../../shared/interfaces/book.interface';
 import { useEffect } from 'react';
 
 interface WantBookRecordBoxProps {
-  recordDetail: BookRecordDetail | undefined;
+  bookRecord: MyBook | undefined;
 }
 
-function WantBookRecordBox({ recordDetail }: WantBookRecordBoxProps) {
+function WantBookRecordBox({ bookRecord }: WantBookRecordBoxProps) {
   const [rating, setRating] = useAtom(wantBookExpectationRatingAtom);
   const [expectationMemo, setExpectationMemo] = useAtom(
     wantBookExpectationMemoAtom
@@ -27,13 +24,19 @@ function WantBookRecordBox({ recordDetail }: WantBookRecordBoxProps) {
   };
 
   useEffect(() => {
-    if (!!!recordDetail) return;
+    if (!!!bookRecord) return;
+    const { readingRecord } = bookRecord;
+
+    if (!!!readingRecord) return;
+    const { recordType, recordDetail } = readingRecord;
+
+    if (recordType !== 'want') return;
 
     const { expectationRating, expectationMemo } = recordDetail as WantBook;
 
     setRating(expectationRating);
     setExpectationMemo(expectationMemo);
-  }, [recordDetail]);
+  }, [bookRecord]);
 
   return (
     <div>

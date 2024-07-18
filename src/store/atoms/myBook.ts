@@ -13,7 +13,7 @@ export const readingRecordTypeAtom = atom<BookRecordType>('already');
 // 읽은 책
 export const alreadyBookStartDateAtom = atom<Date>(new Date());
 export const alreadyBookEndDateAtom = atom<Date>(new Date());
-export const alreadyBookRatingAtom = atom<number>(5);
+export const alreadyBookRatingAtom = atom<number>(0);
 export const alreadyBookAtom = atom<AlreadyBook>((get) => ({
   startDate: get(alreadyBookStartDateAtom),
   endDate: get(alreadyBookEndDateAtom),

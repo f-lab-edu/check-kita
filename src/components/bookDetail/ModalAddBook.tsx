@@ -29,7 +29,7 @@ import {
 import * as api from '../../shared/services/myBookService';
 import { match } from 'ts-pattern';
 import { queryClient } from '../../main';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { splitBookAuthor } from '../../shared/utils';
 
@@ -43,7 +43,6 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   const alreadyBook = useAtomValue(alreadyBookAtom);
   const ingBook = useAtomValue(ingBookAtom);
   const wantBook = useAtomValue(wantBookAtom);
-  const [recordDetail, setRecordDetail] = useState<BookRecordDetail>();
 
   const bookInfo: SearchBook | undefined = queryClient.getQueryData([
     'book',
@@ -54,8 +53,8 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     bookIsbn,
   ]);
 
-  const addRecord = useMutation({
-    mutationFn: (saveBook: MyBook) => api.addMyBook(saveBook),
+  const updateRecord = useMutation({
+    mutationFn: (saveBook: MyBook) => api.updateMyBook(saveBook),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
       alert('추가 성공!');
@@ -79,10 +78,15 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     const { readingRecord } = bookRecord;
     if (!!!readingRecord) return;
 
-    const { recordType, recordDetail } = readingRecord;
+    const { recordType } = readingRecord;
     setRecordType(recordType);
-    setRecordDetail(recordDetail);
   }, [bookRecord]);
+
+  useEffect(() => {
+    // TODO: 레코드 디테일에 데이터 셋해주기
+    // bookRecord로 변경되면 거기에 맞게 변경
+    // 그 외에는 INIT 데이터로 변경
+  }, [recordType]);
 
   const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
     return selectedRecordType === recordType;
@@ -91,7 +95,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   /**
    * 책 기록 저장
    */
-  const saveBookRecord = async () => {
+  const updateBookRecord = async () => {
     try {
       if (!!!bookInfo) {
         // TODO: 알럿띄우기
@@ -128,8 +132,10 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         },
       };
 
-      addRecord.mutate(saveBook);
+      updateRecord.mutate(saveBook);
       onClose();
+
+      // TODO: alreadyBook, ingBook wantBook 초기화하기
       // TODO: 성공 알럿 띄우기
     } catch (e) {
       // TODO: 에러 핸들링
@@ -202,16 +208,16 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         <TabList>
           {match(recordType)
             .with('already', () => (
-              <AlreadyBookRecordBox recordDetail={recordDetail} />
+              <AlreadyBookRecordBox bookRecord={bookRecord} />
             ))
-            .with('ing', () => <IngBookRecordBox recordDetail={recordDetail} />)
+            .with('ing', () => <IngBookRecordBox bookRecord={bookRecord} />)
             .otherwise(() => (
-              <WantBookRecordBox recordDetail={recordDetail} />
+              <WantBookRecordBox bookRecord={bookRecord} />
             ))}
         </TabList>
       </ModalBody>
       <ModalFooter>
-        <Button width={'100%'} onClick={saveBookRecord}>
+        <Button width={'100%'} onClick={updateBookRecord}>
           {!!!bookRecord?.id ? '저장하기' : '수정하기'}
         </Button>
       </ModalFooter>
