@@ -10,6 +10,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import {
   BookReadingProgressType,
   IngBook,
+  MyBook,
 } from '../../shared/interfaces/book.interface';
 import { useEffect } from 'react';
 

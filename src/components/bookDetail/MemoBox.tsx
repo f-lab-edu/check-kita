@@ -20,7 +20,7 @@ function MemoBox() {
   const [showedMemoIndex, setShowedMemoIndex] = useState<Number>(-1);
   const [updateTarget, setUpdateTarget] = useState<Memo>();
 
-  const { data: memoList, isLoading } = useQuery({
+  const { data: memoList } = useQuery({
     queryKey: ['memos', bookIsbn],
     queryFn: async () => {
       const result = await api.getMemosByBookId(Number(bookIsbn));
