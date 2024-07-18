@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { parseBookXml } from './utils';
+import { parseBookXml } from '../utils';
 
 const api = axios.create({
   baseURL: '/api',
@@ -56,5 +56,7 @@ export const searchBookByIsbn = (isbn: number) => {
         return parseBookXml(res.data);
       }
     })
-    .catch();
+    .catch(() => {
+      // TODO: 에러 핸들링
+    });
 };
