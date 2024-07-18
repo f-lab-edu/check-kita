@@ -10,11 +10,13 @@ import { queryClient } from '../main';
 import { SearchBook } from '../shared/interfaces/book.interface';
 import { useEffect, useState } from 'react';
 import { splitBookAuthor } from '../shared/utils';
+import MemoBox from '../components/bookDetail/MemoBox';
 
 function BookDetailPage() {
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [authors, setAuthors] = useState<string[]>([]);
 
   const { data: myBook, isLoading } = useQuery({
@@ -131,6 +133,8 @@ function BookDetailPage() {
             <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
             <p>{bookInfo?.description}</p>
           </BookInfoBottom>
+          <MemoBox />
+          {/* 기록 업데이트 모달 */}
           {!!bookIsbn && (
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />

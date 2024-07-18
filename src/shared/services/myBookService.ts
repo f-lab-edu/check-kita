@@ -14,7 +14,7 @@ import { INIT_NOT_EXISTS_RECORD } from '../constants';
 import { convertTimestampsToDate } from '../utils';
 
 /**
- * 책 추가하기
+ * 책 추가하기, 수정하기
  * @param {MyBook} saveBook
  */
 export async function updateMyBook(saveBook: MyBook) {
