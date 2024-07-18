@@ -21,12 +21,15 @@ function Book({ myBook }: BookProps) {
       </BookImgWrapper>
       <BookTitle>{myBook.title}</BookTitle>
       <BookAuthor>
-        {myBook.author.map((author, index) => (
-          <>
-            <span>{author}</span>
-            {index !== myBook.author.length - 1 && <span>, </span>}
-          </>
-        ))}
+        {!!myBook.author &&
+          myBook.author.map((author, index) => (
+            <>
+              <span>{author}</span>
+              {myBook.author && index !== myBook.author.length - 1 && (
+                <span>, </span>
+              )}
+            </>
+          ))}
       </BookAuthor>
     </Wrapper>
   );
