@@ -44,7 +44,7 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
   const updateMemoByMemoId = useMutation({
     mutationFn: () =>
       api.updateMemoByMemoId(Number(bookIsbn), {
-        memoId: updateTarget?.memoId,
+        memoId: String(updateTarget?.memoId),
         content: memo,
       }),
     onSuccess: () => {
