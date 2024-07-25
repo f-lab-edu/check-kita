@@ -1,43 +1,45 @@
 import styled from 'styled-components';
 import DateInput from './DateInput';
 import Rating from './Rating';
+
 import {
-  alreadyBookEndDateAtom,
-  alreadyBookRatingAtom,
-  alreadyBookStartDateAtom,
-} from '../../store';
-import { useAtom } from 'jotai';
-import { AlreadyBook, MyBook } from '../../shared/interfaces/book.interface';
-import { useEffect } from 'react';
+  AlreadyBook,
+  BookRecordDetail,
+} from '../../shared/interfaces/book.interface';
+import { useEffect, useState } from 'react';
+import { ModalType } from '../../shared/interfaces/common.interface';
+import { Button } from '@chakra-ui/react';
 
 interface AlreadyBookRecordBoxProps {
-  bookRecord: MyBook | undefined;
+  recordInfo: AlreadyBook;
+  type: ModalType;
+  updateRecord: (recordDetail: BookRecordDetail) => void;
 }
 
-function AlreadyBookRecordBox({ bookRecord }: AlreadyBookRecordBoxProps) {
-  const [alreadyBookStartDate, setAlreadyBookStartDate] = useAtom(
-    alreadyBookStartDateAtom
-  );
-  const [alreadyBookEndDate, setAlreadyBookEndDate] = useAtom(
-    alreadyBookEndDateAtom
-  );
-  const [rating, setRating] = useAtom(alreadyBookRatingAtom);
+function AlreadyBookRecordBox({
+  recordInfo,
+  type,
+  updateRecord,
+}: AlreadyBookRecordBoxProps) {
+  const [startDate, setStartDate] = useState<Date>(recordInfo.startDate);
+  const [endDate, setEndDate] = useState<Date>(recordInfo.endDate);
+  const [rating, setRating] = useState<number>(recordInfo.rating);
 
   useEffect(() => {
-    if (!bookRecord) return;
-    const { readingRecord } = bookRecord;
+    setStartDate(recordInfo.startDate);
+    setEndDate(recordInfo.endDate);
+    setRating(recordInfo.rating);
+  }, [recordInfo]);
 
-    if (!readingRecord) return;
-    const { recordType, recordDetail } = readingRecord;
+  useEffect(() => {
+    console.log('alreadyBox state => ', startDate, endDate, rating);
+  }, [startDate, endDate, rating]);
 
-    if (recordType !== 'already') return;
+  const handleUpdateRecordClick = () => {
+    const recordDetail: AlreadyBook = { startDate, endDate, rating };
 
-    const { startDate, endDate, rating } = recordDetail as AlreadyBook;
-
-    setAlreadyBookStartDate(startDate);
-    setAlreadyBookEndDate(endDate);
-    setRating(rating);
-  }, [bookRecord]);
+    updateRecord(recordDetail);
+  };
 
   return (
     <div>
@@ -46,16 +48,16 @@ function AlreadyBookRecordBox({ bookRecord }: AlreadyBookRecordBoxProps) {
         labelText={'시작일'}
         marginBottom={6}
         atom={{
-          value: alreadyBookStartDate,
-          setValue: setAlreadyBookStartDate,
+          value: startDate,
+          setValue: setStartDate,
         }}
       ></DateInput>
       <DateInput
         labelText={'종료일'}
         marginBottom={12}
         atom={{
-          value: alreadyBookEndDate,
-          setValue: setAlreadyBookEndDate,
+          value: endDate,
+          setValue: setEndDate,
         }}
       ></DateInput>
       <div
@@ -68,6 +70,11 @@ function AlreadyBookRecordBox({ bookRecord }: AlreadyBookRecordBoxProps) {
         <LabelText>평점을 남겨 주세요!</LabelText>
         <Rating score={rating} setScore={setRating} />
       </div>
+      <ButtonWrapper>
+        <Button width={'100%'} onClick={handleUpdateRecordClick}>
+          {type === 'save' ? '저장하기' : '수정하기'}
+        </Button>
+      </ButtonWrapper>
     </div>
   );
 }
@@ -75,6 +82,10 @@ function AlreadyBookRecordBox({ bookRecord }: AlreadyBookRecordBoxProps) {
 const LabelText = styled.p`
   font-size: 13px;
   margin-bottom: 3px;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 export default AlreadyBookRecordBox;

@@ -1,22 +1,29 @@
 import styled from 'styled-components';
-import {
-  wantBookExpectationMemoAtom,
-  wantBookExpectationRatingAtom,
-} from '../../store';
 import Rating from './Rating';
-import { useAtom } from 'jotai';
-import { MyBook, WantBook } from '../../shared/interfaces/book.interface';
-import { useEffect } from 'react';
+import {
+  BookRecordDetail,
+  WantBook,
+} from '../../shared/interfaces/book.interface';
+import { useEffect, useState } from 'react';
+import { Button } from '@chakra-ui/react';
+import { ModalType } from '../../shared/interfaces/common.interface';
 
 interface WantBookRecordBoxProps {
-  bookRecord: MyBook | undefined;
+  recordInfo: WantBook;
+  type: ModalType;
+  updateRecord: (recordDetail: BookRecordDetail) => void;
 }
 
-function WantBookRecordBox({ bookRecord }: WantBookRecordBoxProps) {
-  const [rating, setRating] = useAtom(wantBookExpectationRatingAtom);
-  const [expectationMemo, setExpectationMemo] = useAtom(
-    wantBookExpectationMemoAtom
+function WantBookRecordBox({
+  recordInfo,
+  type,
+  updateRecord,
+}: WantBookRecordBoxProps) {
+  const [rating, setRating] = useState(recordInfo.expectationRating);
+  const [expectationMemo, setExpectationMemo] = useState(
+    recordInfo.expectationMemo
   );
+
   const memoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const eventTarget = e.target;
 
@@ -24,19 +31,17 @@ function WantBookRecordBox({ bookRecord }: WantBookRecordBoxProps) {
   };
 
   useEffect(() => {
-    if (!bookRecord) return;
-    const { readingRecord } = bookRecord;
+    console.log(rating, expectationMemo);
+  }, [rating, expectationMemo]);
 
-    if (!readingRecord) return;
-    const { recordType, recordDetail } = readingRecord;
+  const handleUpdateRecordClick = () => {
+    const recordDetail: WantBook = {
+      expectationRating: rating,
+      expectationMemo: expectationMemo,
+    };
 
-    if (recordType !== 'want') return;
-
-    const { expectationRating, expectationMemo } = recordDetail as WantBook;
-
-    setRating(expectationRating);
-    setExpectationMemo(expectationMemo);
-  }, [bookRecord]);
+    updateRecord(recordDetail);
+  };
 
   return (
     <div>
@@ -49,6 +54,11 @@ function WantBookRecordBox({ bookRecord }: WantBookRecordBoxProps) {
         value={expectationMemo}
         onChange={(e) => memoChange(e)}
       ></textarea>
+      <ButtonWrapper>
+        <Button width={'100%'} onClick={handleUpdateRecordClick}>
+          {type === 'save' ? '저장하기' : '수정하기'}
+        </Button>
+      </ButtonWrapper>
     </div>
   );
 }
@@ -56,6 +66,10 @@ function WantBookRecordBox({ bookRecord }: WantBookRecordBoxProps) {
 const LabelText = styled.p`
   font-size: 13px;
   margin-bottom: 3px;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 export default WantBookRecordBox;

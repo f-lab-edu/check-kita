@@ -1,37 +1,38 @@
 import {
-  Button,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
 } from '@chakra-ui/react';
 import styled from 'styled-components';
 import FlagIcon from '@mui/icons-material/Flag';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  alreadyBookAtom,
-  ingBookAtom,
-  readingRecordTypeAtom,
-  wantBookAtom,
-} from '../../store';
-import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
+
 import IngBookRecordBox from '../search/IngBookRecordBox';
 import WantBookRecordBox from '../search/WantBookRecordBox';
 import {
+  AlreadyBook,
   BookRecordDetail,
   BookRecordType,
+  IngBook,
   MyBook,
   SearchBook,
+  WantBook,
 } from '../../shared/interfaces/book.interface';
 import * as api from '../../shared/services/myBookService';
 import { match } from 'ts-pattern';
 import { queryClient } from '../../main';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { splitBookAuthor } from '../../shared/utils';
+import {
+  INIT_ALREADYBOOK,
+  INIT_INGBOOK,
+  INIT_WANTBOOK,
+} from '../../shared/constants';
+import { ModalType } from '../../shared/interfaces/common.interface';
+import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 
 interface ModalAddBookProps {
   onClose: () => void;
@@ -39,10 +40,11 @@ interface ModalAddBookProps {
 }
 
 function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
-  const [recordType, setRecordType] = useAtom(readingRecordTypeAtom);
-  const alreadyBook = useAtomValue(alreadyBookAtom);
-  const ingBook = useAtomValue(ingBookAtom);
-  const wantBook = useAtomValue(wantBookAtom);
+  const [modalType, setModalType] = useState<ModalType>('save');
+  const [recordType, setRecordType] = useState<BookRecordType>('already');
+  const [alreadyBook, setAlreadyBook] = useState<AlreadyBook>(INIT_ALREADYBOOK);
+  const [ingBook, setIngBook] = useState<IngBook>(INIT_INGBOOK);
+  const [wantBook, setWantBook] = useState<WantBook>(INIT_WANTBOOK);
 
   const bookInfo: SearchBook | undefined = queryClient.getQueryData([
     'book',
@@ -57,10 +59,10 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     mutationFn: (saveBook: MyBook) => api.updateMyBook(saveBook),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
-      alert('추가 성공!');
+      alert('업데이트 성공!');
     },
     onError: () => {
-      alert('추가 실패!');
+      alert('업데이트 실패!');
     },
   });
 
@@ -75,11 +77,26 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   useEffect(() => {
     if (!bookRecord) return;
 
+    if (bookRecord.id) setModalType('update');
+    else setModalType('save');
+
     const { readingRecord } = bookRecord;
     if (!readingRecord) return;
 
-    const { recordType } = readingRecord;
+    const { recordType, recordDetail } = readingRecord;
     setRecordType(recordType);
+
+    switch (recordType) {
+      case 'already':
+        setAlreadyBook(recordDetail as AlreadyBook);
+        break;
+      case 'ing':
+        setIngBook(recordDetail as IngBook);
+        break;
+      case 'want':
+        setWantBook(recordDetail as WantBook);
+        break;
+    }
   }, [bookRecord]);
 
   const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
@@ -89,26 +106,12 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   /**
    * 책 기록 저장
    */
-  const updateBookRecord = async () => {
+  const updateBookRecord = async (recordDetail: BookRecordDetail) => {
     try {
       if (!bookInfo) {
         // TODO: 알럿띄우기
         onClose();
         return;
-      }
-
-      let bookDetail: BookRecordDetail;
-
-      switch (recordType) {
-        case 'already':
-          bookDetail = alreadyBook;
-          break;
-        case 'ing':
-          bookDetail = ingBook;
-          break;
-        case 'want':
-          bookDetail = wantBook;
-          break;
       }
 
       const selectedBookInfo = {
@@ -122,14 +125,13 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         ...selectedBookInfo,
         readingRecord: {
           recordType,
-          recordDetail: bookDetail,
+          recordDetail,
         },
       };
 
       updateRecord.mutate(saveBook);
       onClose();
 
-      // TODO: alreadyBook, ingBook wantBook 초기화하기
       // TODO: 성공 알럿 띄우기
     } catch (e) {
       // TODO: 에러 핸들링
@@ -202,19 +204,28 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
         <TabList>
           {match(recordType)
             .with('already', () => (
-              <AlreadyBookRecordBox bookRecord={bookRecord} />
+              <AlreadyBookRecordBox
+                recordInfo={alreadyBook}
+                type={modalType}
+                updateRecord={updateBookRecord}
+              />
             ))
-            .with('ing', () => <IngBookRecordBox bookRecord={bookRecord} />)
+            .with('ing', () => (
+              <IngBookRecordBox
+                recordInfo={ingBook}
+                type={modalType}
+                updateRecord={updateBookRecord}
+              />
+            ))
             .otherwise(() => (
-              <WantBookRecordBox bookRecord={bookRecord} />
+              <WantBookRecordBox
+                recordInfo={wantBook}
+                type={modalType}
+                updateRecord={updateBookRecord}
+              />
             ))}
         </TabList>
       </ModalBody>
-      <ModalFooter>
-        <Button width={'100%'} onClick={updateBookRecord}>
-          {!bookRecord?.id ? '저장하기' : '수정하기'}
-        </Button>
-      </ModalFooter>
     </ModalContent>
   );
 }

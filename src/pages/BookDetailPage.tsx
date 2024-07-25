@@ -28,6 +28,7 @@ function BookDetailPage() {
     },
     enabled: !!bookIsbn,
     retry: false,
+    staleTime: 0,
   });
 
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
