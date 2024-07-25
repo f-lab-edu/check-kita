@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { parseBookXml } from '../utils';
+import { SearchBook } from '../interfaces/book.interface';
 
 const api = axios.create({
   baseURL: '/api',
@@ -20,9 +21,7 @@ export const searchBooks = (
   search: string,
   count: number = 20,
   page: number = 1
-) => {
-  console.log(search, count, page);
-
+): Promise<SearchBook[]> => {
   return api
     .get('/search-books', {
       params: { query: search, display: count, start: page, sort: 'sim' },
@@ -43,20 +42,18 @@ export const searchBooks = (
  * @param {number} isbn
  * @returns
  */
-export const searchBookByIsbn = (isbn: number) => {
-  return api
-    .get('/search-book-by-isbn', {
+export async function searchBookByIsbn(
+  isbn: number
+): Promise<null | SearchBook> {
+  try {
+    const res = await api.get('/search-book-by-isbn', {
       params: { d_isbn: isbn },
-    })
-    .then((res) => {
-      console.log(res);
-      if (res.status === 200) {
-        console.log(res.data);
-
-        return parseBookXml(res.data);
-      }
-    })
-    .catch(() => {
-      // TODO: 에러 핸들링
     });
-};
+
+    if (!res || !res.data || res.status !== 200) return null;
+
+    return parseBookXml(res.data);
+  } catch (e) {
+    return null;
+  }
+}

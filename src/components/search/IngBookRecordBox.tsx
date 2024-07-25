@@ -1,35 +1,53 @@
-import { useAtom } from 'jotai';
 import DateInput from './DateInput';
-import {
-  ingBookReadingProgressCountAtom,
-  ingBookReadingProgressTypeAtom,
-  ingBookStartDateAtom,
-} from '../../store';
 import styled from 'styled-components';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { BookReadingProgressType } from '../../shared/enums/book.enum';
+import {
+  BookReadingProgressType,
+  BookRecordDetail,
+  IngBook,
+} from '../../shared/interfaces/book.interface';
+import { useEffect, useState } from 'react';
+import { Button } from '@chakra-ui/react';
+import { ModalType } from '../../shared/interfaces/common.interface';
 
-function IngBookRecordBox() {
-  const [ingBookStartDate, setIngBookStartDate] = useAtom(ingBookStartDateAtom);
-  const [progressType, setProgressType] = useAtom(
-    ingBookReadingProgressTypeAtom
+interface IngBookRecordBoxProps {
+  recordInfo: IngBook;
+  type: ModalType;
+  updateRecord: (recordDetail: BookRecordDetail) => void;
+}
+
+function IngBookRecordBox({
+  recordInfo,
+  type,
+  updateRecord,
+}: IngBookRecordBoxProps) {
+  const [startDate, setStartDate] = useState<Date>(recordInfo.startDate);
+  const [progressType, setProgressType] = useState<BookReadingProgressType>(
+    recordInfo.readingProgressType
   );
-  const [progressCount, setProgressCount] = useAtom(
-    ingBookReadingProgressCountAtom
+  const [progressCount, setProgressCount] = useState<number>(
+    recordInfo.readingProgressCount
   );
 
-  const progressTypeChange = (changeType: BookReadingProgressType) => {
-    setProgressType(changeType);
+  useEffect(() => {
+    setStartDate(recordInfo.startDate);
+    setProgressType(recordInfo.readingProgressType);
+    setProgressCount(recordInfo.readingProgressCount);
+  }, [recordInfo]);
+
+  const progressCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setProgressCount(Number(value));
   };
 
-  /**
-   * 읽은 페이지 수 변경
-   * @param {React.ChangeEvent<HTMLInputElement>} e
-   */
-  const progressCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const eventTarget = e.target;
+  const handleUpdateRecordClick = () => {
+    const recordDetail: IngBook = {
+      startDate,
+      readingProgressType: progressType,
+      readingProgressCount: progressCount,
+    };
 
-    setProgressCount(+eventTarget.value);
+    updateRecord(recordDetail);
   };
 
   return (
@@ -44,18 +62,8 @@ function IngBookRecordBox() {
       >
         <LabelText marginBottom={'0px'}>독서량</LabelText>
         <ProgressTypeSelector>
-          <button
-            onClick={() => progressTypeChange(BookReadingProgressType.pages)}
-          >
-            쪽
-          </button>
-          <button
-            onClick={() =>
-              progressTypeChange(BookReadingProgressType.percentage)
-            }
-          >
-            %
-          </button>
+          <button onClick={() => setProgressType('pages')}>쪽</button>
+          <button onClick={() => setProgressType('percentage')}>%</button>
         </ProgressTypeSelector>
       </div>
       <ProgressTypeInputBox>
@@ -66,20 +74,27 @@ function IngBookRecordBox() {
 
         <ProgressTypeInput>
           <input
+            type="number"
             value={progressCount}
             onChange={(e) => progressCountChange(e)}
           />
-          <span>
-            {progressType === BookReadingProgressType.pages ? '쪽' : '%'}
-          </span>
+          <span>{progressType === 'pages' ? '쪽' : '%'}</span>
         </ProgressTypeInput>
       </ProgressTypeInputBox>
 
       <LabelText>독서 기간</LabelText>
       <DateInput
         labelText={'시작일'}
-        atom={{ value: ingBookStartDate, setValue: setIngBookStartDate }}
+        atom={{
+          value: startDate,
+          setValue: setStartDate,
+        }}
       ></DateInput>
+      <ButtonWrapper>
+        <Button width={'100%'} onClick={handleUpdateRecordClick}>
+          {type === 'save' ? '저장하기' : '수정하기'}
+        </Button>
+      </ButtonWrapper>
     </div>
   );
 }
@@ -145,6 +160,10 @@ const ProgressTypeInput = styled.div`
     font-size: 13px;
     line-height: 13px;
   }
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 export default IngBookRecordBox;

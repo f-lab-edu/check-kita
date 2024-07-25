@@ -1,36 +1,32 @@
-import { useEffect, useState } from 'react';
 import * as apis from '../shared/services/searchService';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { SearchBook } from '../shared/interfaces/book.interface';
 import SearchResultBook from '../components/search/SearchBook';
+import { useQuery } from '@tanstack/react-query';
 
 function SearchBookPage() {
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search');
 
-  const [searchResult, setSearchResult] = useState<SearchBook[]>([]);
-
-  useEffect(() => {
-    if (search) {
-      // TODO: 리액트 쿼리로 변경
-      apis.searchBooks(search).then((res) => {
-        console.log(res);
-        setSearchResult(res);
-
-        // TODO: 타이틀, link. image 아톰에 저장
-      });
-    }
-  }, [search]);
+  const { data: searchResult, isLoading } = useQuery({
+    queryKey: ['search', search],
+    queryFn: async () => {
+      if (!search) throw new Error('No Search Word');
+      return await apis.searchBooks(search);
+    },
+    enabled: !!search,
+  });
 
   return (
     <Wrapper>
       <SearchText>'{search}' 검색 결과</SearchText>
-      <ResultList>
-        {searchResult?.map((bookInfo) => (
-          <SearchResultBook bookInfo={bookInfo} key={bookInfo.isbn} />
-        ))}
-      </ResultList>
+      {!isLoading && (
+        <ResultList>
+          {searchResult?.map((bookInfo) => (
+            <SearchResultBook bookInfo={bookInfo} key={bookInfo.isbn} />
+          ))}
+        </ResultList>
+      )}
     </Wrapper>
   );
 }

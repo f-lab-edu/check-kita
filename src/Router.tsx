@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from './App';
 import BookcasePage from './pages/BookcasePage';
 import SearchBookPage from './pages/SearchBookPage';
-import SearchBookDetailPage from './pages/SearchBookDetailPage';
+import BookDetailPage from './pages/BookDetailPage';
 import MyBookPage from './pages/MyBookPage';
 import MyPage from './pages/MyPage';
 const router = createBrowserRouter([
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'book/:bookIsbn',
-        element: <SearchBookDetailPage />,
+        element: <BookDetailPage />,
       },
 
       // TODO: 아래 라우터 구조 변경될 가능성이 있음

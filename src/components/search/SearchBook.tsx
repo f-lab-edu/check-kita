@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { SearchBook } from '../../shared/interfaces/book.interface';
-
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { textOverflowStyles } from '../../shared/styles/\bcommon';
 import { changedMoneyFormat, splitBookAuthor } from '../../shared/utils';
+import { useEffect, useState } from 'react';
 
 interface SearchResultBookProps {
   bookInfo: SearchBook;
@@ -25,10 +25,17 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search');
   const navigate = useNavigate();
+  const [authors, setAuthors] = useState<string[]>([]);
 
   const goToSearchBookDetail = () => {
     navigate(`/book/${bookInfo.isbn}`);
   };
+
+  useEffect(() => {
+    if (!!bookInfo.author) {
+      setAuthors(splitBookAuthor(bookInfo.author));
+    }
+  }, [bookInfo.author]);
 
   // TODO: 작가, 출판사 누르면 검색하게 연결
 
@@ -42,15 +49,13 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
       />
       <BookInfoContainer>
         <BookTitle lines={2} onClick={goToSearchBookDetail}>
-          {HighlightedText(bookInfo.title, search as string)}
+          {HighlightedText(bookInfo.title, String(search))}
         </BookTitle>
         <BookAuthor>
-          {splitBookAuthor(bookInfo.author).map((bookAuthor, index) => (
+          {authors.map((bookAuthor, index) => (
             <span key={index}>
               <span>{bookAuthor}</span>
-              {index !== bookInfo.author.split('^').length - 1 && (
-                <span>, </span>
-              )}
+              {index !== authors.length - 1 && <span>, </span>}
             </span>
           ))}
         </BookAuthor>

@@ -1,5 +1,3 @@
-import { BookReadingProgressType, BookRecordType } from '../enums/book.enum';
-
 export interface SearchBook {
   title: string;
   link: string;
@@ -20,16 +18,21 @@ export interface SelectedBookInfo {
 }
 
 export interface MyBook {
-  id: number;
-  title: string;
-  author: string[];
-  image: string;
-  readingRecord: ReadingRecord;
+  id?: number;
+  title?: string;
+  author?: string[];
+  image?: string;
+  readingRecord?: ReadingRecord;
 }
+
+export type BookRecordType = 'already' | 'ing' | 'want';
+
+export type BookRecordDetail = AlreadyBook | IngBook | WantBook;
+
 // 책 기록
 export interface ReadingRecord {
   recordType: BookRecordType;
-  recordDetail: AlreadyBook | IngBook | WantBook;
+  recordDetail: BookRecordDetail;
 }
 
 // 이미 읽은 책
@@ -38,6 +41,8 @@ export interface AlreadyBook {
   endDate: Date;
   rating: number;
 }
+
+export type BookReadingProgressType = 'pages' | 'percentage';
 
 // 읽는 중 책
 export interface IngBook {
