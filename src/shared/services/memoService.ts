@@ -7,6 +7,7 @@ import { db } from '../firebase';
  */
 export async function addBookMemo(bookId: number, memo: Memo) {
   try {
+    debugger;
     const docRef = doc(db, 'memos', String(bookId));
     const docSnap = await getDoc(docRef);
     let updatedMemo: Memos;
@@ -46,7 +47,7 @@ export async function getMemosByBookId(bookId: number): Promise<Memos> {
  */
 export async function deleteMemoByMemoId(
   bookId: number,
-  memoId: number
+  memoId: string
 ): Promise<boolean> {
   try {
     const docRef = doc(db, 'memos', String(bookId));

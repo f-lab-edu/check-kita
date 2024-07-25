@@ -16,11 +16,14 @@ import { Memo } from '../../shared/interfaces/memo.interface';
 import { ModalType } from '../../shared/interfaces/common.interface';
 
 interface ModalUpdateMemoProps {
-  onClose: () => void;
+  hanldeModalClose: () => void;
   updateTarget?: Memo;
 }
 
-function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
+function ModalUpdateMemo({
+  hanldeModalClose,
+  updateTarget,
+}: ModalUpdateMemoProps) {
   const { bookIsbn } = useParams();
   const [memo, setMemo] = useState<string>('');
   const [modalType, setModalType] = useState<ModalType>('save');
@@ -33,11 +36,11 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
-      alert('추가 성공!');
-      onClose();
+      alert('수정 성공!');
+      hanldeModalClose();
     },
     onError: () => {
-      alert('추가 실패!');
+      alert('수정 실패!');
     },
   });
 
@@ -50,7 +53,7 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
       alert('추가 성공!');
-      onClose();
+      hanldeModalClose();
     },
     onError: () => {
       alert('추가 실패!');

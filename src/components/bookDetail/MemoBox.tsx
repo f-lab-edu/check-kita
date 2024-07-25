@@ -32,7 +32,7 @@ function MemoBox() {
   });
 
   const deleteMemo = useMutation({
-    mutationFn: (memoId: number) =>
+    mutationFn: (memoId: string) =>
       api.deleteMemoByMemoId(Number(bookIsbn), memoId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
@@ -47,6 +47,11 @@ function MemoBox() {
   const setUpdateMemo = (targetMemo: Memo) => {
     setUpdateTarget(targetMemo);
     onOpen();
+  };
+
+  const hanldeModalClose = () => {
+    onClose();
+    setUpdateTarget(undefined);
   };
 
   return (
@@ -89,8 +94,8 @@ function MemoBox() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalUpdateMemo
-          onClose={onClose}
           updateTarget={updateTarget}
+          hanldeModalClose={hanldeModalClose}
         ></ModalUpdateMemo>
       </Modal>
     </>
