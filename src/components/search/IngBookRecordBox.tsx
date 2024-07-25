@@ -29,17 +29,16 @@ function IngBookRecordBox({
     recordInfo.readingProgressCount
   );
 
-  const progressCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    setProgressCount(Number(value));
-  };
-
   useEffect(() => {
     setStartDate(recordInfo.startDate);
     setProgressType(recordInfo.readingProgressType);
     setProgressCount(recordInfo.readingProgressCount);
   }, [recordInfo]);
+
+  const progressCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setProgressCount(Number(value));
+  };
 
   const handleUpdateRecordClick = () => {
     const recordDetail: IngBook = {

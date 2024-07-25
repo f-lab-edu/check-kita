@@ -24,15 +24,15 @@ function WantBookRecordBox({
     recordInfo.expectationMemo
   );
 
+  useEffect(() => {
+    setRating(recordInfo.expectationRating);
+    setExpectationMemo(recordInfo.expectationMemo);
+  }, [recordInfo]);
+
   const memoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const eventTarget = e.target;
-
     setExpectationMemo(eventTarget.value);
   };
-
-  useEffect(() => {
-    console.log(rating, expectationMemo);
-  }, [rating, expectationMemo]);
 
   const handleUpdateRecordClick = () => {
     const recordDetail: WantBook = {

@@ -31,10 +31,6 @@ function AlreadyBookRecordBox({
     setRating(recordInfo.rating);
   }, [recordInfo]);
 
-  useEffect(() => {
-    console.log('alreadyBox state => ', startDate, endDate, rating);
-  }, [startDate, endDate, rating]);
-
   const handleUpdateRecordClick = () => {
     const recordDetail: AlreadyBook = { startDate, endDate, rating };
 
