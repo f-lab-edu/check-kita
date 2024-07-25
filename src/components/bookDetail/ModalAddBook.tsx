@@ -65,7 +65,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   });
 
   useEffect(() => {
-    if (!!!bookInfo) {
+    if (!bookInfo) {
       // TODO: 알럿 띄우기
       onClose();
       return;
@@ -73,10 +73,10 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   }, [bookInfo]);
 
   useEffect(() => {
-    if (!!!bookRecord) return;
+    if (!bookRecord) return;
 
     const { readingRecord } = bookRecord;
-    if (!!!readingRecord) return;
+    if (!readingRecord) return;
 
     const { recordType } = readingRecord;
     setRecordType(recordType);
@@ -91,7 +91,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
    */
   const updateBookRecord = async () => {
     try {
-      if (!!!bookInfo) {
+      if (!bookInfo) {
         // TODO: 알럿띄우기
         onClose();
         return;
@@ -212,7 +212,7 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
       </ModalBody>
       <ModalFooter>
         <Button width={'100%'} onClick={updateBookRecord}>
-          {!!!bookRecord?.id ? '저장하기' : '수정하기'}
+          {!bookRecord?.id ? '저장하기' : '수정하기'}
         </Button>
       </ModalFooter>
     </ModalContent>

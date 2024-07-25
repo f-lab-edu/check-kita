@@ -71,7 +71,7 @@ export async function getMyBookInfoByBookId(bookId: string): Promise<MyBook> {
     if (!docSnap.exists()) return INIT_NOT_EXISTS_RECORD;
 
     const result = docSnap.data() as MyBook;
-    if (!!!result) return INIT_NOT_EXISTS_RECORD;
+    if (!result) return INIT_NOT_EXISTS_RECORD;
 
     return convertTimestampsToDate(result);
   } catch (e) {

@@ -11,7 +11,7 @@ function SearchBookPage() {
   const { data: searchResult, isLoading } = useQuery({
     queryKey: ['search', search],
     queryFn: async () => {
-      if (!!!search) throw new Error('No Search Word');
+      if (!search) throw new Error('No Search Word');
       return await apis.searchBooks(search);
     },
     enabled: !!search,
@@ -20,7 +20,7 @@ function SearchBookPage() {
   return (
     <Wrapper>
       <SearchText>'{search}' 검색 결과</SearchText>
-      {!!!isLoading && (
+      {!isLoading && (
         <ResultList>
           {searchResult?.map((bookInfo) => (
             <SearchResultBook bookInfo={bookInfo} key={bookInfo.isbn} />

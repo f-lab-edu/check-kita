@@ -52,7 +52,7 @@ export async function deleteMemoByMemoId(
     const docRef = doc(db, 'memos', String(bookId));
     const docSnap = await getDoc(docRef);
 
-    if (!!!docSnap.exists()) throw new Error('존재하지 않는 메모');
+    if (!docSnap.exists()) throw new Error('존재하지 않는 메모');
 
     const beforeMemos = docSnap.data() as Memos;
 
@@ -89,7 +89,7 @@ export async function updateMemoByMemoId(
     const docRef = doc(db, 'memos', String(bookId));
     const docSnap = await getDoc(docRef);
 
-    if (!!!docSnap.exists()) throw new Error('존재하지 않는 메모');
+    if (!docSnap.exists()) throw new Error('존재하지 않는 메모');
 
     const beforeMemos = docSnap.data() as Memos;
 

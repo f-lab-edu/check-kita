@@ -24,10 +24,10 @@ function WantBookRecordBox({ bookRecord }: WantBookRecordBoxProps) {
   };
 
   useEffect(() => {
-    if (!!!bookRecord) return;
+    if (!bookRecord) return;
     const { readingRecord } = bookRecord;
 
-    if (!!!readingRecord) return;
+    if (!readingRecord) return;
     const { recordType, recordDetail } = readingRecord;
 
     if (recordType !== 'want') return;

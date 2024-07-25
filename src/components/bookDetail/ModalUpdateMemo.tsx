@@ -57,7 +57,7 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
   });
 
   useEffect(() => {
-    if (!!!updateTarget) return;
+    if (!updateTarget) return;
 
     const { content } = updateTarget;
 
@@ -72,7 +72,7 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
         <MemoTextarea value={memo} onChange={(e) => setMemo(e.target.value)} />
         <Button
           onClick={() =>
-            !!!updateTarget ? addMemo.mutate() : updateMemoByMemoId.mutate()
+            !updateTarget ? addMemo.mutate() : updateMemoByMemoId.mutate()
           }
         >
           메모 완료
