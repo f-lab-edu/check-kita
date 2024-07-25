@@ -39,11 +39,11 @@ export const searchBooks = (
 
 /**
  * isbn으로 책 검색
- * @param {string} isbn
+ * @param {number} isbn
  * @returns
  */
 export async function searchBookByIsbn(
-  isbn: string
+  isbn: number
 ): Promise<null | SearchBook> {
   try {
     const res = await api.get('/search-book-by-isbn', {

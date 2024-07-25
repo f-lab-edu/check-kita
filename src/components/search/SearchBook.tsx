@@ -49,7 +49,7 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
       />
       <BookInfoContainer>
         <BookTitle lines={2} onClick={goToSearchBookDetail}>
-          {HighlightedText(bookInfo.title, search as string)}
+          {HighlightedText(bookInfo.title, String(search))}
         </BookTitle>
         <BookAuthor>
           {authors.map((bookAuthor, index) => (

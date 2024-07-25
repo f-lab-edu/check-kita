@@ -63,7 +63,7 @@ export async function getAllMyBooks(
  * 책 아이디로 내 책 정보 가져오기
  * @param {number} bookId
  */
-export async function getMyBookInfoByBookId(bookId: string): Promise<MyBook> {
+export async function getMyBookInfoByBookId(bookId: number): Promise<MyBook> {
   try {
     const docRef = doc(db, 'myBooks', bookId);
     const docSnap = await getDoc(docRef);
@@ -81,10 +81,10 @@ export async function getMyBookInfoByBookId(bookId: string): Promise<MyBook> {
 
 /**
  * 책 아이디로 책기록 삭제하기
- * @param {string} bookId
+ * @param {number} bookId
  * @return {Promise<boolean>}
  */
-export async function deleteRecordByBookId(bookId: string): Promise<boolean> {
+export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
   try {
     await deleteDoc(doc(db, 'myBooks', bookId));
 

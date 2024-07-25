@@ -22,8 +22,7 @@ function BookDetailPage() {
   const { data: myBook, isLoading } = useQuery({
     queryKey: ['record', bookIsbn],
     queryFn: async () => {
-      // TODO: bookIsbn 타입 number로 통일
-      const result = await api.getMyBookInfoByBookId(bookIsbn as string);
+      const result = await api.getMyBookInfoByBookId(Number(bookIsbn));
 
       return result;
     },
@@ -34,8 +33,7 @@ function BookDetailPage() {
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
     queryKey: ['book', bookIsbn],
     queryFn: async (): Promise<SearchBook> => {
-      // TODO: bookIsbn 타입 number로 통일
-      const result = await api.searchBookByIsbn(bookIsbn as string);
+      const result = await api.searchBookByIsbn(Number(bookIsbn));
 
       if (result === null) {
         alert('데이터 불러오기 실패!');
@@ -48,7 +46,7 @@ function BookDetailPage() {
   });
 
   const deleteRecord = useMutation({
-    mutationFn: () => api.deleteRecordByBookId(bookIsbn as string),
+    mutationFn: () => api.deleteRecordByBookId(Number(bookIsbn)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
       alert('삭제 성공!');
