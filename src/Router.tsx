@@ -43,9 +43,6 @@ const router = createBrowserRouter([
           {
             path: 'library/:libraryType',
           },
-          {
-            path: 'memo',
-          },
         ],
       },
     ],

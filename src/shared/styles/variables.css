@@ -1,5 +1,14 @@
 :root {
-  --brand-color: #1e9eff;
-  --main-text-color: #666;
-  --sub-text-color: #808991;
+  --brand-color: #7851e7;
+  /* --main-text-color: #666; */
+  /* --sub-text-color: #808991; */
+
+  --background-color: #131722;
+  --warpper-color: #1b2130;
+  --main-text-color: #fff;
+  --sub-text-color-1: #f2f0ff;
+  --sub-text-color-2: #8d9098;
+
+  --min-width: 768px;
+  --header-height: 90px;
 }

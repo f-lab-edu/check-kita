@@ -38,9 +38,7 @@ function Header() {
         }}
         onKeyDown={enterPressHandle}
         placeholder={
-          location.pathname.includes('search')
-            ? '등록할 책 검색하기'
-            : '나의 책 검색하기'
+          location.pathname.includes('search') ? '등록할 책 검색하기' : '나의 책 검색하기'
         }
       />
       {/* TODO: 실시간 검색 결과 팝오버로 보여주기 */}
@@ -52,6 +50,9 @@ const Wrapper = styled.div`
   width: 100%;
   border: 10px solid blue;
   display: flex;
+  position: absolute;
+  width: 100vw;
+  top: 0;
 `;
 
 export default Header;
