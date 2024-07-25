@@ -65,7 +65,7 @@ export async function getAllMyBooks(
  */
 export async function getMyBookInfoByBookId(bookId: number): Promise<MyBook> {
   try {
-    const docRef = doc(db, 'myBooks', bookId);
+    const docRef = doc(db, 'myBooks', String(bookId));
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) return INIT_NOT_EXISTS_RECORD;
@@ -86,7 +86,7 @@ export async function getMyBookInfoByBookId(bookId: number): Promise<MyBook> {
  */
 export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
   try {
-    await deleteDoc(doc(db, 'myBooks', bookId));
+    await deleteDoc(doc(db, 'myBooks', String(bookId)));
 
     return true;
   } catch (e) {
