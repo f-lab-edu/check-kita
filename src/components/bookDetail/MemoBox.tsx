@@ -85,6 +85,7 @@ function MemoBox() {
         </MemoList>
       </Wrapper>
       {/* 메모 업데이트 모달 */}
+      {/* TODO: Modal 공통 컴포넌트로 빼기 */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalUpdateMemo

@@ -77,6 +77,7 @@ export const convertTimestampsToDate = (obj: any): any => {
  * @return {number}
  */
 export const generateMemoId = (): number => {
+  // 라이브러리 찾아보기
   const currentDate = new Date();
 
   return currentDate.getMilliseconds();

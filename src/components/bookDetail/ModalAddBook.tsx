@@ -82,12 +82,6 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
     setRecordType(recordType);
   }, [bookRecord]);
 
-  useEffect(() => {
-    // TODO: 레코드 디테일에 데이터 셋해주기
-    // bookRecord로 변경되면 거기에 맞게 변경
-    // 그 외에는 INIT 데이터로 변경
-  }, [recordType]);
-
   const getIsSameRecordType = (selectedRecordType: BookRecordType) => {
     return selectedRecordType === recordType;
   };

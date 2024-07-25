@@ -16,6 +16,7 @@ import { Memo } from '../../shared/interfaces/memo.interface';
 
 interface ModalUpdateMemoProps {
   onClose: () => void;
+  // 변수명 수정 type, data
   updateTarget?: Memo;
 }
 

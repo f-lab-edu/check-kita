@@ -22,6 +22,7 @@ function BookDetailPage() {
   const { data: myBook, isLoading } = useQuery({
     queryKey: ['record', bookIsbn],
     queryFn: async () => {
+      // TODO: bookIsbn 타입 number로 통일
       const result = await api.getMyBookInfoByBookId(bookIsbn as string);
 
       return result;
@@ -33,6 +34,7 @@ function BookDetailPage() {
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
     queryKey: ['book', bookIsbn],
     queryFn: async (): Promise<SearchBook> => {
+      // TODO: bookIsbn 타입 number로 통일
       const result = await api.searchBookByIsbn(bookIsbn as string);
 
       if (result === null) {
