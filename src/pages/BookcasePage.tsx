@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 import { match } from 'ts-pattern';
 import LandingImage from '../components/bookcase/LandingImage';
 import Container from '../elements/Container';
+import RecentBooks from '../components/bookcase/RecentBooks';
 
 function BookcasePage() {
   const { data: myBooks, isLoading } = useQuery({
@@ -16,6 +17,7 @@ function BookcasePage() {
   return (
     <Wrapper>
       <LandingImage />
+      <RecentBooks></RecentBooks>
       <Container>
         {match(isLoading)
           .with(true, () => <Loading />)
