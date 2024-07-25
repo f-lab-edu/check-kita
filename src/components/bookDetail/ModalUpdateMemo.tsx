@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as api from '../../shared/services/memoService';
 import { queryClient } from '../../main';
-import { generateId, generateMemoId } from '../../shared/utils';
+import { generateId } from '../../shared/utils';
 import { Memo } from '../../shared/interfaces/memo.interface';
 import { ModalType } from '../../shared/interfaces/common.interface';
 
