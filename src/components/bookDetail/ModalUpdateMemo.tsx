@@ -11,23 +11,24 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as api from '../../shared/services/memoService';
 import { queryClient } from '../../main';
-import { generateMemoId } from '../../shared/utils';
+import { generateId, generateMemoId } from '../../shared/utils';
 import { Memo } from '../../shared/interfaces/memo.interface';
+import { ModalType } from '../../shared/interfaces/common.interface';
 
 interface ModalUpdateMemoProps {
   onClose: () => void;
-  // 변수명 수정 type, data
   updateTarget?: Memo;
 }
 
 function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
   const { bookIsbn } = useParams();
   const [memo, setMemo] = useState<string>('');
+  const [modalType, setModalType] = useState<ModalType>('save');
 
   const addMemo = useMutation({
     mutationFn: () =>
       api.addBookMemo(Number(bookIsbn), {
-        memoId: generateMemoId(),
+        memoId: generateId(),
         content: memo,
       }),
     onSuccess: () => {
@@ -43,7 +44,7 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
   const updateMemoByMemoId = useMutation({
     mutationFn: () =>
       api.updateMemoByMemoId(Number(bookIsbn), {
-        memoId: Number(updateTarget?.memoId),
+        memoId: updateTarget?.memoId,
         content: memo,
       }),
     onSuccess: () => {
@@ -62,6 +63,7 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
     const { content } = updateTarget;
 
     setMemo(content);
+    setModalType('update');
   }, [updateTarget]);
 
   return (
@@ -72,7 +74,9 @@ function ModalUpdateMemo({ onClose, updateTarget }: ModalUpdateMemoProps) {
         <MemoTextarea value={memo} onChange={(e) => setMemo(e.target.value)} />
         <Button
           onClick={() =>
-            !updateTarget ? addMemo.mutate() : updateMemoByMemoId.mutate()
+            modalType === 'save'
+              ? addMemo.mutate()
+              : updateMemoByMemoId.mutate()
           }
         >
           메모 완료

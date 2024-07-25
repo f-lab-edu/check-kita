@@ -1,5 +1,5 @@
 export interface Memo {
-  memoId: number;
+  memoId: string;
   content: string;
 }
 

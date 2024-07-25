@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import { SearchBook } from './interfaces/book.interface';
+import { v4 as uuidv4 } from 'uuid';
 
 export const changedMoneyFormat = (number: number): string => {
   return new Intl.NumberFormat('ko-KR').format(number);
@@ -72,13 +73,6 @@ export const convertTimestampsToDate = (obj: any): any => {
   return obj;
 };
 
-/**
- *
- * @return {number}
- */
-export const generateMemoId = (): number => {
-  // 라이브러리 찾아보기
-  const currentDate = new Date();
-
-  return currentDate.getMilliseconds();
+export const generateId = (): string => {
+  return uuidv4();
 };
