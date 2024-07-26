@@ -8,7 +8,13 @@ function SearchBox() {
   return (
     <Wrapper>
       <SearchIcon fontSize="large" />
-      <input value={searchText} placeholder="Search Books" />
+      <input
+        value={searchText}
+        placeholder="Search Books"
+        onChange={(e) => {
+          setSearchText(e.target.value);
+        }}
+      />
     </Wrapper>
   );
 }
@@ -32,9 +38,10 @@ const Wrapper = styled.div`
     color: #000;
     font-size: 28px;
     line-height: normal;
+    color: var(--main-text-color);
 
     &::placeholder {
-      color: #000;
+      color: var(--main-text-color);
       opacity: 0.7;
     }
   }

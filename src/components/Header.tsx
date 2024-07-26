@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 function Header() {
   const location = useLocation();
-
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
