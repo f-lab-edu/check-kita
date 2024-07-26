@@ -10,6 +10,8 @@ import RecentBooks from '../components/bookcase/RecentBooks';
 import { Tab, TabList, Tabs } from '@chakra-ui/react';
 
 function BookcasePage() {
+  const selectedTabStyle = { color: 'white', bg: 'brand.500' };
+
   // TODO: 첫번째 이외에 10개씩 가지고 와서 페이지네이션 하기
   const { data: myBooks, isLoading } = useQuery({
     queryKey: ['myBooks', 'all'],
@@ -28,11 +30,12 @@ function BookcasePage() {
             .with(true, () => <Loading />)
             .otherwise(() => (
               <>
-                <Tabs variant="enclosed" colorScheme="brand">
+                <Tabs variant="soft-rounded">
                   <TabList>
-                    <Tab>읽은 책</Tab>
-                    <Tab>읽고 있는 책</Tab>
-                    <Tab>읽고 싶은 책</Tab>
+                    <Tab _selected={selectedTabStyle}>전체</Tab>
+                    <Tab _selected={selectedTabStyle}>읽은 책</Tab>
+                    <Tab _selected={selectedTabStyle}>읽고 있는 책</Tab>
+                    <Tab _selected={selectedTabStyle}>읽고 싶은 책</Tab>
                   </TabList>
                 </Tabs>
                 <BookList>
