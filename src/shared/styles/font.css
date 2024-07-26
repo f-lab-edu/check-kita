@@ -65,3 +65,8 @@
   font-family: 'Galmuri14';
   src: url('../../assets/fonts/Galmuri14/Galmuri14.woff2') format('woff2');
 }
+
+@font-face {
+  font-family: 'HakgyoansimWooju';
+  src: url('../../assets/fonts/HakgyoansimWoojuR/HakgyoansimWoojuR.ttf') format('truetype');
+}

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SearchBook } from '../../shared/interfaces/book.interface';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { textOverflowStyles } from '../../shared/styles/\bcommon';
+import { textOverflowStyles } from '../../shared/styles/common';
 import { changedMoneyFormat, splitBookAuthor } from '../../shared/utils';
 import { useEffect, useState } from 'react';
 
@@ -13,11 +13,7 @@ const HighlightedText = (target: string, search: string) => {
   const parts = target.split(new RegExp(`(${search})`, 'gi'));
 
   return parts.map((part, index) =>
-    part === search ? (
-      <strong key={index}>{part}</strong>
-    ) : (
-      <span key={index}>{part}</span>
-    )
+    part === search ? <strong key={index}>{part}</strong> : <span key={index}>{part}</span>
   );
 };
 

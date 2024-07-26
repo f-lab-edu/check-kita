@@ -47,12 +47,13 @@ function Header() {
 }
 
 const Wrapper = styled.div`
+  position: fixed;
   width: 100%;
-  border: 10px solid blue;
   display: flex;
-  position: absolute;
   width: 100vw;
   top: 0;
+  background-color: aqua;
+  z-index: 10;
 `;
 
 export default Header;

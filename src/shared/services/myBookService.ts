@@ -35,6 +35,7 @@ export async function updateMyBook(saveBook: MyBook) {
 /**
  * 추가한 책 가져오기
  * @param {BookRecordType | 'all'} recordType
+ * @param {number} count
  * @returns
  */
 export async function getAllMyBooks(

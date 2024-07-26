@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   height: 100vh;
   overflow-y: auto;
   background-color: var(--background-color);
+  padding-bottom: 180px;
 `;
 
 export default App;

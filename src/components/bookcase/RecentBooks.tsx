@@ -4,8 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllMyBooks } from '../../shared/services';
 import { match } from 'ts-pattern';
 import Loading from '../Loading';
-import { textOverflowStyles } from '../../shared/styles/\bcommon';
+import { textOverflowStyles } from '../../shared/styles/common';
 import RecordTypeIcon from '../common/RecordTypeIcon';
+import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
+import { Button } from '@chakra-ui/react';
 
 function RecentBooks() {
   const { data, isLoading } = useQuery({
@@ -35,11 +37,16 @@ function RecentBooks() {
                       ))}
                     </BookAuthor>
                     <BookRecordTypeBox>
-                      {book.readingRecord?.recordType}
-                      <RecordTypeIcon
-                        recordType={book.readingRecord?.recordType}
-                        iconSize="medium"
-                      />
+                      <Button width={'100%'}>
+                        <RecordTypeIcon
+                          recordType={book.readingRecord?.recordType}
+                          iconSize="small"
+                        />
+                        <span>
+                          {book.readingRecord && BookRecordTypeLabel[book.readingRecord.recordType]}{' '}
+                          보러 가기
+                        </span>
+                      </Button>
                     </BookRecordTypeBox>
                   </BookBox>
                 ))}
@@ -61,21 +68,22 @@ const Title = styled.div`
   font-size: 28px;
   font-weight: 600;
   line-height: normal;
+  margin-bottom: 30px;
 `;
 
 const ImgSlider = styled.div`
-  margin-top: 30px;
   display: flex;
-  gap: 10px;
+  gap: 30px;
   // TODO: Framer 사용해서 이미지 슬라이더 만들기
 `;
 
 const BookBox = styled.div`
   height: fit-content;
   flex: 1 1 100%;
-  background-color: var(--warpper-color);
+  background-color: var(--wrapper-color);
   border-radius: 18px;
   padding: 18px;
+  font-family: 'HakgyoansimWooju';
 
   & > img {
     width: 100%;
@@ -86,32 +94,30 @@ const BookBox = styled.div`
 const BookTitle = styled.p`
   margin-top: 15px;
   color: var(--sub-text-color-1);
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 300;
   line-height: normal;
   ${textOverflowStyles(2)}
 `;
 
 const BookAuthor = styled.div`
-  margin-top: 8px;
+  margin-top: 5px;
   display: inline-block;
-  color: var(--main-text-color);
-  color: var(--sub-text-color-2);
-  font-size: 15px;
-  line-height: normal;
-  ${textOverflowStyles(1)}
+
+  span {
+    color: var(--sub-text-color-2);
+    font-size: 13px;
+    line-height: normal;
+    ${textOverflowStyles(1)}
+  }
 `;
 
 const BookRecordTypeBox = styled.div`
   margin-top: 30px;
-  color: var(--main-text-color);
-  font-size: 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
+
+  span {
+    margin-left: 6px;
+  }
 `;
 
 export default RecentBooks;

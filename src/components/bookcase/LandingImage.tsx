@@ -37,6 +37,7 @@ function LandingImage() {
 }
 
 // TODO: 반응형 추가 768 - 1024
+// TODO: Info 텍스트에 책 개수 서버에서 가져와서 수정하기
 
 const Wrapper = styled.div`
   position: relative;

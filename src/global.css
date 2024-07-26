@@ -6,4 +6,5 @@
   box-sizing: border-box;
   font-family: 'pretendard', sans-serif;
   word-break: keep-all;
+  color: var(--main-text-color);
 }
