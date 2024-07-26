@@ -42,7 +42,7 @@ export const searchBooks = (
  * @param {string} search 검색어
  * @return {number}
  */
-export const getSearchBookCount = (search: string): Promise<SearchBook[]> => {
+export const getSearchBookCount = (search: string): Promise<number> => {
   return api
     .get('/search-book-count', {
       params: { query: search, display: 100, sort: 'sim' },

@@ -23,8 +23,12 @@ function SearchBookPage() {
   const { data: searchResultCount } = useQuery({
     queryKey: ['search-count', search],
     queryFn: async () => {
-      if (!search) throw new Error('No Search Word');
-      return await apis.getSearchBookCount(search);
+      if (!search) return '0';
+
+      const count = await apis.getSearchBookCount(search);
+      if (count === 100) return '+99';
+
+      return String(count);
     },
     enabled: !!search,
   });
@@ -32,8 +36,7 @@ function SearchBookPage() {
   return (
     <Wrapper>
       <SearchText>
-        <strong>'{search}'</strong> 검색 결과 총{' '}
-        <strong>{typeof searchResultCount === 'number' ? searchResultCount : 0}</strong>건
+        <strong>'{search}'</strong> 검색 결과 총 <strong>{searchResultCount}</strong>건
       </SearchText>
       {!isLoading && (
         <ResultList>
@@ -62,7 +65,7 @@ const Wrapper = styled.div`
 
 const SearchText = styled.div`
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 21px;
   margin: 10px 0px;
   overflow-wrap: break-word;
