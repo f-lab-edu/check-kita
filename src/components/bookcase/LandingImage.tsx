@@ -44,6 +44,7 @@ const Wrapper = styled.div`
   width: 100%;
   aspect-ratio: 2/1;
   min-height: 720px;
+  max-height: 1000px;
   padding-top: var(--header-height);
 `;
 

@@ -29,30 +29,70 @@ function Header() {
 
   return (
     <Wrapper>
-      헤더
-      <input
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-        onKeyDown={enterPressHandle}
-        placeholder={
-          location.pathname.includes('search') ? '등록할 책 검색하기' : '나의 책 검색하기'
-        }
-      />
-      {/* TODO: 실시간 검색 결과 팝오버로 보여주기 */}
+      <ContentBox>
+        <Checkita
+          onClick={() => {
+            navigate('');
+          }}
+        >
+          Checkita!
+        </Checkita>
+        <NavigationBox>
+          {location.pathname !== 'bookcase' && (
+            <input
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              onKeyDown={enterPressHandle}
+              placeholder={
+                location.pathname.includes('search') ? '등록할 책 검색하기' : '나의 책 검색하기'
+              }
+            />
+          )}
+          <button>Logs</button>
+        </NavigationBox>
+      </ContentBox>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   position: fixed;
-  width: 100%;
-  display: flex;
-  width: 100vw;
   top: 0;
-  background-color: aqua;
   z-index: 10;
+  width: 100vw;
+  height: var(--header-height);
+  padding: 24px;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const ContentBox = styled.div`
+  margin: auto;
+  max-width: 1440px;
+  min-width: calc(60px + var(--min-width));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Checkita = styled.div`
+  color: #fff;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: normal;
+`;
+
+const NavigationBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  & > button {
+    font-size: 24px;
+    color: var(--sub-text-color-2);
+    font-weight: 700;
+  }
 `;
 
 export default Header;

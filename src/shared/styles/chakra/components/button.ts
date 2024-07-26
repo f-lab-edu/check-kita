@@ -44,31 +44,27 @@ const solid = defineStyle({
   },
 });
 
-const outline = defineStyle(
-  new ButtonOutline('brand.500', 'brand.500').getOutlineTheme()
-);
+const outline = defineStyle(new ButtonOutline('brand.500', 'brand.500').getOutlineTheme());
 
-const outlineGray = defineStyle(
-  new ButtonOutline('gray.50', 'gray.1000').getOutlineTheme()
-);
+const outlineGray = defineStyle(new ButtonOutline('gray.50', 'gray.1000').getOutlineTheme());
 
 const clear = defineStyle({
-  backgroundColor: 'gray.0',
-  color: 'gray.1000',
+  backgroundColor: 'rbga(255, 255, 255, 0)',
+  color: 'gray.0',
 
   _hover: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rbga(255, 255, 255, 0)',
   },
 
   _disabled: {
     opacity: 1,
-    backgroundColor: 'gray.0',
+    backgroundColor: 'rbga(255, 255, 255, 0)',
     color: 'gray.300',
     pointerEvents: 'none',
   },
 
   _loading: {
-    backgroundColor: 'gray.0',
+    backgroundColor: 'rbga(255, 255, 255, 0)',
     color: 'gray.300',
   },
 });
