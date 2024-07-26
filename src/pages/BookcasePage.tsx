@@ -82,7 +82,7 @@ const BookList = styled.div`
   padding-top: 32px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  gap: 20px 10px;
 `;
 
 const MoreCard = styled.div`
