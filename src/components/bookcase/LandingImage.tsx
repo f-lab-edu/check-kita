@@ -108,7 +108,7 @@ const CharacterBox = styled.div`
   top: 50%;
   right: 0;
   z-index: 2;
-  width: 100%;
+  width: 60%;
   display: flex;
   justify-content: flex-end;
 `;
@@ -134,7 +134,7 @@ const InfoText = styled.p`
 `;
 
 const Character = styled.div`
-  width: 60%;
+  width: 100%;
   aspect-ratio: 700/415;
   background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/bookcase/img_character.png');
   background-size: cover;
