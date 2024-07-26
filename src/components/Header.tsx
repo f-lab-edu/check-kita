@@ -63,8 +63,9 @@ const Wrapper = styled.div`
   z-index: 10;
   width: 100vw;
   height: var(--header-height);
-  padding: 24px;
-  background-color: rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  // TODO: 스크롤, 라우터 주소에 맞춰서 색상 지정
+  /* background-color: rgba(0, 0, 0, 0.5); */
 `;
 
 const ContentBox = styled.div`
@@ -81,6 +82,7 @@ const Checkita = styled.div`
   font-size: 35px;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const NavigationBox = styled.div`

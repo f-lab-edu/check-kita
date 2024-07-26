@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { textOverflowStyles } from '../../shared/styles/common';
 import { changedMoneyFormat, splitBookAuthor } from '../../shared/utils';
 import { useEffect, useState } from 'react';
+import { Button } from '@chakra-ui/react';
 
 interface SearchResultBookProps {
   bookInfo: SearchBook;
@@ -70,7 +71,7 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
 const BookWrapper = styled.div`
   width: 100%;
   padding: 20px 0;
-  border-bottom: 1px solid rgb(209, 213, 217);
+  border-bottom: 1px solid rgb(255, 255, 255, 0.06);
   display: flex;
   gap: 15px;
 
@@ -79,6 +80,7 @@ const BookWrapper = styled.div`
     width: 100px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     cursor: pointer;
+    border-radius: 4px;
   }
 `;
 
@@ -93,15 +95,19 @@ interface TextOverflowStylesParams {
   lines: number;
 }
 
-const BookTitle = styled.div<TextOverflowStylesParams>`
-  font-size: 14px;
+const BookTitle = styled.span<TextOverflowStylesParams>`
+  font-size: 18px;
   line-height: 1.4em;
   font-weight: 400;
   white-space: normal;
   color: black;
   ${(props) => textOverflowStyles(props.lines)};
   cursor: pointer;
-  // TODO; 마우스 호버 밑줄 넣기
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--main-text-color);
+  }
 
   & > strong {
     font-weight: bolder;
@@ -112,19 +118,19 @@ const BookAuthor = styled.div`
   font-weight: normal;
   line-height: 1.2em;
   font-size: 14px;
-  color: rgb(99, 108, 115);
+  color: var(--sub-text-color-1);
 `;
 
 const BookPublisher = styled.div`
   font-weight: normal;
   line-height: 1.2em;
   font-size: 13px;
-  color: rgb(128, 137, 145);
+  color: var(--sub-text-color-2);
   overflow-wrap: break-word;
 `;
 
 const BookDesc = styled.div<TextOverflowStylesParams>`
-  color: rgb(102, 102, 102);
+  color: var(--sub-text-color-1);
   font-size: 13px;
   ${(props) => textOverflowStyles(props.lines)};
   max-height: calc(4.5em);

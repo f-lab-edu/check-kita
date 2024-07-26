@@ -19,7 +19,7 @@ const api = axios.create({
  */
 export const searchBooks = (
   search: string,
-  count: number = 20,
+  count: number = 15,
   page: number = 1
 ): Promise<SearchBook[]> => {
   return api

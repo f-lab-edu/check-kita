@@ -3,8 +3,11 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import SearchResultBook from '../components/search/SearchBook';
 import { useQuery } from '@tanstack/react-query';
+import { Tab, TabList, Tabs } from '@chakra-ui/react';
 
 function SearchBookPage() {
+  const selectedTabStyle = { color: 'white', bg: 'brand.500' };
+
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search');
 
@@ -34,6 +37,12 @@ function SearchBookPage() {
       </SearchText>
       {!isLoading && (
         <ResultList>
+          <Tabs variant="soft-rounded">
+            <TabList>
+              <Tab _selected={selectedTabStyle}>정확도순</Tab>
+              <Tab _selected={selectedTabStyle}>출간일순</Tab>
+            </TabList>
+          </Tabs>
           {searchResult?.map((bookInfo) => (
             <SearchResultBook bookInfo={bookInfo} key={bookInfo.isbn} />
           ))}
@@ -48,7 +57,7 @@ const Wrapper = styled.div`
   max-width: 952px;
   overflow: hidden;
   margin: auto;
-  padding-top: calc(30px + var(--header-height));
+  padding: calc(30px + var(--header-height)) 20px 0;
 `;
 
 const SearchText = styled.div`
