@@ -70,3 +70,5 @@
   font-family: 'HakgyoansimWooju';
   src: url('../../assets/fonts/HakgyoansimWoojuR/HakgyoansimWoojuR.ttf') format('truetype');
 }
+
+// TODO: font variables로 관리하기

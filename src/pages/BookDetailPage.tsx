@@ -64,7 +64,7 @@ function BookDetailPage() {
   }, [bookInfo?.author]);
 
   return (
-    <div>
+    <Wrapper>
       {!bookInfoIsLoading && (
         <>
           <BookTopInfo>
@@ -98,21 +98,16 @@ function BookDetailPage() {
               </BookPublisingInfoBottom>
               <HorizontalLine />
               <div>
-                {!!myBook?.readingRecord && (
-                  <BookRecordBox bookRecord={myBook.readingRecord} />
-                )}
+                {!!myBook?.readingRecord && <BookRecordBox bookRecord={myBook.readingRecord} />}
                 <MyBookButtonBox>
                   {match({ isLoading, myBook })
-                    .with({ isLoading: true }, () => (
-                      <Button onClick={onOpen}>저장하기</Button>
-                    ))
+                    .with({ isLoading: true }, () => <Button onClick={onOpen}>저장하기</Button>)
                     .with({ isLoading: false, myBook: undefined }, () => (
                       <Button onClick={onOpen}>저장하기</Button>
                     ))
-                    .with(
-                      { isLoading: false, myBook: { id: undefined } },
-                      () => <Button onClick={onOpen}>저장하기</Button>
-                    )
+                    .with({ isLoading: false, myBook: { id: undefined } }, () => (
+                      <Button onClick={onOpen}>저장하기</Button>
+                    ))
                     .otherwise(() => (
                       <>
                         <Button onClick={onOpen}>수정하기</Button>
@@ -144,9 +139,11 @@ function BookDetailPage() {
           )}
         </>
       )}
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div``;
 
 const BookTopInfo = styled.div`
   display: flex;

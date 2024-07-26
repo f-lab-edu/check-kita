@@ -97,14 +97,17 @@ const BookTitle = styled.p`
   font-size: 18px;
   font-weight: 300;
   line-height: normal;
+  font-family: inherit;
   ${textOverflowStyles(2)}
 `;
 
 const BookAuthor = styled.div`
   margin-top: 5px;
   display: inline-block;
+  font-family: inherit;
 
   span {
+    font-family: 'HakgyoansimWooju';
     color: var(--sub-text-color-2);
     font-size: 13px;
     line-height: normal;
