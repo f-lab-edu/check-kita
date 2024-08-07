@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface SearchBook {
   title: string;
   link: string;
@@ -23,6 +25,7 @@ export interface MyBook {
   author?: string[];
   image?: string;
   readingRecord?: ReadingRecord;
+  createAt?: Timestamp;
 }
 
 export type BookRecordType = 'already' | 'ing' | 'want';

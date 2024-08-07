@@ -7,6 +7,7 @@ import {
   where,
   getDoc,
   deleteDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
@@ -21,10 +22,12 @@ export async function updateMyBook(saveBook: MyBook) {
   try {
     const { id } = saveBook;
 
-    setDoc(doc(db, 'myBooks', String(id)), saveBook).catch((e) => {
-      console.log(e);
-      // TODO: 에러 핸들링
-    });
+    setDoc(doc(db, 'myBooks', String(id)), { ...saveBook, createAt: serverTimestamp() }).catch(
+      (e) => {
+        console.log(e);
+        // TODO: 에러 핸들링
+      }
+    );
   } catch (e) {
     console.log(e);
     // TODO: 에러 핸들링
@@ -36,16 +39,11 @@ export async function updateMyBook(saveBook: MyBook) {
  * @param {BookRecordType | 'all'} recordType
  * @returns
  */
-export async function getAllMyBooks(
-  recordType: BookRecordType | 'all' = 'all'
-): Promise<MyBook[]> {
+export async function getAllMyBooks(recordType: BookRecordType | 'all' = 'all'): Promise<MyBook[]> {
   const q =
     recordType === 'all'
       ? query(collection(db, 'myBooks'))
-      : query(
-          collection(db, 'myBooks'),
-          where('readingRecord.recordType', '==', recordType)
-        );
+      : query(collection(db, 'myBooks'), where('readingRecord.recordType', '==', recordType));
 
   const querySnapshot = await getDocs(q);
   const books: MyBook[] = querySnapshot.docs.map((doc) => ({
