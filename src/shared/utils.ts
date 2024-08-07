@@ -32,16 +32,11 @@ export const parseBookXml = (bookXml: string): SearchBook => {
   const link = book.getElementsByTagName('link')[0]?.textContent as string;
   const image = book.getElementsByTagName('image')[0]?.textContent as string;
   const author = book.getElementsByTagName('author')[0]?.textContent as string;
-  const discount = Number(
-    book.getElementsByTagName('discount')[0]?.textContent
-  );
-  const description = book.getElementsByTagName('description')[0]
-    ?.textContent as string;
-  const publisher = book.getElementsByTagName('publisher')[0]
-    ?.textContent as string;
+  const discount = Number(book.getElementsByTagName('discount')[0]?.textContent);
+  const description = book.getElementsByTagName('description')[0]?.textContent as string;
+  const publisher = book.getElementsByTagName('publisher')[0]?.textContent as string;
   const isbn = Number(book.getElementsByTagName('isbn')[0]?.textContent);
-  const pubdate = book.getElementsByTagName('pubdate')[0]
-    ?.textContent as string;
+  const pubdate = book.getElementsByTagName('pubdate')[0]?.textContent as string;
 
   return {
     title,
@@ -75,4 +70,10 @@ export const convertTimestampsToDate = (obj: any): any => {
 
 export const generateId = (): string => {
   return uuidv4();
+};
+
+export const getDaysInMonth = (year: number, month: number) => {
+  const nextMonthDate = new Date(year, month, 1);
+  const lastDayOfMonth = new Date(nextMonthDate.getTime() - 1);
+  return lastDayOfMonth.getDate();
 };

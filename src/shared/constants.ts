@@ -30,3 +30,5 @@ export const INIT_WANTBOOK: WantBook = {
   expectationRating: 0,
   expectationMemo: '',
 };
+
+export const DAYS_OF_THE_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
