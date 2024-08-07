@@ -34,16 +34,8 @@ const router = createBrowserRouter([
       // TODO: 아래 라우터 구조 변경될 가능성이 있음
       // 나의 기록
       {
-        path: 'my',
+        path: 'logs',
         element: <MyPage />,
-        children: [
-          {
-            path: 'home',
-          },
-          {
-            path: 'library/:libraryType',
-          },
-        ],
       },
     ],
   },
