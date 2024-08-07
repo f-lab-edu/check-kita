@@ -25,7 +25,7 @@ export interface MyBook {
   author?: string[];
   image?: string;
   readingRecord?: ReadingRecord;
-  createAt?: Timestamp;
+  createdAt?: Timestamp;
 }
 
 export type BookRecordType = 'already' | 'ing' | 'want';

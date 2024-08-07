@@ -22,7 +22,7 @@ export async function updateMyBook(saveBook: MyBook) {
   try {
     const { id } = saveBook;
 
-    setDoc(doc(db, 'myBooks', String(id)), { ...saveBook, createAt: serverTimestamp() }).catch(
+    setDoc(doc(db, 'myBooks', String(id)), { ...saveBook, createdAt: serverTimestamp() }).catch(
       (e) => {
         console.log(e);
         // TODO: 에러 핸들링
@@ -89,5 +89,33 @@ export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
     return true;
   } catch (e) {
     return false;
+  }
+}
+
+/**
+ * 이번년도 원하는 월의 기록 개수 가져오기
+ * @param month
+ * @return {Promise<number>}
+ */
+export async function getMonthlyRecordCount(month: number): Promise<number> {
+  try {
+    const year = new Date().getFullYear();
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+
+    const q = query(
+      collection(db, 'myBooks'),
+      where('createdAt', '>=', startDate),
+      where('createdAt', '<', endDate)
+      // OPTIMIZE: myBook 인터페이스 변경 - nested하게 저장한 recordType 바깥으로 빼기
+      // 추후에 ['already', 'ing', 'want'] 각각 where로 나눠서 가져와서 배열로 묶어서 return
+      // where('readingRecord.recordType', '==', 'already')
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.size;
+  } catch (e) {
+    return 0;
   }
 }
