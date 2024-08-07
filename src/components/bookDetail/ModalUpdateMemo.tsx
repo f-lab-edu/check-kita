@@ -1,10 +1,4 @@
-import {
-  Button,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-} from '@chakra-ui/react';
+import { Button, ModalBody, ModalCloseButton, ModalContent, ModalHeader } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,16 +8,14 @@ import { queryClient } from '../../main';
 import { generateId } from '../../shared/utils';
 import { Memo } from '../../shared/interfaces/memo.interface';
 import { ModalType } from '../../shared/interfaces/common.interface';
+import DoneIcon from '@mui/icons-material/Done';
 
 interface ModalUpdateMemoProps {
   hanldeModalClose: () => void;
   updateTarget?: Memo;
 }
 
-function ModalUpdateMemo({
-  hanldeModalClose,
-  updateTarget,
-}: ModalUpdateMemoProps) {
+function ModalUpdateMemo({ hanldeModalClose, updateTarget }: ModalUpdateMemoProps) {
   const { bookIsbn } = useParams();
   const [memo, setMemo] = useState<string>('');
   const [modalType, setModalType] = useState<ModalType>('save');
@@ -36,11 +28,11 @@ function ModalUpdateMemo({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
-      alert('수정 성공!');
+      alert('추가 성공!');
       hanldeModalClose();
     },
     onError: () => {
-      alert('수정 실패!');
+      alert('추가 실패!');
     },
   });
 
@@ -52,11 +44,11 @@ function ModalUpdateMemo({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
-      alert('추가 성공!');
+      alert('수정 성공!');
       hanldeModalClose();
     },
     onError: () => {
-      alert('추가 실패!');
+      alert('수정 실패!');
     },
   });
 
@@ -76,13 +68,10 @@ function ModalUpdateMemo({
       <ModalBody>
         <MemoTextarea value={memo} onChange={(e) => setMemo(e.target.value)} />
         <Button
-          onClick={() =>
-            modalType === 'save'
-              ? addMemo.mutate()
-              : updateMemoByMemoId.mutate()
-          }
+          width="100%"
+          onClick={() => (modalType === 'save' ? addMemo.mutate() : updateMemoByMemoId.mutate())}
         >
-          메모 완료
+          <DoneIcon />
         </Button>
       </ModalBody>
     </ModalContent>
@@ -92,7 +81,13 @@ function ModalUpdateMemo({
 const MemoTextarea = styled.textarea`
   width: 100%;
   height: 200px;
-  border: 5px solid red;
+  border: 1px solid var(--main-text-color);
+  outline: none;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 3px;
+  resize: none;
+  margin-bottom: 20px;
 `;
 
 export default ModalUpdateMemo;

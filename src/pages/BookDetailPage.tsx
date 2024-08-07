@@ -115,7 +115,7 @@ function BookDetailPage() {
             </BookTopInfo>
             <BookInfoBottom>
               <DescriptionTitle>작품 소개</DescriptionTitle>
-              <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
+              <HorizontalLine margin="0 0 16px"></HorizontalLine>
               <p>{bookInfo?.description}</p>
             </BookInfoBottom>
             <MemoBox />
@@ -212,7 +212,7 @@ interface HorizontalLineProps {
 
 const HorizontalLine = styled.div<HorizontalLineProps>`
   width: 100%;
-  border: 1px solid ${(props) => (props.color ? props.color : 'var(--border-color)')};
+  border: 1px solid ${(props) => (props.color ? props.color : 'var(--main-text-color)')};
   margin: ${(props) => (props.margin ? props.margin : '20px 0')};
 `;
 
@@ -221,13 +221,13 @@ const BookInfoBottom = styled.div`
   & > p {
     font-size: 15px;
     line-height: 1.74em;
-    color: #666;
+    color: var(--sub-text-color-1);
   }
 `;
 
 const DescriptionTitle = styled.div`
   font-size: 20px;
-  color: #666;
+  color: var(--main-text-color);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 24px;

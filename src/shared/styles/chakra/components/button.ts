@@ -26,6 +26,19 @@ const mdIcon = defineStyle({
   },
 });
 
+const xsIcon = defineStyle({
+  boxSizing: 'border-box',
+  px: '4px',
+  py: '4px',
+  borderRadius: '5px',
+  width: '24px',
+  height: '24px',
+
+  svg: {
+    fontSize: '16px',
+  },
+});
+
 // theme
 const solid = defineStyle({
   backgroundColor: 'brand.500',
@@ -44,7 +57,7 @@ const solid = defineStyle({
   },
 });
 
-const outline = defineStyle(new ButtonOutline('brand.500', 'brand.500').getOutlineTheme());
+const outline = defineStyle(new ButtonOutline('transparent', 'gray.0').getOutlineTheme());
 
 const outlineGray = defineStyle(new ButtonOutline('gray.50', 'gray.1000').getOutlineTheme());
 
@@ -70,7 +83,7 @@ const clear = defineStyle({
 });
 
 export const buttonTheme = defineStyleConfig({
-  sizes: { md, mdIcon },
+  sizes: { md, mdIcon, xsIcon },
   variants: { solid, outline, outlineGray, clear },
   defaultProps: {
     size: 'md',

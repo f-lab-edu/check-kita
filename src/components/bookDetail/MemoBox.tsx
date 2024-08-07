@@ -1,10 +1,4 @@
-import {
-  Button,
-  Flex,
-  Modal,
-  ModalOverlay,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, Flex, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import styled from 'styled-components';
 import ModalUpdateMemo from './ModalUpdateMemo';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -13,6 +7,9 @@ import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { queryClient } from '../../main';
 import { Memo } from '../../shared/interfaces/memo.interface';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function MemoBox() {
   const { bookIsbn } = useParams();
@@ -32,8 +29,7 @@ function MemoBox() {
   });
 
   const deleteMemo = useMutation({
-    mutationFn: (memoId: string) =>
-      api.deleteMemoByMemoId(Number(bookIsbn), memoId),
+    mutationFn: (memoId: string) => api.deleteMemoByMemoId(Number(bookIsbn), memoId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
       alert('제거 성공!');
@@ -59,9 +55,11 @@ function MemoBox() {
       <Wrapper>
         <Flex justify={'space-between'}>
           <DescriptionTitle>메모</DescriptionTitle>
-          <Button onClick={onOpen}>메모하기</Button>
+          <Button onClick={onOpen} size="mdIcon" variant="goast">
+            <AddIcon />
+          </Button>
         </Flex>
-        <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
+        <HorizontalLine margin="0 0 16px"></HorizontalLine>
         <MemoList>
           {!!memoList &&
             memoList.memos.map((memo, index) => (
@@ -74,15 +72,19 @@ function MemoBox() {
                   setShowedMemoIndex(-1);
                 }}
               >
-                {memo.content}
+                <p>{memo.content}</p>
                 <ButtonWrapper show={index === showedMemoIndex}>
-                  <Button onClick={() => setUpdateMemo(memo)}>수정</Button>
+                  <Button size="xsIcon" variant="goast" onClick={() => setUpdateMemo(memo)}>
+                    <EditIcon />
+                  </Button>
                   <Button
+                    size="xsIcon"
+                    variant="goast"
                     onClick={() => {
                       deleteMemo.mutate(memo.memoId);
                     }}
                   >
-                    식제
+                    <DeleteIcon />
                   </Button>
                 </ButtonWrapper>
               </MemoContainer>
@@ -108,7 +110,7 @@ const Wrapper = styled.div`
 
 const DescriptionTitle = styled.div`
   font-size: 20px;
-  color: #666;
+  color: var(--main-text-color);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 24px;
@@ -122,20 +124,26 @@ interface HorizontalLineProps {
 
 const HorizontalLine = styled.div<HorizontalLineProps>`
   width: 100%;
-  border: 1px solid ${(props) => (props.color ? props.color : '#e6e8eb')};
+  border: 1px solid ${(props) => (props.color ? props.color : 'var(--main-text-color)')};
   margin: ${(props) => (props.margin ? props.margin : '20px 0')};
 `;
 
 const MemoList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 `;
 
 const MemoContainer = styled.div`
-  border: 1px solid blue;
+  background-color: var(--wrapper-color);
+  padding: 8px;
+  border-radius: 6px;
   display: flex;
-  gap: 4px;
+  gap: 12px;
+
+  p {
+    width: calc(100% - 70px);
+  }
 `;
 
 interface ButtonWrapperProps {
