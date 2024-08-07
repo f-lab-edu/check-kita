@@ -146,6 +146,7 @@ const ImgContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex: 0 0 auto;
 
   & > img {
     width: 200px;
@@ -156,6 +157,7 @@ const ImgContainer = styled.div`
 `;
 
 const BookInfoBox = styled.div`
+  width: calc(100% - 200px - 40px);
   flex: 1 1 auto;
 `;
 

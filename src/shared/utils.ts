@@ -71,3 +71,11 @@ export const convertTimestampsToDate = (obj: any): any => {
 export const generateId = (): string => {
   return uuidv4();
 };
+
+export const convertDateToDisplayFormat = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDay();
+
+  return `${year}년 ${month}월 ${day}일`;
+};
