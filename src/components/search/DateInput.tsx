@@ -62,8 +62,7 @@ const Wrapper = styled.div<WrapperProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: ${(props) =>
-    props.marginBottom ? props.marginBottom + 'px' : 0};
+  margin-bottom: ${(props) => (props.marginBottom ? props.marginBottom + 'px' : 0)};
 
   .react-datepicker-wrapper {
     input {
@@ -74,6 +73,7 @@ const Wrapper = styled.div<WrapperProps>`
       caret-color: transparent;
       font-weight: 500;
       color: var(--main-text-color);
+      background-color: var(--wrapper-color);
     }
   }
 `;

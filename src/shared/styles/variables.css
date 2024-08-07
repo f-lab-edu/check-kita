@@ -5,7 +5,9 @@
   --main-text-color: #fff;
   --sub-text-color-1: #f2f0ff;
   --sub-text-color-2: #8d9098;
+  --border-color: rgba(255, 255, 255, 0.06);
 
   --min-width: 768px;
   --header-height: 90px;
+  --wrapper-border-radius: 18px;
 }

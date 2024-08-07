@@ -1,45 +1,62 @@
 import styled from 'styled-components';
-import { ReadingRecord } from '../../shared/interfaces/book.interface';
+import {
+  AlreadyBook,
+  IngBook,
+  ReadingRecord,
+  WantBook,
+} from '../../shared/interfaces/book.interface';
 import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
-import { match } from 'ts-pattern';
+import RecordTypeIcon from '../common/RecordTypeIcon';
 
 interface BookRecordBoxProps {
+  recordId: number | undefined;
   bookRecord: ReadingRecord;
 }
 
-function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
-  const { recordType } = bookRecord;
+function BookRecordBox({ bookRecord, recordId }: BookRecordBoxProps) {
+  const { recordType, recordDetail } = bookRecord;
+
+  const RecordDetail = () => {
+    switch (recordType) {
+      case 'already':
+        const { startDate, endDate, rating } = recordDetail as AlreadyBook;
+        return <></>;
+      case 'ing':
+        const { readingProgressType, readingProgressCount } = recordDetail as IngBook;
+        return <></>;
+      case 'want':
+        const { expectationRating, expectationMemo } = recordDetail as WantBook;
+        return <></>;
+    }
+  };
 
   return (
     <Wrapper>
-      <RecordBox>
-        <RecordType>{BookRecordTypeLabel[recordType]}</RecordType>
-        {/* TODO: 책 기록 퍼블리싱 */}
-        {match(recordType)
-          .with('already', () => <div></div>)
-          .with('ing', () => <div></div>)
-          .otherwise(() => (
-            <div></div>
-          ))}
-      </RecordBox>
+      <RecordType>
+        {<RecordTypeIcon recordType={recordType} iconSize="small" />}
+        {BookRecordTypeLabel[recordType]}
+      </RecordType>
+      {RecordDetail()}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
-
-const RecordType = styled.p`
-  font-size: 15px;
-  color: #59667a;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 120%;
+const Wrapper = styled.div`
+  margin-top: 30px;
+  width: 100%;
+  background-color: var(--wrapper-color);
+  border-radius: var(--wrapper-border-radius);
+  display: flex;
+  padding: 18px;
 `;
 
-const RecordBox = styled.div`
-  margin-top: 10px;
-  border: solid 4px #f2f4f5;
-  padding: 20px 26px;
+const RecordType = styled.p`
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 120%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 export default BookRecordBox;

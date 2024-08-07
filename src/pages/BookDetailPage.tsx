@@ -11,6 +11,7 @@ import { SearchBook } from '../shared/interfaces/book.interface';
 import { useEffect, useState } from 'react';
 import { splitBookAuthor } from '../shared/utils';
 import MemoBox from '../components/bookDetail/MemoBox';
+import Container from '../elements/Container';
 
 function BookDetailPage() {
   const navigate = useNavigate();
@@ -57,6 +58,11 @@ function BookDetailPage() {
     },
   });
 
+  const isRecordedBook = () => {
+    if (isLoading || !myBook || !myBook.id) return false;
+    return true;
+  };
+
   useEffect(() => {
     if (!!bookInfo?.author) {
       setAuthors(splitBookAuthor(bookInfo.author));
@@ -65,89 +71,81 @@ function BookDetailPage() {
 
   return (
     <Wrapper>
-      {!bookInfoIsLoading && (
-        <>
-          <BookTopInfo>
-            <img src={bookInfo?.image} width={200} />
-            <BookInfoBox>
-              <BookTitle>{bookInfo?.title}</BookTitle>
-              <BookPublisingInfoTop>
-                <p>
-                  {!!authors &&
-                    authors.map((bookAuthor, index) => (
-                      <span key={index}>
-                        <strong>{bookAuthor}</strong>
-                        {index !== authors.length - 1 && <span>, </span>}
-                      </span>
-                    ))}{' '}
-                  저
-                </p>
-                <p>
-                  <strong>{bookInfo?.publisher}</strong> 출판
-                </p>
-              </BookPublisingInfoTop>
-              <BookPublisingInfoBottom>
-                <InfoBox>
-                  <p>출간일</p>
-                  <p>{bookInfo?.pubdate}</p>
-                </InfoBox>
-                <InfoBox>
-                  <p>ISBN</p>
-                  <p>{bookInfo?.isbn}</p>
-                </InfoBox>
-              </BookPublisingInfoBottom>
-              <HorizontalLine />
-              <div>
-                {!!myBook?.readingRecord && <BookRecordBox bookRecord={myBook.readingRecord} />}
-                <MyBookButtonBox>
-                  {match({ isLoading, myBook })
-                    .with({ isLoading: true }, () => <Button onClick={onOpen}>저장하기</Button>)
-                    .with({ isLoading: false, myBook: undefined }, () => (
-                      <Button onClick={onOpen}>저장하기</Button>
-                    ))
-                    .with({ isLoading: false, myBook: { id: undefined } }, () => (
-                      <Button onClick={onOpen}>저장하기</Button>
-                    ))
-                    .otherwise(() => (
-                      <>
-                        <Button onClick={onOpen}>수정하기</Button>
-                        <Button
-                          onClick={() => {
-                            deleteRecord.mutate();
-                          }}
-                        >
-                          삭제하기
-                        </Button>
-                      </>
-                    ))}
-                </MyBookButtonBox>
-              </div>
-            </BookInfoBox>
-          </BookTopInfo>
-          <BookInfoBottom>
-            <DescriptionTitle>작품 소개</DescriptionTitle>
-            <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
-            <p>{bookInfo?.description}</p>
-          </BookInfoBottom>
-          <MemoBox />
-          {/* 기록 업데이트 모달 */}
-          {!!bookIsbn && (
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalAddBook onClose={onClose} bookIsbn={bookIsbn} />
-            </Modal>
-          )}
-        </>
-      )}
+      <Container>
+        {!bookInfoIsLoading && (
+          <>
+            <BookTopInfo>
+              <ImgContainer>
+                <img src={bookInfo?.image} width={200} />
+                <Button onClick={onOpen}>{isRecordedBook() ? '수정하기' : '저장하기'}</Button>
+              </ImgContainer>
+              <BookInfoBox>
+                <BookTitle>{bookInfo?.title}</BookTitle>
+                <BookPublisingInfoTop>
+                  <p>
+                    {!!authors &&
+                      authors.map((bookAuthor, index) => (
+                        <span key={index}>
+                          <strong>{bookAuthor}</strong>
+                          {index !== authors.length - 1 && <span>, </span>}
+                        </span>
+                      ))}{' '}
+                    저
+                  </p>
+                  <p>
+                    <strong>{bookInfo?.publisher}</strong> 출판
+                  </p>
+                </BookPublisingInfoTop>
+                <BookPublisingInfoBottom>
+                  <InfoBox>
+                    <p>출간일</p>
+                    <p>{bookInfo?.pubdate}</p>
+                  </InfoBox>
+                  <InfoBox>
+                    <p>ISBN</p>
+                    <p>{bookInfo?.isbn}</p>
+                  </InfoBox>
+                </BookPublisingInfoBottom>
+
+                {/* 나의 책 기록 */}
+                {!!myBook?.readingRecord && (
+                  <BookRecordBox recordId={myBook.id} bookRecord={myBook.readingRecord} />
+                )}
+              </BookInfoBox>
+            </BookTopInfo>
+            <BookInfoBottom>
+              <DescriptionTitle>작품 소개</DescriptionTitle>
+              <HorizontalLine color="#666" margin="0 0 16px"></HorizontalLine>
+              <p>{bookInfo?.description}</p>
+            </BookInfoBottom>
+            <MemoBox />
+            {/* 기록 업데이트 모달 */}
+            {!!bookIsbn && (
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalAddBook onClose={onClose} bookIsbn={bookIsbn} />
+              </Modal>
+            )}
+          </>
+        )}
+      </Container>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  padding: calc(30px + var(--header-height)) 0 0;
+`;
 
 const BookTopInfo = styled.div`
   display: flex;
   gap: 40px;
+`;
+
+const ImgContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
   & > img {
     width: 200px;
@@ -159,29 +157,30 @@ const BookTopInfo = styled.div`
 
 const BookInfoBox = styled.div`
   flex: 1 1 auto;
-  padding-top: 22px;
 `;
 
 const BookTitle = styled.span`
   font-size: 30px;
   line-height: 1.3em;
-  color: #333;
+  color: var(--main-text-color);
   font-weight: 700;
 `;
 
 const BookPublisingInfoTop = styled.div`
   padding: 20px 0;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 120%;
-  color: #666;
 
   & > p {
+    color: var(--sub-text-color-2);
+
     &:first-of-type {
       padding-bottom: 6px;
     }
   }
 
   strong {
+    color: var(--sub-text-color-1);
     font-weight: 700;
     cursor: pointer;
   }
@@ -194,10 +193,11 @@ const BookPublisingInfoBottom = styled.div`
 
 const InfoBox = styled.div`
   display: flex;
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
 
   & > p {
+    color: var(--sub-text-color-2);
+
     &:first-of-type {
       font-weight: 700;
       margin-right: 8px;
@@ -212,7 +212,7 @@ interface HorizontalLineProps {
 
 const HorizontalLine = styled.div<HorizontalLineProps>`
   width: 100%;
-  border: 1px solid ${(props) => (props.color ? props.color : '#e6e8eb')};
+  border: 1px solid ${(props) => (props.color ? props.color : 'var(--border-color)')};
   margin: ${(props) => (props.margin ? props.margin : '20px 0')};
 `;
 
@@ -232,14 +232,6 @@ const DescriptionTitle = styled.div`
   letter-spacing: -0.03em;
   line-height: 24px;
   padding: 10px 0 8px;
-`;
-
-const MyBookButtonBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
 `;
 
 export default BookDetailPage;

@@ -9,7 +9,7 @@ export class ButtonOutline {
 
   getOutlineTheme() {
     return {
-      border: '1px solid',
+      border: '2px solid',
       borderColor: this.borderColor,
       backgroundColor: 'gray.0',
       color: this.textColor,

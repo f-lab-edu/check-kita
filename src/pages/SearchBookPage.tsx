@@ -86,7 +86,7 @@ const ResultList = styled.div`
   display: flex;
   flex-direction: column;
   background: var(--wrapper-color);
-  border-radius: 18px;
+  border-radius: var(--wrapper-border-radius);
   padding: 18px;
 `;
 

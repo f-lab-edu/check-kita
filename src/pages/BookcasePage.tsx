@@ -74,7 +74,7 @@ const Title = styled.div`
 const BooksContainer = styled.div`
   width: 100%;
   background-color: var(--wrapper-color);
-  border-radius: 18px;
+  border-radius: var(--wrapper-border-radius);
   padding: 32px;
 `;
 
