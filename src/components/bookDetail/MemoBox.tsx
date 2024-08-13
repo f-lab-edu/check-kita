@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 function MemoBox() {
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [showedMemoIndex, setShowedMemoIndex] = useState<Number>(-1);
+  const [showedMemoIndex, setShowedMemoIndex] = useState<number>(-1);
   const [updateTarget, setUpdateTarget] = useState<Memo>();
 
   const { data: memoList } = useQuery({

@@ -4,7 +4,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { textOverflowStyles } from '../../shared/styles/common';
 import { changedMoneyFormat, splitBookAuthor } from '../../shared/utils';
 import { useEffect, useState } from 'react';
-import { Button } from '@chakra-ui/react';
 
 interface SearchResultBookProps {
   bookInfo: SearchBook;

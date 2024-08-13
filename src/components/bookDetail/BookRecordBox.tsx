@@ -11,11 +11,10 @@ import { convertDateToDisplayFormat } from '../../shared/utils';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 interface BookRecordBoxProps {
-  recordId: number | undefined;
   bookRecord: ReadingRecord;
 }
 
-function BookRecordBox({ bookRecord, recordId }: BookRecordBoxProps) {
+function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
   const { recordType, recordDetail } = bookRecord;
 
   const RecordDetail = () => {

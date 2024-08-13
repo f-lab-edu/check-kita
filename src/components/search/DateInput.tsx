@@ -18,7 +18,7 @@ const actionTypes = {
 function DateInput({ labelText, marginBottom, atom }: DateInputProps) {
   const { value, setValue } = atom;
 
-  const openReducer = (state: boolean, action: any) => {
+  const openReducer = (state: boolean, action: { type: string }) => {
     switch (action.type) {
       case actionTypes.TOGGLE:
         return !state;
