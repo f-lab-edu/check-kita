@@ -19,7 +19,7 @@ const api = axios.create({
  */
 export const searchBooks = (
   search: string,
-  count: number = 20,
+  count: number = 15,
   page: number = 1
 ): Promise<SearchBook[]> => {
   return api
@@ -38,13 +38,33 @@ export const searchBooks = (
 };
 
 /**
+ *
+ * @param {string} search 검색어
+ * @return {number}
+ */
+export const getSearchBookCount = (search: string): Promise<number> => {
+  return api
+    .get('/search-book-count', {
+      params: { query: search, display: 100, sort: 'sim' },
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        return res.data.items.length;
+      }
+      return 0;
+    })
+    .catch((e) => {
+      console.log('[API ERROR] searchBooks: ', e);
+      return 0;
+    });
+};
+
+/**
  * isbn으로 책 검색
  * @param {number} isbn
  * @returns
  */
-export async function searchBookByIsbn(
-  isbn: number
-): Promise<null | SearchBook> {
+export async function searchBookByIsbn(isbn: number): Promise<null | SearchBook> {
   try {
     const res = await api.get('/search-book-by-isbn', {
       params: { d_isbn: isbn },

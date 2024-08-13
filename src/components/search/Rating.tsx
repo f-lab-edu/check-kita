@@ -36,23 +36,15 @@ function Rating({ score, setScore }: RatingProps) {
     const scoreMinusIndex = score - index;
 
     return match(scoreMinusIndex)
-      .with(0.5, () => (
-        <HalfStar key={index} onClick={starClicked} id={String(index)} />
-      ))
+      .with(0.5, () => <HalfStar key={`half-${index}`} onClick={starClicked} id={String(index)} />)
       .when(
         (n) => n > 0,
-        () => <OneStar key={index} onClick={starClicked} id={String(index)} />
+        () => <OneStar key={`one-${index}`} onClick={starClicked} id={String(index)} />
       )
-      .otherwise(() => (
-        <ZeroStar key={index} onClick={starClicked} id={String(index)} />
-      ));
+      .otherwise(() => <ZeroStar key={`zero-${index}`} onClick={starClicked} id={String(index)} />);
   }
 
-  return (
-    <Wrapper>
-      {Array.from({ length: 5 }).map((_, index) => starScore(score, index))}
-    </Wrapper>
-  );
+  return <Wrapper>{Array.from({ length: 5 }).map((_, index) => starScore(score, index))}</Wrapper>;
 }
 
 const Wrapper = styled.div`
@@ -75,17 +67,14 @@ const Star = styled.div`
 `;
 
 const OneStar = styled(Star)`
-  background-image: url('${import.meta.env
-    .VITE_APP_IMAGEPATH}/img_star_score.svg');
+  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/img_star_score.svg');
 `;
 
 const HalfStar = styled(Star)`
-  background-image: url('${import.meta.env
-    .VITE_APP_IMAGEPATH}/img_star_score_half.svg');
+  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/img_star_score_half.svg');
 `;
 const ZeroStar = styled(Star)`
-  background-image: url('${import.meta.env
-    .VITE_APP_IMAGEPATH}/img_star_score_zero.svg');
+  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/img_star_score_zero.svg');
 `;
 
 export default Rating;

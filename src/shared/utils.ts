@@ -77,3 +77,11 @@ export const getDaysInMonth = (year: number, month: number) => {
   const lastDayOfMonth = new Date(nextMonthDate.getTime() - 1);
   return lastDayOfMonth.getDate();
 };
+
+export const convertDateToDisplayFormat = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDay();
+
+  return `${year}년 ${month}월 ${day}일`;
+};

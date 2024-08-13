@@ -1,9 +1,4 @@
-import {
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-} from '@chakra-ui/react';
+import { ModalBody, ModalCloseButton, ModalContent, ModalHeader } from '@chakra-ui/react';
 import styled from 'styled-components';
 import FlagIcon from '@mui/icons-material/Flag';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -26,11 +21,7 @@ import { queryClient } from '../../main';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { splitBookAuthor } from '../../shared/utils';
-import {
-  INIT_ALREADYBOOK,
-  INIT_INGBOOK,
-  INIT_WANTBOOK,
-} from '../../shared/constants';
+import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants';
 import { ModalType } from '../../shared/interfaces/common.interface';
 import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 
@@ -46,14 +37,8 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
   const [ingBook, setIngBook] = useState<IngBook>(INIT_INGBOOK);
   const [wantBook, setWantBook] = useState<WantBook>(INIT_WANTBOOK);
 
-  const bookInfo: SearchBook | undefined = queryClient.getQueryData([
-    'book',
-    bookIsbn,
-  ]);
-  const bookRecord: MyBook | undefined = queryClient.getQueryData([
-    'record',
-    bookIsbn,
-  ]);
+  const bookInfo: SearchBook | undefined = queryClient.getQueryData(['book', bookIsbn]);
+  const bookRecord: MyBook | undefined = queryClient.getQueryData(['record', bookIsbn]);
 
   const updateRecord = useMutation({
     mutationFn: (saveBook: MyBook) => api.updateMyBook(saveBook),
@@ -241,12 +226,11 @@ interface TypeButtonProps {
 
 const BookTypeButton = styled.button<TypeButtonProps>`
   flex: 1 1 auto;
-  border: 1px solid
-    ${(props) => (props.isSelected ? 'var(--brand-color)' : '#d3d3d3')};
+  border: 1px solid ${(props) => (props.isSelected ? 'var(--brand-color)' : '#d3d3d3')};
   border-radius: 10px;
   padding: 15px;
   background-color: ${(props) =>
-    props.isSelected ? 'var(--brand-color)' : '#fff'};
+    props.isSelected ? 'var(--brand-color)' : 'var(--wrapper-color)'};
 `;
 
 const TypeButtonMainText = styled.p<TypeButtonProps>`
