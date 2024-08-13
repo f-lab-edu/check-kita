@@ -9,13 +9,31 @@ import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
 import RecordTypeIcon from '../common/RecordTypeIcon';
 import { convertDateToDisplayFormat } from '../../shared/utils';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import { Button } from '@chakra-ui/react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import * as api from '../../shared/services/myBookService';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../main';
 
 interface BookRecordBoxProps {
   bookRecord: ReadingRecord;
+  bookIsbn: string;
 }
 
-function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
+function BookRecordBox({ bookRecord, bookIsbn }: BookRecordBoxProps) {
   const { recordType, recordDetail } = bookRecord;
+
+  // TODO: 알럿 먼저 띄우기
+  const deleteRecord = useMutation({
+    mutationFn: () => api.deleteRecordByBookId(Number(bookIsbn)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
+      alert('삭제 성공!');
+    },
+    onError: () => {
+      alert('삭제 실패!');
+    },
+  });
 
   const RecordDetail = () => {
     switch (recordType) {
@@ -56,7 +74,6 @@ function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
             </ContentWraper>
           </>
         );
-        return <></>;
       case 'want':
         const { expectationRating, expectationMemo } = recordDetail as WantBook;
         return (
@@ -80,11 +97,22 @@ function BookRecordBox({ bookRecord }: BookRecordBoxProps) {
 
   return (
     <Wrapper>
-      <RecordType>
-        {<RecordTypeIcon recordType={recordType} iconSize="small" />}
-        {BookRecordTypeLabel[recordType]}
-      </RecordType>
-      {RecordDetail()}
+      <Container>
+        <RecordType>
+          {<RecordTypeIcon recordType={recordType} iconSize="small" />}
+          {BookRecordTypeLabel[recordType]}
+        </RecordType>
+        <RecordDetail />
+      </Container>
+      <Button
+        variant="clear"
+        size="24"
+        onClick={() => {
+          deleteRecord.mutate();
+        }}
+      >
+        <DeleteIcon />
+      </Button>
     </Wrapper>
   );
 }
@@ -94,29 +122,37 @@ const Wrapper = styled.div`
   width: 100%;
   background-color: var(--wrapper-color);
   border-radius: var(--wrapper-border-radius);
-  display: flex;
   padding: 18px 24px;
-  gap: 10px 24px;
-  flex-wrap: wrap;
   overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  flex: 1 1 auto;
 `;
 
 const RecordType = styled.p`
   font-size: 16px;
   font-weight: 700;
-  line-height: 120%;
+  line-height: 22px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
   color: var(--sub-text-color-1);
 `;
 
 const ContentWraper = styled.div`
-  display: inline-block;
   font-weight: 500;
   color: var(--sub-text-color-2);
   display: flex;
   align-items: flex-start;
+  gap: 4px;
 `;
 
 const ContentLabel = styled.span`
@@ -124,6 +160,7 @@ const ContentLabel = styled.span`
   margin-right: 8px;
   color: var(--brand-color-2);
   font-weight: 700;
+  line-height: 22px;
 `;
 
 const ContentMainText = styled.span`
@@ -131,6 +168,7 @@ const ContentMainText = styled.span`
   font-weight: 700;
   display: inline-block;
   word-break: break-all;
+  line-height: 22px;
 `;
 
 const QuoteWrapper = styled.div`

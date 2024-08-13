@@ -3,10 +3,8 @@ import * as api from '../shared/services';
 import styled from 'styled-components';
 import { Button, Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import ModalAddBook from '../components/bookDetail/ModalAddBook';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { match } from 'ts-pattern';
+import { useQuery } from '@tanstack/react-query';
 import BookRecordBox from '../components/bookDetail/BookRecordBox';
-import { queryClient } from '../main';
 import { SearchBook } from '../shared/interfaces/book.interface';
 import { useEffect, useState } from 'react';
 import { splitBookAuthor } from '../shared/utils';
@@ -44,17 +42,6 @@ function BookDetailPage() {
       }
 
       return result;
-    },
-  });
-
-  const deleteRecord = useMutation({
-    mutationFn: () => api.deleteRecordByBookId(Number(bookIsbn)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
-      alert('삭제 성공!');
-    },
-    onError: () => {
-      alert('삭제 실패!');
     },
   });
 
@@ -108,7 +95,9 @@ function BookDetailPage() {
                 </BookPublisingInfoBottom>
 
                 {/* 나의 책 기록 */}
-                {!!myBook?.readingRecord && <BookRecordBox bookRecord={myBook.readingRecord} />}
+                {!!myBook?.readingRecord && bookIsbn && (
+                  <BookRecordBox bookRecord={myBook.readingRecord} bookIsbn={bookIsbn} />
+                )}
               </BookInfoBox>
             </BookTopInfo>
             <BookInfoBottom>

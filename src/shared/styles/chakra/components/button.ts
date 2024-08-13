@@ -57,7 +57,7 @@ const solid = defineStyle({
   },
 });
 
-const outline = defineStyle(new ButtonOutline('transparent', 'gray.0').getOutlineTheme());
+const outline = defineStyle(new ButtonOutline('brand.500', 'gray.0').getOutlineTheme());
 
 const outlineGray = defineStyle(new ButtonOutline('gray.50', 'gray.1000').getOutlineTheme());
 
