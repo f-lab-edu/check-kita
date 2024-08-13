@@ -48,7 +48,7 @@ function RecentBooks() {
                         <Button
                           width={'100%'}
                           onClick={() => {
-                            goToBookDetail(book.id);
+                            goToBookDetail(String(book.id));
                           }}
                         >
                           <RecordTypeIcon
