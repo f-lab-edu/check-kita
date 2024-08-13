@@ -16,18 +16,12 @@ interface IngBookRecordBoxProps {
   updateRecord: (recordDetail: BookRecordDetail) => void;
 }
 
-function IngBookRecordBox({
-  recordInfo,
-  type,
-  updateRecord,
-}: IngBookRecordBoxProps) {
+function IngBookRecordBox({ recordInfo, type, updateRecord }: IngBookRecordBoxProps) {
   const [startDate, setStartDate] = useState<Date>(recordInfo.startDate);
   const [progressType, setProgressType] = useState<BookReadingProgressType>(
     recordInfo.readingProgressType
   );
-  const [progressCount, setProgressCount] = useState<number>(
-    recordInfo.readingProgressCount
-  );
+  const [progressCount, setProgressCount] = useState<number>(recordInfo.readingProgressCount);
 
   useEffect(() => {
     setStartDate(recordInfo.startDate);
@@ -73,11 +67,7 @@ function IngBookRecordBox({
         </LabelWrapper>
 
         <ProgressTypeInput>
-          <input
-            type="number"
-            value={progressCount}
-            onChange={(e) => progressCountChange(e)}
-          />
+          <input type="number" value={progressCount} onChange={(e) => progressCountChange(e)} />
           <span>{progressType === 'pages' ? '쪽' : '%'}</span>
         </ProgressTypeInput>
       </ProgressTypeInputBox>
@@ -105,8 +95,7 @@ interface LabelTextProps {
 
 const LabelText = styled.p<LabelTextProps>`
   font-size: 13px;
-  margin-bottom: ${(props) =>
-    props.marginBottom ? props.marginBottom : '3px'};
+  margin-bottom: ${(props) => (props.marginBottom ? props.marginBottom : '3px')};
 `;
 
 const ProgressTypeSelector = styled.div`
@@ -154,6 +143,7 @@ const ProgressTypeInput = styled.div`
   input {
     text-align: right;
     outline: none;
+    background: transparent;
   }
 
   span {

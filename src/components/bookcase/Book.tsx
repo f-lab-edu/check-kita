@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { MyBook } from '../../shared/interfaces/book.interface';
-import { textOverflowStyles } from '../../shared/styles/\bcommon';
+import { textOverflowStyles } from '../../shared/styles/common';
 import { useNavigate } from 'react-router-dom';
 
 interface BookProps {
@@ -19,18 +19,16 @@ function Book({ myBook }: BookProps) {
       <BookImgWrapper>
         <img src={myBook.image} />
       </BookImgWrapper>
-      <BookTitle>{myBook.title}</BookTitle>
-      <BookAuthor>
+      <BookInfoBox>
+        <BookTitle>{myBook.title}</BookTitle>
         {!!myBook.author &&
           myBook.author.map((author, index) => (
-            <>
+            <BookAuthor key={index}>
               <span>{author}</span>
-              {myBook.author && index !== myBook.author.length - 1 && (
-                <span>, </span>
-              )}
-            </>
+              {myBook.author && index !== myBook.author.length - 1 && <span>, </span>}
+            </BookAuthor>
           ))}
-      </BookAuthor>
+      </BookInfoBox>
     </Wrapper>
   );
 }
@@ -44,29 +42,38 @@ const Wrapper = styled.div`
 `;
 
 const BookImgWrapper = styled.div`
-  border-radius: 4px;
   width: 100%;
-  aspect-ratio: 200/288;
   overflow: hidden;
+
+  & > img {
+    border-radius: 4px;
+  }
+`;
+
+const BookInfoBox = styled.div`
+  padding-top: 12px;
+  font-family: 'HakgyoansimWooju';
 `;
 
 const BookTitle = styled.span`
-  padding-top: 10px;
-  line-height: 19px;
+  font-family: inherit;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
+  line-height: normal;
   ${textOverflowStyles(2)}
 `;
 
-const BookAuthor = styled.span`
-  padding-top: 8px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.2em;
-  font-size: 13px;
-  color: rgb(128, 137, 145);
-  overflow-wrap: break-word;
-  ${textOverflowStyles(2)}
+const BookAuthor = styled.div`
+  padding-top: 6px;
+  font-family: 'HakgyoansimWooju';
+
+  span {
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--sub-text-color-2);
+    ${textOverflowStyles(2)}
+  }
 `;
 
 export default Book;

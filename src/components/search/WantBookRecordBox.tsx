@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import Rating from './Rating';
-import {
-  BookRecordDetail,
-  WantBook,
-} from '../../shared/interfaces/book.interface';
+import { BookRecordDetail, WantBook } from '../../shared/interfaces/book.interface';
 import { useEffect, useState } from 'react';
 import { Button } from '@chakra-ui/react';
 import { ModalType } from '../../shared/interfaces/common.interface';
@@ -14,15 +11,9 @@ interface WantBookRecordBoxProps {
   updateRecord: (recordDetail: BookRecordDetail) => void;
 }
 
-function WantBookRecordBox({
-  recordInfo,
-  type,
-  updateRecord,
-}: WantBookRecordBoxProps) {
+function WantBookRecordBox({ recordInfo, type, updateRecord }: WantBookRecordBoxProps) {
   const [rating, setRating] = useState(recordInfo.expectationRating);
-  const [expectationMemo, setExpectationMemo] = useState(
-    recordInfo.expectationMemo
-  );
+  const [expectationMemo, setExpectationMemo] = useState(recordInfo.expectationMemo);
 
   useEffect(() => {
     setRating(recordInfo.expectationRating);
@@ -50,10 +41,7 @@ function WantBookRecordBox({
         <Rating score={rating} setScore={setRating} />
       </div>
       <LabelText>기대평</LabelText>
-      <textarea
-        value={expectationMemo}
-        onChange={(e) => memoChange(e)}
-      ></textarea>
+      <MemoTextarea value={expectationMemo} onChange={(e) => memoChange(e)}></MemoTextarea>
       <ButtonWrapper>
         <Button width={'100%'} onClick={handleUpdateRecordClick}>
           {type === 'save' ? '저장하기' : '수정하기'}
@@ -66,6 +54,16 @@ function WantBookRecordBox({
 const LabelText = styled.p`
   font-size: 13px;
   margin-bottom: 3px;
+`;
+
+const MemoTextarea = styled.textarea`
+  width: 100%;
+  background: transparent;
+  outline: none;
+  border: 1px solid var(--main-text-color);
+  padding: 2px 4px;
+  border-radius: 3px;
+  resize: none;
 `;
 
 const ButtonWrapper = styled.div`

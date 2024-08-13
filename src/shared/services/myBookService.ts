@@ -7,6 +7,7 @@ import {
   where,
   getDoc,
   deleteDoc,
+  limit,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
@@ -34,17 +35,20 @@ export async function updateMyBook(saveBook: MyBook) {
 /**
  * 추가한 책 가져오기
  * @param {BookRecordType | 'all'} recordType
+ * @param {number} count
  * @returns
  */
 export async function getAllMyBooks(
-  recordType: BookRecordType | 'all' = 'all'
+  recordType: BookRecordType | 'all' = 'all',
+  count: number = 50
 ): Promise<MyBook[]> {
   const q =
     recordType === 'all'
-      ? query(collection(db, 'myBooks'))
+      ? query(collection(db, 'myBooks'), limit(count))
       : query(
           collection(db, 'myBooks'),
-          where('readingRecord.recordType', '==', recordType)
+          where('readingRecord.recordType', '==', recordType),
+          limit(count)
         );
 
   const querySnapshot = await getDocs(q);

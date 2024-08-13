@@ -9,13 +9,13 @@ export class ButtonOutline {
 
   getOutlineTheme() {
     return {
-      border: '1px solid',
+      border: '2px solid',
       borderColor: this.borderColor,
-      backgroundColor: 'gray.0',
+      backgroundColor: 'transparnt',
       color: this.textColor,
 
       _hover: {
-        backgroundColor: '#F5F5F5',
+        backgroundColor: 'rgba(0,0,0,0.4)',
       },
 
       _disabled: {

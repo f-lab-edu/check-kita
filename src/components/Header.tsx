@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 function Header() {
   const location = useLocation();
-
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
@@ -30,28 +29,72 @@ function Header() {
 
   return (
     <Wrapper>
-      헤더
-      <input
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-        onKeyDown={enterPressHandle}
-        placeholder={
-          location.pathname.includes('search')
-            ? '등록할 책 검색하기'
-            : '나의 책 검색하기'
-        }
-      />
-      {/* TODO: 실시간 검색 결과 팝오버로 보여주기 */}
+      <ContentBox>
+        <Checkita
+          onClick={() => {
+            navigate('');
+          }}
+        >
+          Checkita!
+        </Checkita>
+        <NavigationBox>
+          {location.pathname !== 'bookcase' && (
+            <input
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              onKeyDown={enterPressHandle}
+              placeholder={
+                location.pathname.includes('search') ? '등록할 책 검색하기' : '나의 책 검색하기'
+              }
+            />
+          )}
+          <button>Logs</button>
+        </NavigationBox>
+      </ContentBox>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  width: 100%;
-  border: 10px solid blue;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  width: 100vw;
+  height: var(--header-height);
+  padding: 30px;
+  // TODO: 스크롤, 라우터 주소에 맞춰서 색상 지정
+  /* background-color: rgba(0, 0, 0, 0.5); */
+`;
+
+const ContentBox = styled.div`
+  margin: auto;
+  max-width: 1440px;
+  min-width: calc(60px + var(--min-width));
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Checkita = styled.div`
+  color: #fff;
+  font-size: 35px;
+  font-weight: 700;
+  line-height: normal;
+  cursor: pointer;
+`;
+
+const NavigationBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  & > button {
+    font-size: 24px;
+    color: var(--sub-text-color-2);
+    font-weight: 700;
+  }
 `;
 
 export default Header;
