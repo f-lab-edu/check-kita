@@ -6,17 +6,23 @@ import SearchBox from './SearchBox';
 function LandingImage() {
   return (
     <Wrapper>
-      <BackgroundImg>
+      <ImgWrapper>
+        <BackgroundImg
+          src={`${import.meta.env.VITE_APP_IMAGEPATH}/bookcase/img_library.jpg`}
+          width={window.innerWidth}
+          alt="랜딩 배경 이미지"
+        />
         <Filter />
-      </BackgroundImg>
+      </ImgWrapper>
       <Container>
         <ContentBox>
           <Slogan>Have A Book Day.</Slogan>
           <Title>Checkita!</Title>
           <SearchBox />
           <Description>
-            <strong>Checkita!</strong>는 어쩌구 저쩌구 어쩌구 저쩌구 이렇고 저렇고 그런
-            사이트입니다.
+            <strong>Checkita!</strong>는 독서 현황을 기록하고
+            <br />
+            기록을 확인할 수 있는 서비스입니다.
           </Description>
           <Button marginTop={30}>Browse My Records</Button>
           <CharacterBox>
@@ -48,16 +54,19 @@ const Wrapper = styled.div`
   padding-top: var(--header-height);
 `;
 
-const BackgroundImg = styled.div`
+const ImgWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   min-width: var(--min-width);
   height: 100%;
-  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/bookcase/img_library.jpg');
-  background-size: cover;
-  background-position: center;
+`;
+
+const BackgroundImg = styled.img`
+  width: 100%;
+  min-width: var(--min-width);
+  height: 100%;
   filter: brightness(0.4);
 `;
 

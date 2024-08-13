@@ -36,12 +36,12 @@ function Rating({ score, setScore }: RatingProps) {
     const scoreMinusIndex = score - index;
 
     return match(scoreMinusIndex)
-      .with(0.5, () => <HalfStar key={index} onClick={starClicked} id={String(index)} />)
+      .with(0.5, () => <HalfStar key={`half-${index}`} onClick={starClicked} id={String(index)} />)
       .when(
         (n) => n > 0,
-        () => <OneStar key={index} onClick={starClicked} id={String(index)} />
+        () => <OneStar key={`one-${index}`} onClick={starClicked} id={String(index)} />
       )
-      .otherwise(() => <ZeroStar key={index} onClick={starClicked} id={String(index)} />);
+      .otherwise(() => <ZeroStar key={`zero-${index}`} onClick={starClicked} id={String(index)} />);
   }
 
   return <Wrapper>{Array.from({ length: 5 }).map((_, index) => starScore(score, index))}</Wrapper>;
