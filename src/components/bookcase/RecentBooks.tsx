@@ -8,12 +8,19 @@ import { textOverflowStyles } from '../../shared/styles/common';
 import RecordTypeIcon from '../common/RecordTypeIcon';
 import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
 import { Button } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 function RecentBooks() {
   const { data, isLoading } = useQuery({
     queryKey: ['myBooks', 'all', 4],
     queryFn: () => getAllMyBooks('all', 4),
   });
+
+  const navigate = useNavigate();
+
+  const goToBookDetail = (bookIsbn: string) => {
+    navigate(`/book/${bookIsbn}`);
+  };
 
   return (
     <Wrapper>
@@ -37,16 +44,24 @@ function RecentBooks() {
                       ))}
                     </BookAuthor>
                     <BookRecordTypeBox>
-                      <Button width={'100%'}>
-                        <RecordTypeIcon
-                          recordType={book.readingRecord?.recordType}
-                          iconSize="small"
-                        />
-                        <span>
-                          {book.readingRecord && BookRecordTypeLabel[book.readingRecord.recordType]}{' '}
-                          보러 가기
-                        </span>
-                      </Button>
+                      {book.id && (
+                        <Button
+                          width={'100%'}
+                          onClick={() => {
+                            goToBookDetail(book.id);
+                          }}
+                        >
+                          <RecordTypeIcon
+                            recordType={book.readingRecord?.recordType}
+                            iconSize="small"
+                          />
+                          <span>
+                            {book.readingRecord &&
+                              BookRecordTypeLabel[book.readingRecord.recordType]}{' '}
+                            보러 가기
+                          </span>
+                        </Button>
+                      )}
                     </BookRecordTypeBox>
                   </BookBox>
                 ))}
