@@ -9,13 +9,12 @@ function MyPage() {
         <ContentBox>
           <MontlyCalendar />
         </ContentBox>
-        {/* 월별 그래프 */}
+        <ContentBox>등록한 책</ContentBox>
+      </Container>
+      <Container>
         <ContentBox>
           <MontlyGraph />
         </ContentBox>
-      </Container>
-      <Container>
-        <ContentBox>등록한 책</ContentBox>
         <ContentBox>메모</ContentBox>
       </Container>
     </Wrapper>
@@ -27,7 +26,7 @@ export default MyPage;
 const Wrapper = styled.div`
   border: 10px solid red;
   display: flex;
-  flex-direction: column;
+
   gap: 16px;
   min-width: 768px;
   max-width: 1154px;
@@ -38,9 +37,10 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 16px;
+  flex: 1 1 300px;
 `;
 const ContentBox = styled.div`
   /* border: 10px solid gold; */
-  flex: 1 1 auto;
 `;

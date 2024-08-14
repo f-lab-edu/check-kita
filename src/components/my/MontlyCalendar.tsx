@@ -51,7 +51,7 @@ function MontlyCalendar() {
             })}
           {records && !!(records.length > availableCount) && (
             <div className="more-button">
-              <AddIcon fontSize="12" />
+              <AddIcon />
               {records.length - availableCount}
             </div>
           )}

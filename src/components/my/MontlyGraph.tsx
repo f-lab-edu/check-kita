@@ -30,8 +30,8 @@ function MontlyGraph() {
     datasets: [
       {
         data: data || [0, 0, 0],
-        backgroundColor: ['rgba(200, 200, 200, 0.6)', 'rgba(200, 200, 200, 0.6)', 'tomato'],
-        borderColor: ['rgba(200, 200, 200, 0.8)', 'rgba(200, 200, 200, 0.8)', 'red'],
+        backgroundColor: ['rgba(200, 200, 200, 0.6)', 'rgba(200, 200, 200, 0.6)', '#956aff'],
+        borderColor: ['rgba(200, 200, 200, 0.8)', 'rgba(200, 200, 200, 0.8)', '#7851e7'],
         borderWidth: 1,
         barPercentage: 0.3,
       },
@@ -80,15 +80,33 @@ function MontlyGraph() {
 
   return (
     <div>
-      <Title>이달의 기록 현황!</Title>
-      {SummaryReport()}
-      <Bar data={config} options={config.options} />
+      <Title>이달의 기록 바로 보기</Title>
+      <SummaryReport />
+      <GraphWrapper>
+        <Bar data={config} options={config.options} />
+      </GraphWrapper>
     </div>
   );
 }
 
-const Title = styled.div``;
+const Title = styled.span`
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  margin-right: 8px;
+`;
 
-const SummaryText = styled.div``;
+const SummaryText = styled.span`
+  font-size: 18px;
+  color: var(--sub-text-color-2);
+  font-weight: 500;
+`;
+
+const GraphWrapper = styled.div`
+  margin-top: 16px;
+  padding: 16px;
+  background-color: var(--wrapper-color);
+  border-radius: var(--wrapper-border-radius);
+`;
 
 export default MontlyGraph;
