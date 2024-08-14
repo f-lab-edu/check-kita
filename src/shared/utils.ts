@@ -85,3 +85,7 @@ export const convertDateToDisplayFormat = (date: Date) => {
 
   return `${year}년 ${month}월 ${day}일`;
 };
+
+export const convertDateMapKey = (date: Date) => {
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+};

@@ -14,7 +14,7 @@ import {
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
 import { INIT_NOT_EXISTS_RECORD } from '../constants';
-import { convertTimestampsToDate } from '../utils';
+import { convertDateMapKey, convertTimestampsToDate } from '../utils';
 
 /**
  * 책 추가하기, 수정하기
@@ -162,7 +162,7 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
       };
 
       const createdAt = record.createdAt.toDate();
-      const recordKey = `${createdAt.getFullYear()}-${createdAt.getMonth()}-${createdAt.getDate()}`;
+      const recordKey = convertDateMapKey(createdAt);
 
       if (books.has(recordKey)) {
         const targetDateRecords = books.get(recordKey);

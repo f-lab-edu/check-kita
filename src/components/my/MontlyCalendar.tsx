@@ -3,7 +3,9 @@ import * as api from '../../shared/services/myBookService';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { useState } from 'react';
-import { convertDateToDisplayFormat } from '../../shared/utils';
+import { convertDateMapKey, convertDateToDisplayFormat } from '../../shared/utils';
+import AddIcon from '@mui/icons-material/Add';
+import DetailBook from './DetailBook';
 
 function MontlyCalendar() {
   const TODAY = new Date();
@@ -18,14 +20,14 @@ function MontlyCalendar() {
   const renderRecords = ({ date }: { date: Date }) => {
     if (isLoading) return;
 
-    const convertedKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    const convertedKey = convertDateMapKey(date);
 
     if (data?.has(convertedKey)) {
       const records = data.get(convertedKey);
       const cellHeight = document.querySelector('button.react-calendar__tile')?.clientHeight;
 
-      // (셀 높이 - 날짜 높이 - gap) / (한 개의 높이 + gap + 패딩)
-      const availableCount = Math.floor(((cellHeight as number) - 24 - 2) / (18 + 4 + 2));
+      // (셀 높이 - 날짜 높이 - gap - 추가개수높이) / (한 개의 높이 + gap + 패딩)
+      const availableCount = Math.floor(((cellHeight as number) - 24 - 2 - 20) / (18 + 4 + 2));
 
       return (
         <div className="tile-content-wrapper">
@@ -44,7 +46,12 @@ function MontlyCalendar() {
                 );
               }
             })}
-          {records && records.length > availableCount && <div className="more-button"></div>}
+          {records && !!(records.length > availableCount) && (
+            <div className="more-button">
+              <AddIcon fontSize="12" />
+              {records.length - availableCount}
+            </div>
+          )}
         </div>
       );
     }
@@ -63,11 +70,20 @@ function MontlyCalendar() {
         tileContent={renderRecords}
       />
       <CalendarDetailRecord>
-        {/* TODO: 여기 선택한 날짜의 데이터 자세히 보여주기 */}
         <SelectedDate>
           <strong>{convertDateToDisplayFormat(selectedDate)}</strong> 기록 현황
         </SelectedDate>
-        <DateRecords></DateRecords>
+        {data && (
+          <DateRecords>
+            {/* TODO: data 개수 많아지면 어떻게 할 지 고민하기 */}
+            {!!data.get(convertDateMapKey(selectedDate)) &&
+              data
+                .get(convertDateMapKey(selectedDate))
+                ?.map((record, index) => (
+                  <DetailBook record={record} key={`DetailBook=${index}`} />
+                ))}
+          </DateRecords>
+        )}
       </CalendarDetailRecord>
     </div>
   );
@@ -78,6 +94,8 @@ const CalendarDetailRecord = styled.div`
   background: var(--wrapper-color);
   font-family: 'HakgyoansimWooju' !important;
   width: 100%;
+  min-width: 350px;
+  max-width: 700px;
 `;
 
 const SelectedDate = styled.div`
@@ -92,8 +110,12 @@ const SelectedDate = styled.div`
 `;
 
 const DateRecords = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, auto));
+  grid-auto-rows: 1fr;
+
+  gap: 8px;
+  padding: 8px;
 `;
 
 export default MontlyCalendar;

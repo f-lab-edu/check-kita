@@ -101,4 +101,13 @@
       color: var(--want-text-color);
     }
   }
+
+  & > .more-button {
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 12px;
+  }
 }
