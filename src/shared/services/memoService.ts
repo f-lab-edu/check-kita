@@ -1,24 +1,23 @@
 import { Memo, Memos } from './../interfaces/memo.interface';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
 import { db } from '../firebase';
 
 /**
  * 메모 추가하기, 수정하기
  */
-export async function addBookMemo(bookId: number, memo: Memo) {
+export async function updateMemo(memo: Memo) {
   try {
-    debugger;
-    const docRef = doc(db, 'memos', String(bookId));
-    const docSnap = await getDoc(docRef);
-    let updatedMemo: Memos;
-
-    if (docSnap.exists()) {
-      const beforeMemoInfo = { ...docSnap.data() };
-
-      updatedMemo = { bookId, memos: [...beforeMemoInfo.memos, memo] };
-    } else updatedMemo = { bookId, memos: [memo] };
-
-    setDoc(doc(db, 'memos', String(bookId)), updatedMemo).catch((e) => {
+    setDoc(doc(db, 'memos', String(memo.memoId)), memo).catch((e) => {
       console.log(e);
       // TODO: 에러 핸들링
     });
@@ -29,15 +28,20 @@ export async function addBookMemo(bookId: number, memo: Memo) {
 }
 
 /**
- * 책 메모 정보 가져오기
+ * 메모 정보 가져오기
  */
-export async function getMemosByBookId(bookId: number): Promise<Memos> {
-  const docRef = doc(db, 'memos', String(bookId));
-  const docSnap = await getDoc(docRef);
+export async function getMemosByBookId(bookId: number, count: number = 10): Promise<Memo[]> {
+  const q = query(collection(db, 'memos'), where('bookId', '==', bookId), limit(count));
 
-  if (docSnap.exists()) return docSnap.data() as Memos;
+  const querySnapshot = await getDocs(q);
+  const memos: Memo[] = querySnapshot.docs.map((doc) => ({
+    bookId: doc.data().bookId,
+    memoId: doc.data().memoId,
+    content: doc.data().content,
+    createdAt: doc.data().createdAt,
+  }));
 
-  return { bookId, memos: [] };
+  return memos;
 }
 
 /**
@@ -45,30 +49,9 @@ export async function getMemosByBookId(bookId: number): Promise<Memos> {
  * @param {string} bookId
  * @return {Promise<boolean>}
  */
-export async function deleteMemoByMemoId(
-  bookId: number,
-  memoId: string
-): Promise<boolean> {
+export async function deleteMemoByMemoId(memoId: string): Promise<boolean> {
   try {
-    const docRef = doc(db, 'memos', String(bookId));
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) throw new Error('존재하지 않는 메모');
-
-    const beforeMemos = docSnap.data() as Memos;
-
-    const afterMemos = beforeMemos.memos.filter(
-      (memo) => memo.memoId !== memoId
-    );
-
-    setDoc(doc(db, 'memos', String(bookId)), {
-      bookId,
-      memos: afterMemos,
-    }).catch((e) => {
-      console.log(e);
-      return false;
-      // TODO: 에러 핸들링
-    });
+    await deleteDoc(doc(db, 'memos', String(memoId)));
 
     return true;
   } catch (e) {
@@ -77,40 +60,16 @@ export async function deleteMemoByMemoId(
 }
 
 /**
- * 메모 수정하기
- * @param bookId 수정할 메모의 책 아이디
- * @param updatedMemo 수정할 메모 정보
- * @returns
+ * 전체 메모 가져오기
  */
-export async function updateMemoByMemoId(
-  bookId: number,
-  updatedMemo: Memo
-): Promise<boolean> {
-  try {
-    const docRef = doc(db, 'memos', String(bookId));
-    const docSnap = await getDoc(docRef);
+export async function getAllMemos(count: number = 10) {
+  const querySnapshot = await getDocs(collection(db, 'memos'));
 
-    if (!docSnap.exists()) throw new Error('존재하지 않는 메모');
+  const memos: Memos[] = [];
 
-    const beforeMemos = docSnap.data() as Memos;
+  querySnapshot.forEach((doc) => {
+    memos.push(doc.data() as Memos);
+  });
 
-    const afterMemos = beforeMemos.memos.map((memo) =>
-      memo.memoId === updatedMemo.memoId
-        ? { ...memo, content: updatedMemo.content }
-        : memo
-    );
-
-    setDoc(doc(db, 'memos', String(bookId)), {
-      bookId,
-      memos: afterMemos,
-    }).catch((e) => {
-      console.log(e);
-      return false;
-      // TODO: 에러 핸들링
-    });
-
-    return true;
-  } catch (e) {
-    return false;
-  }
+  return memos;
 }
