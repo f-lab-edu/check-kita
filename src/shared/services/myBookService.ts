@@ -9,6 +9,7 @@ import {
   deleteDoc,
   serverTimestamp,
   limit,
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
@@ -126,5 +127,53 @@ export async function getMonthlyRecordCount(month: number): Promise<number> {
     return querySnapshot.size;
   } catch (e) {
     return 0;
+  }
+}
+
+/**
+ * 이번년도 원하는 월의 기록 가져오기
+ * @param month
+ * @return {Promise<Map<string, MyBook[]>>}
+ */
+export async function getMonthlyRecords(month: number): Promise<Map<string, MyBook[]>> {
+  try {
+    const year = new Date().getFullYear();
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+
+    const q = query(
+      collection(db, 'myBooks'),
+      where('createdAt', '>=', startDate),
+      where('createdAt', '<', endDate)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    let books = new Map<string, MyBook[]>();
+
+    for (let doc of querySnapshot.docs) {
+      const record = {
+        id: doc.data().id,
+        title: doc.data().title,
+        author: doc.data().author,
+        image: doc.data().image,
+        readingRecord: doc.data().readingRecord,
+        createdAt: doc.data().createdAt,
+      };
+
+      const createdAt = record.createdAt.toDate();
+      const recordKey = `${createdAt.getFullYear()}-${createdAt.getMonth()}-${createdAt.getDate()}`;
+
+      if (books.has(recordKey)) {
+        const targetDateRecords = books.get(recordKey);
+        targetDateRecords?.push(record);
+        books.set(recordKey, targetDateRecords);
+      } else {
+        books.set(recordKey, [record]);
+      }
+    }
+    return books;
+  } catch (e) {
+    return new Map();
   }
 }
