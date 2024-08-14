@@ -4,7 +4,7 @@ import * as api from '../../shared/services/myBookService';
 import Book from '../bookcase/Book';
 
 function AllRecords() {
-  const { data: myBooks, isLoading } = useQuery({
+  const { data: myBooks } = useQuery({
     queryKey: ['myBooks', 'all'],
     queryFn: () => api.getAllMyBooks('all', 10),
   });

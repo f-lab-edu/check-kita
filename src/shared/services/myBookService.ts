@@ -149,9 +149,9 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
 
     const querySnapshot = await getDocs(q);
 
-    let books = new Map<string, MyBook[]>();
+    const books = new Map<string, MyBook[]>();
 
-    for (let doc of querySnapshot.docs) {
+    for (const doc of querySnapshot.docs) {
       const record = {
         id: doc.data().id,
         title: doc.data().title,

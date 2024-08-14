@@ -13,7 +13,7 @@ function MontlyGraph() {
   const { data, isLoading } = useQuery({
     queryKey: ['montlyCount'],
     queryFn: async () => {
-      let results = [];
+      const results = [];
 
       for (const month of viewMonth) {
         const result = await api.getMonthlyRecordCount(month);

@@ -5,7 +5,7 @@ import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { convertDateToDisplayFormat } from '../../shared/utils';
 
 function MemoBox() {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['all memo'],
     queryFn: () => api.getAllMemos(),
   });
