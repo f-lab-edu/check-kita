@@ -167,7 +167,7 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
       if (books.has(recordKey)) {
         const targetDateRecords = books.get(recordKey);
         targetDateRecords?.push(record);
-        books.set(recordKey, targetDateRecords);
+        targetDateRecords && books.set(recordKey, targetDateRecords);
       } else {
         books.set(recordKey, [record]);
       }
