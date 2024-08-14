@@ -4,16 +4,18 @@ import {
   BookRecordType,
   IngBook,
   MyBook,
-  ReadingRecord,
   WantBook,
 } from '../../shared/interfaces/book.interface';
 import { convertDateToDisplayFormat } from '../../shared/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface DetailBookProps {
   record: MyBook;
 }
 
 function DetailBook({ record }: DetailBookProps) {
+  const navigate = useNavigate();
+
   const RecordDetail = () => {
     if (!record.readingRecord) return;
 
@@ -65,8 +67,12 @@ function DetailBook({ record }: DetailBookProps) {
     }
   };
 
+  const goToDetail = () => {
+    navigate(`/book/${record.id}`);
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onClick={goToDetail}>
       <BookCover src={record.image} />
       <BookInfoWrapper>
         <BookTitle>{record.title}</BookTitle>
@@ -89,6 +95,7 @@ const Wrapper = styled.div`
 const BookCover = styled.img`
   width: 100px;
   flex: 0 0 auto;
+  border-radius: 8px;
 `;
 
 const BookInfoWrapper = styled.div`
