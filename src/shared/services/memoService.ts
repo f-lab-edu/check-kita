@@ -1,12 +1,13 @@
-import { Memo, Memos } from './../interfaces/memo.interface';
+import { Memo } from './../interfaces/memo.interface';
 import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   limit,
+  orderBy,
   query,
+  serverTimestamp,
   setDoc,
   where,
 } from 'firebase/firestore';
@@ -17,10 +18,12 @@ import { db } from '../firebase';
  */
 export async function updateMemo(memo: Memo) {
   try {
-    setDoc(doc(db, 'memos', String(memo.memoId)), memo).catch((e) => {
-      console.log(e);
-      // TODO: 에러 핸들링
-    });
+    setDoc(doc(db, 'memos', String(memo.memoId)), { ...memo, createdAt: serverTimestamp() }).catch(
+      (e) => {
+        console.log(e);
+        // TODO: 에러 핸들링
+      }
+    );
   } catch (e) {
     console.log(e);
     // TODO: 에러 핸들링
@@ -62,14 +65,16 @@ export async function deleteMemoByMemoId(memoId: string): Promise<boolean> {
 /**
  * 전체 메모 가져오기
  */
-export async function getAllMemos(count: number = 10) {
-  const querySnapshot = await getDocs(collection(db, 'memos'));
+export async function getAllMemos(count: number = 10): Promise<Memo[]> {
+  const q = query(collection(db, 'memos'), orderBy('createdAt'), limit(count));
 
-  const memos: Memos[] = [];
-
-  querySnapshot.forEach((doc) => {
-    memos.push(doc.data() as Memos);
-  });
+  const querySnapshot = await getDocs(q);
+  const memos: Memo[] = querySnapshot.docs.map((doc) => ({
+    bookId: doc.data().bookId,
+    memoId: doc.data().memoId,
+    content: doc.data().content,
+    createdAt: doc.data().createdAt,
+  }));
 
   return memos;
 }

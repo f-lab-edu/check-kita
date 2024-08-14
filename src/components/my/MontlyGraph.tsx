@@ -79,31 +79,34 @@ function MontlyGraph() {
   if (isLoading) return <div>로딩중</div>;
 
   return (
-    <div>
-      <Title>이달의 기록 바로 보기</Title>
-      <SummaryReport />
-      <GraphWrapper>
-        <Bar data={config} options={config.options} />
-      </GraphWrapper>
-    </div>
+    <GraphWrapper>
+      <TextBox>
+        <Title>이달의 기록 바로 보기</Title>
+        <SummaryReport />
+      </TextBox>
+      <Bar data={config} options={config.options} />
+    </GraphWrapper>
   );
 }
 
+const TextBox = styled.div`
+  margin-bottom: 24px;
+`;
+
 const Title = styled.span`
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 18px;
+  line-height: 24px;
   font-weight: 700;
-  margin-right: 8px;
 `;
 
 const SummaryText = styled.span`
-  font-size: 18px;
+  margin-left: 8px;
+  font-size: 14px;
   color: var(--sub-text-color-2);
   font-weight: 500;
 `;
 
 const GraphWrapper = styled.div`
-  margin-top: 16px;
   padding: 16px;
   background-color: var(--wrapper-color);
   border-radius: var(--wrapper-border-radius);

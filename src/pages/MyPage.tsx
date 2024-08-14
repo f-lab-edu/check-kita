@@ -29,7 +29,7 @@ export default MyPage;
 const Wrapper = styled.div`
   border: 10px solid red;
   display: flex;
-  gap: 16px;
+  gap: 24px;
   min-width: 768px;
   max-width: 1154px;
   min-height: 100%;
