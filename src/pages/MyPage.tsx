@@ -2,24 +2,25 @@ import styled from 'styled-components';
 import MontlyGraph from '../components/my/MontlyGraph';
 import MontlyCalendar from '../components/my/MontlyCalendar';
 import MemoBox from '../components/my/MemoBox';
+import AllRecords from '../components/my/AllRecords';
 
 function MyPage() {
   return (
     <Wrapper>
-      <Container>
-        <ContentBox>
+      <TopWrapper>
+        <Container>
           <MontlyCalendar />
-        </ContentBox>
-        <ContentBox>등록한 책</ContentBox>
-      </Container>
-      <Container>
-        <ContentBox>
+        </Container>
+        <Container>
           <MontlyGraph />
-        </ContentBox>
-        <ContentBox>
-          <MemoBox />
-        </ContentBox>
-      </Container>
+          <ContentBox>
+            <MemoBox />
+          </ContentBox>
+        </Container>
+      </TopWrapper>
+      <BottomWrapper>
+        <AllRecords />
+      </BottomWrapper>
     </Wrapper>
   );
 }
@@ -27,9 +28,6 @@ function MyPage() {
 export default MyPage;
 
 const Wrapper = styled.div`
-  border: 10px solid red;
-  display: flex;
-  gap: 24px;
   min-width: 768px;
   max-width: 1154px;
   min-height: 100%;
@@ -37,12 +35,22 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
+const TopWrapper = styled.div`
+  display: flex;
+  gap: 24px;
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   flex: 1 1 300px;
 `;
+
 const ContentBox = styled.div`
-  /* border: 10px solid gold; */
+  flex: 1 1 510px;
+`;
+
+const BottomWrapper = styled.div`
+  margin-top: 24px;
 `;

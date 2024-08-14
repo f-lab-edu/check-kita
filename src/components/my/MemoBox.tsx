@@ -13,7 +13,6 @@ function MemoBox() {
   return (
     <Wrapper>
       <Title>메모 모아 보기</Title>
-
       {data?.map((memo, index) => (
         <ContentBox key={`ContentBox-${index}`}>
           <div>
@@ -40,6 +39,7 @@ const Wrapper = styled.div`
   padding: 16px;
   background-color: var(--wrapper-color);
   border-radius: var(--wrapper-border-radius);
+  height: 100%;
 `;
 
 const ContentBox = styled.div`

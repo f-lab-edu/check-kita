@@ -65,7 +65,7 @@ function MontlyCalendar() {
   };
 
   return (
-    <div>
+    <Wrapper>
       <Calendar
         onClickDay={onClickDay}
         defaultActiveStartDate={TODAY}
@@ -89,17 +89,22 @@ function MontlyCalendar() {
           </DateRecords>
         )}
       </CalendarDetailRecord>
-    </div>
+    </Wrapper>
   );
 }
 
-const CalendarDetailRecord = styled.div`
-  border-radius: 0 0 10px 10px;
+const Wrapper = styled.div`
+  height: 100%;
+  border-radius: 10px;
   background: var(--wrapper-color);
+`;
+
+const CalendarDetailRecord = styled.div`
   font-family: 'HakgyoansimWooju' !important;
   width: 100%;
   min-width: 350px;
   max-width: 700px;
+  height: 100%;
 `;
 
 const SelectedDate = styled.div`
@@ -116,8 +121,7 @@ const SelectedDate = styled.div`
 const DateRecords = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, auto));
-  grid-auto-rows: 1fr;
-
+  grid-auto-rows: 1fr 1fr;
   gap: 8px;
   padding: 8px;
 `;

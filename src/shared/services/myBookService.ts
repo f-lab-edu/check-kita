@@ -9,6 +9,7 @@ import {
   deleteDoc,
   serverTimestamp,
   limit,
+  orderBy,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
@@ -47,7 +48,7 @@ export async function getAllMyBooks(
 ): Promise<MyBook[]> {
   const q =
     recordType === 'all'
-      ? query(collection(db, 'myBooks'), limit(count))
+      ? query(collection(db, 'myBooks'), orderBy('createdAt'), limit(count))
       : query(
           collection(db, 'myBooks'),
           where('readingRecord.recordType', '==', recordType),
