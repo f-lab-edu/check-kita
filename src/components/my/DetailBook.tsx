@@ -115,6 +115,7 @@ interface ContentWraperProps {
 }
 
 const ContentWraper = styled.div<ContentWraperProps>`
+  flex: 1 1 auto;
   margin: 4px;
   padding: 4px;
   border-radius: 5px;

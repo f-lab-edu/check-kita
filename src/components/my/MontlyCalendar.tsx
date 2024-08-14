@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { convertDateMapKey, convertDateToDisplayFormat } from '../../shared/utils';
 import AddIcon from '@mui/icons-material/Add';
 import DetailBook from './DetailBook';
+import { Tooltip } from '@chakra-ui/react';
 
 function MontlyCalendar() {
   const TODAY = new Date();
@@ -37,12 +38,14 @@ function MontlyCalendar() {
 
               if (index < availableCount) {
                 return (
-                  <div
-                    className={`tile-content ${readingRecord?.recordType}`}
+                  <Tooltip
+                    label={<DetailBook record={record} />}
+                    shouldWrapChildren
                     key={`tile-${date}-${index}`}
+                    bg="transparent"
                   >
-                    {title}
-                  </div>
+                    <div className={`tile-content ${readingRecord?.recordType}`}>{title}</div>
+                  </Tooltip>
                 );
               }
             })}
