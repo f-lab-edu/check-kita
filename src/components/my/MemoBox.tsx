@@ -21,7 +21,9 @@ function MemoBox() {
             </QuoteWrapper>
             <MemoContent>{memo.content}</MemoContent>
           </div>
-          <CreatedAtText>{convertDateToDisplayFormat(memo.createdAt?.toDate())}</CreatedAtText>
+          {memo.createdAt && (
+            <CreatedAtText>{convertDateToDisplayFormat(memo.createdAt.toDate())}</CreatedAtText>
+          )}
         </ContentBox>
       ))}
     </Wrapper>
