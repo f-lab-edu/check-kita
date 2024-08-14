@@ -76,11 +76,12 @@ function MontlyCalendar() {
         {data && (
           <DateRecords>
             {/* TODO: data 개수 많아지면 어떻게 할 지 고민하기 */}
+            {/* FIXME: 다른 날짜 클릭시 오류 발생 */}
             {!!data.get(convertDateMapKey(selectedDate)) &&
               data
                 .get(convertDateMapKey(selectedDate))
                 ?.map((record, index) => (
-                  <DetailBook record={record} key={`DetailBook=${index}`} />
+                  <DetailBook record={record} key={`DetailBook-${index}`} />
                 ))}
           </DateRecords>
         )}
