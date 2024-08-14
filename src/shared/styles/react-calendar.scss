@@ -1,0 +1,64 @@
+@import 'react-calendar/dist/Calendar.css';
+
+.react-calendar {
+  width: 100%;
+  min-width: 350px;
+  max-width: 500px;
+  background: var(--wrapper-color);
+  border: 0;
+  font-family: 'HakgyoansimWooju';
+  line-height: 1.125em;
+  border-radius: 10px;
+}
+
+.react-calendar__tile {
+  padding: 8px;
+  width: 100%;
+  min-width: calc(350px / 7);
+  max-width: calc(500px / 7);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-right: 1px solid var(--border-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  & > abbr {
+    color: var(--main-text-color);
+  }
+
+  &:nth-child(7n) {
+    border-right: none !important;
+  }
+
+  &:nth-last-child(-n + 7) {
+    border-bottom: none !important;
+  }
+
+  &:enabled:hover {
+    background: var(--brand-color-a);
+  }
+}
+
+// 지난달, 다음달
+.react-calendar__month-view__days__day--neighboringMonth {
+  & > abbr {
+    color: var(--sub-text-color-2);
+  }
+}
+
+.react-calendar__tile--now {
+  background: var(--brand-color-a) !important;
+}
+
+.react-calendar__tile--active {
+  background: transparent;
+  outline: 2px solid var(--brand-color-2);
+
+  &:enabled:hover {
+    background: var(--brand-color-a);
+  }
+  &:enabled:focus {
+    background: transparent;
+    outline: 2px solid var(--brand-color-2);
+  }
+}

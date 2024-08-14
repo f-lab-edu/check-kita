@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import MontlyGraph from '../components/my/MontlyGraph';
-import Calendar from '../components/my/Calendar';
+import MontlyCalendar from '../components/my/MontlyCalendar';
 
 function MyPage() {
   return (
     <Wrapper>
       <Container>
         <ContentBox>
-          <Calendar />
+          <MontlyCalendar />
         </ContentBox>
         {/* 월별 그래프 */}
         <ContentBox>
@@ -29,6 +29,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 768px;
+  max-width: 1154px;
+  min-height: 100%;
+  padding: var(--header-height) 24px 0;
+  margin: auto;
 `;
 
 const Container = styled.div`
@@ -36,6 +41,6 @@ const Container = styled.div`
   gap: 16px;
 `;
 const ContentBox = styled.div`
-  border: 10px solid gold;
+  /* border: 10px solid gold; */
   flex: 1 1 auto;
 `;
