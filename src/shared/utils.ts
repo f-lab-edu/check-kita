@@ -78,7 +78,9 @@ export const getDaysInMonth = (year: number, month: number) => {
   return lastDayOfMonth.getDate();
 };
 
-export const convertDateToDisplayFormat = (date: Date) => {
+export const convertDateToDisplayFormat = (date: Date | Timestamp) => {
+  if (!(date instanceof Date)) date = date.toDate();
+
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
