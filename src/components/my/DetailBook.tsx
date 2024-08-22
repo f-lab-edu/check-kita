@@ -8,7 +8,6 @@ import {
 } from '../../shared/interfaces/book.interface';
 import { convertDateToDisplayFormat } from '../../shared/utils';
 import { useNavigate } from 'react-router-dom';
-import { Timestamp } from 'firebase/firestore';
 
 interface DetailBookProps {
   record: MyBook;
