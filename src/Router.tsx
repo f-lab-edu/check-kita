@@ -3,8 +3,9 @@ import App from './App';
 import BookcasePage from './pages/BookcasePage';
 import SearchBookPage from './pages/SearchBookPage';
 import BookDetailPage from './pages/BookDetailPage';
-import MyBookPage from './pages/MyBookPage';
 import MyPage from './pages/MyPage';
+import AuthPage from './pages/AuthPage';
+import KakaoCallback from './components/auth/KakaoCallback';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,6 @@ const router = createBrowserRouter([
       {
         path: 'bookcase',
         element: <BookcasePage />,
-        children: [{ path: ':bookId', element: <MyBookPage /> }],
       },
 
       // 도서 검색
@@ -32,11 +32,18 @@ const router = createBrowserRouter([
         element: <BookDetailPage />,
       },
 
-      // TODO: 아래 라우터 구조 변경될 가능성이 있음
       // 나의 기록
       {
         path: 'my',
         element: <MyPage />,
+      },
+      {
+        path: 'auth',
+        element: <AuthPage />,
+      },
+      {
+        path: 'kakao/callback',
+        element: <KakaoCallback />,
       },
     ],
   },

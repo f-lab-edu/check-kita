@@ -6,11 +6,24 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/kakao/get-user': {
+        target: 'https://kapi.kakao.com/v2/user/me',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/kakao\/get-user/, ''),
+        secure: false,
+        ws: true,
+      },
+      '/kakao/token': {
+        target: 'https://kauth.kakao.com/oauth/token',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/kakao\/token/, ''),
+        secure: false,
+        ws: true,
+      },
       '/api/search-books': {
         target: 'https://openapi.naver.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/search-books/, '/v1/search/book.json'),
-
         secure: false,
         ws: true,
       },
