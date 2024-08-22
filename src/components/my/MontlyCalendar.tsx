@@ -49,7 +49,7 @@ function MontlyCalendar() {
                 );
               }
             })}
-          {records && !!(records.length > availableCount) && (
+          {records && records.length > availableCount && (
             <div className="more-button">
               <AddIcon />
               {records.length - availableCount}
