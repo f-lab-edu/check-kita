@@ -20,7 +20,9 @@ function KakaoCallback() {
         const queryParams = new URLSearchParams({ success: String(result) });
         navigate(`/auth?${queryParams.toString()}`);
       })
-      .catch((e) => {});
+      .catch((e) => {
+        throw new Error(e);
+      });
   }, [code]);
 
   return <></>;
