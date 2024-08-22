@@ -1,6 +1,7 @@
 @import './shared/styles/_reset.css';
 @import './shared/styles/variables.css';
 @import './shared/styles/font.css';
+@import './shared/styles/react-calendar.scss';
 
 * {
   box-sizing: border-box;

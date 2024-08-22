@@ -1,5 +1,6 @@
 :root {
   --brand-color: #7851e7;
+  --brand-color-a: rgba(120, 81, 231, 0.3);
   --brand-color-2: #956aff;
   --background-color: #131722;
   --wrapper-color: #252836;
@@ -7,6 +8,13 @@
   --sub-text-color-1: #f2f0ff;
   --sub-text-color-2: #8d9098;
   --border-color: rgba(255, 255, 255, 0.06);
+
+  --already-color: rgba(0, 133, 255, 0.1);
+  --already-text-color: #0085ff;
+  --ing-color: rgba(255, 150, 27, 0.1);
+  --ing-text-color: #ff9f2d;
+  --want-color: rgba(0, 186, 52, 0.1);
+  --want-text-color: #00ba34;
 
   --min-width: 768px;
   --header-height: 90px;

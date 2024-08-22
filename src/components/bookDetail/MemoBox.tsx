@@ -17,7 +17,7 @@ function MemoBox() {
   const [showedMemoIndex, setShowedMemoIndex] = useState<number>(-1);
   const [updateTarget, setUpdateTarget] = useState<Memo>();
 
-  const { data: memoList } = useQuery({
+  const { data: memos } = useQuery({
     queryKey: ['memos', bookIsbn],
     queryFn: async () => {
       const result = await api.getMemosByBookId(Number(bookIsbn));
@@ -29,7 +29,7 @@ function MemoBox() {
   });
 
   const deleteMemo = useMutation({
-    mutationFn: (memoId: string) => api.deleteMemoByMemoId(Number(bookIsbn), memoId),
+    mutationFn: (memoId: string) => api.deleteMemoByMemoId(memoId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
       alert('제거 성공!');
@@ -61,8 +61,8 @@ function MemoBox() {
         </Flex>
         <HorizontalLine margin="0 0 16px"></HorizontalLine>
         <MemoList>
-          {!!memoList &&
-            memoList.memos.map((memo, index) => (
+          {!!memos &&
+            memos.map((memo, index) => (
               <MemoContainer
                 key={index}
                 onMouseEnter={() => {

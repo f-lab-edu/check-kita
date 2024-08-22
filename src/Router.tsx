@@ -5,6 +5,7 @@ import SearchBookPage from './pages/SearchBookPage';
 import BookDetailPage from './pages/BookDetailPage';
 import MyBookPage from './pages/MyBookPage';
 import MyPage from './pages/MyPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
       // TODO: 아래 라우터 구조 변경될 가능성이 있음
       // 나의 기록
       {
-        path: 'logs',
+        path: 'my',
         element: <MyPage />,
       },
     ],

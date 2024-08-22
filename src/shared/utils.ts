@@ -51,31 +51,46 @@ export const parseBookXml = (bookXml: string): SearchBook => {
   };
 };
 
-export const convertTimestampsToDate = (obj: any): any => {
-  if (obj instanceof Timestamp) {
-    return obj.toDate();
-  } else if (Array.isArray(obj)) {
-    return obj.map((item) => convertTimestampsToDate(item));
-  } else if (obj !== null && typeof obj === 'object') {
+export const generateId = (): string => {
+  return uuidv4();
+};
+
+export const getDaysInMonth = (year: number, month: number) => {
+  const nextMonthDate = new Date(year, month, 1);
+  const lastDayOfMonth = new Date(nextMonthDate.getTime() - 1);
+  return lastDayOfMonth.getDate();
+};
+
+export const convertDateToDisplayFormat = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return `${year}년 ${month}월 ${day}일`;
+};
+
+export const convertDateMapKey = (date: Date) => {
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+};
+
+export const convertTimestampToDate = (value: Timestamp) => {
+  return value.toDate();
+};
+
+export const convertTimestamps = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj.map(convertTimestamps);
+  } else if (obj && typeof obj === 'object') {
     const newObj: any = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        newObj[key] = convertTimestampsToDate(obj[key]);
+    for (const key of Object.keys(obj)) {
+      const value = obj[key];
+      if (value instanceof Timestamp && key !== 'createdAt') {
+        newObj[key] = convertTimestampToDate(value);
+      } else {
+        newObj[key] = convertTimestamps(value);
       }
     }
     return newObj;
   }
   return obj;
-};
-
-export const generateId = (): string => {
-  return uuidv4();
-};
-
-export const convertDateToDisplayFormat = (date: Date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDay();
-
-  return `${year}년 ${month}월 ${day}일`;
 };
