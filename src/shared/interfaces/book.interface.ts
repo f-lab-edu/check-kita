@@ -40,8 +40,8 @@ export interface ReadingRecord {
 
 // 이미 읽은 책
 export interface AlreadyBook {
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | Timestamp;
+  endDate: Date | Timestamp;
   rating: number;
 }
 
@@ -49,7 +49,7 @@ export type BookReadingProgressType = 'pages' | 'percentage';
 
 // 읽는 중 책
 export interface IngBook {
-  startDate: Date;
+  startDate: Date | Timestamp;
   readingProgressType: BookReadingProgressType;
   readingProgressCount: number;
 }

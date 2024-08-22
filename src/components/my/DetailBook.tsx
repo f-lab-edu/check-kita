@@ -8,6 +8,7 @@ import {
 } from '../../shared/interfaces/book.interface';
 import { convertDateToDisplayFormat } from '../../shared/utils';
 import { useNavigate } from 'react-router-dom';
+import { Timestamp } from 'firebase/firestore';
 
 interface DetailBookProps {
   record: MyBook;
@@ -38,14 +39,13 @@ function DetailBook({ record }: DetailBookProps) {
           </>
         );
       case 'ing':
+        const convertedStartDate = ((recordDetail as IngBook).startDate as Timestamp).toDate();
         return (
           <>
             <ContentWraper recordType={recordType}>
               <ContentLabel>시작일</ContentLabel>
               <MainContentBox>
-                <ContentMainText>
-                  {convertDateToDisplayFormat((recordDetail as IngBook).startDate)}
-                </ContentMainText>
+                <ContentMainText>{convertDateToDisplayFormat(convertedStartDate)}</ContentMainText>
                 {' ~ '}
               </MainContentBox>
             </ContentWraper>

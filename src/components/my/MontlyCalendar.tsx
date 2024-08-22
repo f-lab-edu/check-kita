@@ -61,8 +61,11 @@ function MontlyCalendar() {
   };
 
   const onClickDay = (value: Date) => {
-    setSelectedDate(value);
+    const changedDate = new Date(value);
+    setSelectedDate(changedDate);
   };
+
+  if (isLoading) return;
 
   return (
     <Wrapper>
@@ -76,10 +79,9 @@ function MontlyCalendar() {
         <SelectedDate>
           <strong>{convertDateToDisplayFormat(selectedDate)}</strong> 기록 현황
         </SelectedDate>
-        {data && (
+        {!!data && (
           <DateRecords>
             {/* TODO: data 개수 많아지면 어떻게 할 지 고민하기 */}
-            {/* FIXME: 다른 날짜 클릭시 오류 발생 */}
             {!!data.get(convertDateMapKey(selectedDate)) &&
               data
                 .get(convertDateMapKey(selectedDate))
