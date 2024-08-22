@@ -39,13 +39,14 @@ function DetailBook({ record }: DetailBookProps) {
           </>
         );
       case 'ing':
-        const convertedStartDate = ((recordDetail as IngBook).startDate as Timestamp).toDate();
         return (
           <>
             <ContentWraper recordType={recordType}>
               <ContentLabel>시작일</ContentLabel>
               <MainContentBox>
-                <ContentMainText>{convertDateToDisplayFormat(convertedStartDate)}</ContentMainText>
+                <ContentMainText>
+                  {convertDateToDisplayFormat((recordDetail as IngBook).startDate)}
+                </ContentMainText>
                 {' ~ '}
               </MainContentBox>
             </ContentWraper>
