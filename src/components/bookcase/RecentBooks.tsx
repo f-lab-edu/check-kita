@@ -3,7 +3,7 @@ import Container from '../../elements/Container';
 import { useQuery } from '@tanstack/react-query';
 import { getAllMyBooks } from '../../shared/services';
 import { match } from 'ts-pattern';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 import { textOverflowStyles } from '../../shared/styles/common';
 import RecordTypeIcon from '../common/RecordTypeIcon';
 import { BookRecordTypeLabel } from '../../shared/enums/book.enum';

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Book from '../components/bookcase/Book';
 import { getAllMyBooks } from '../shared/services/myBookService';
 import { useQuery } from '@tanstack/react-query';
-import Loading from '../components/Loading';
+import Loading from '../components/common/Loading';
 import { match } from 'ts-pattern';
 import LandingImage from '../components/bookcase/LandingImage';
 import Container from '../elements/Container';
