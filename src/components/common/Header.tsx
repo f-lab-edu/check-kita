@@ -50,7 +50,14 @@ function Header() {
               }
             />
           )}
-          <button>Logs</button>
+          <button
+            onClick={() => {
+              navigate('/my');
+            }}
+          >
+            Logs
+          </button>
+          <button>Login</button>
         </NavigationBox>
       </ContentBox>
     </Wrapper>

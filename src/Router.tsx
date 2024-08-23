@@ -7,11 +7,17 @@ import MyPage from './pages/MyPage';
 import AuthPage from './pages/AuthPage';
 import KakaoCallback from './components/auth/KakaoCallback';
 import NaverCallback from './components/auth/NaverCallback';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    ),
     children: [
       {
         path: '',
@@ -36,7 +42,7 @@ const router = createBrowserRouter([
       // 나의 기록
       {
         path: 'my',
-        element: <MyPage />,
+        element: <ProtectedRoute element={<MyPage />}></ProtectedRoute>,
       },
       {
         path: 'auth',

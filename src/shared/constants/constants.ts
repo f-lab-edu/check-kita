@@ -32,3 +32,9 @@ export const INIT_WANTBOOK: WantBook = {
 };
 
 export const DAYS_OF_THE_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const INIT_AUTH_CONTEXT = {
+  isLogin: false,
+  login: () => {},
+  logout: () => {},
+};
