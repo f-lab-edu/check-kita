@@ -6,6 +6,20 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/naver/get-user': {
+        target: 'https://openapi.naver.com/v1/nid/me',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/naver\/get-user/, ''),
+        secure: false,
+        ws: true,
+      },
+      '/naver/token': {
+        target: 'https://nid.naver.com/oauth2.0/token	',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/naver\/token/, ''),
+        secure: false,
+        ws: true,
+      },
       '/kakao/get-user': {
         target: 'https://kapi.kakao.com/v2/user/me',
         changeOrigin: true,

@@ -2,10 +2,7 @@ import { Button } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
-  import.meta.env.VITE_APP_KAKAO_CLIENT_ID
-}&redirect_uri=${import.meta.env.VITE_APP_KAKO_REDIRECT_URI}&response_type=code`;
+import { KAKAO_AUTH_URL, NAVER_AUTH_URL } from '../shared/constants/auth';
 
 function AuthPage() {
   const [searchParams] = useSearchParams();
@@ -16,14 +13,18 @@ function AuthPage() {
     if (loginSuccess && loginSuccess === 'false') window.alert('로그인 실패');
   }, []);
 
-  const kakaoLogin = async () => {
+  const kakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
+  };
+
+  const naverLogin = () => {
+    window.location.href = NAVER_AUTH_URL;
   };
 
   return (
     <Wrapper>
-      <a href={KAKAO_AUTH_URL}>카카오 로그인</a>
       <Button onClick={kakaoLogin}>카카오 로그인 버튼</Button>
+      <Button onClick={naverLogin}>네이버 로그인 버튼</Button>
     </Wrapper>
   );
 }

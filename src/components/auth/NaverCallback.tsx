@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import * as api from '../../shared/services/authService';
 import { useNavigate } from 'react-router-dom';
 
-function KakaoCallback() {
+function NaverCallback() {
   const code = new URL(window.location.href).searchParams.get('code');
   const navigate = useNavigate();
 
@@ -21,11 +21,11 @@ function KakaoCallback() {
     if (!code) return;
 
     api
-      .getKakaoToken(code)
+      .getNaverToken(code)
       .then(async (token: string) => {
         if (!token) throw new Error('토큰 발급 실패');
 
-        const userInfo = await api.getKakaoUserInfo(token);
+        const userInfo = await api.getNaverUserInfo(token);
         const result = await api.saveUser(userInfo);
 
         goToBack(result);
@@ -39,4 +39,4 @@ function KakaoCallback() {
   return <></>;
 }
 
-export default KakaoCallback;
+export default NaverCallback;

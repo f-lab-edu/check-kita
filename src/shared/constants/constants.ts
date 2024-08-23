@@ -1,4 +1,4 @@
-import { AlreadyBook, IngBook, WantBook } from './interfaces/book.interface';
+import { AlreadyBook, IngBook, WantBook } from '../interfaces/book.interface';
 
 export const INIT_RECORD_DETAIL = {
   startDate: new Date(),

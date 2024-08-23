@@ -6,6 +6,7 @@ import BookDetailPage from './pages/BookDetailPage';
 import MyPage from './pages/MyPage';
 import AuthPage from './pages/AuthPage';
 import KakaoCallback from './components/auth/KakaoCallback';
+import NaverCallback from './components/auth/NaverCallback';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: 'kakao/callback',
         element: <KakaoCallback />,
+      },
+      {
+        path: 'naver/callback',
+        element: <NaverCallback />,
       },
     ],
   },

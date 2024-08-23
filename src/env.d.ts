@@ -11,6 +11,9 @@ interface ImportMeta {
     readonly VITE_APP_NAVER_CLIENT_SECRET?: string;
     readonly VITE_APP_IMAGEPATH: string;
     readonly VITE_APP_KAKAO_CLIENT_ID: string;
-    readonly VITE_APP_KAKO_REDIRECT_URI: string;
+    readonly VITE_APP_KAKAO_REDIRECT_URI: string;
+    readonly VITE_APP_NAVER_CLIENT_ID: string;
+    readonly VITE_APP_NAVER_CLIENT_SECRET: string;
+    readonly VITE_APP_NAVER_REDIRECT_URI: string;
   };
 }

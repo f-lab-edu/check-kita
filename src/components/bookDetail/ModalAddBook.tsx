@@ -21,7 +21,7 @@ import { queryClient } from '../../main';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { splitBookAuthor } from '../../shared/utils';
-import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants';
+import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants/constants';
 import { ModalType } from '../../shared/interfaces/common.interface';
 import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 

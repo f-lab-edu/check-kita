@@ -13,7 +13,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
-import { INIT_NOT_EXISTS_RECORD } from '../constants';
+import { INIT_NOT_EXISTS_RECORD } from '../constants/constants';
 import { convertDateMapKey, convertTimestamps } from '../utils';
 
 /**
