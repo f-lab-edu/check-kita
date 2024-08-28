@@ -1,19 +1,42 @@
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 function SearchBox() {
-  const [searchText, setSearchText] = useState('');
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+
+  /**
+   * 엔터키 클릭시 검색 결과 페이지로 이동
+   * @param {React.KeyboardEvent<HTMLInputElement>} e
+   */
+  const enterPressHandle = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      goToSearchPage();
+    }
+  };
+
+  const goToSearchPage = () => {
+    const param = { search };
+    const searchString = createSearchParams(param).toString();
+
+    navigate({
+      pathname: '/search',
+      search: `?${searchString}`,
+    });
+  };
 
   return (
     <Wrapper>
       <SearchIcon fontSize="large" />
       <input
-        value={searchText}
+        value={search}
         placeholder="Search Books"
         onChange={(e) => {
-          setSearchText(e.target.value);
+          setSearch(e.target.value);
         }}
+        onKeyDown={enterPressHandle}
       />
     </Wrapper>
   );

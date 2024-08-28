@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuth } from '../../contexts/AuthContext';
+import { Button } from '@chakra-ui/react';
+import SearchIcon from '@mui/icons-material/Search';
 
 function Header() {
-  const location = useLocation();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const { isAuthenticated, logout } = useAuth();
 
   /**
    * 엔터키 클릭시 검색 결과 페이지로 이동
@@ -38,26 +41,37 @@ function Header() {
           Checkita!
         </Checkita>
         <NavigationBox>
-          {location.pathname !== 'bookcase' && (
+          <InputWrapper>
+            <SearchIcon fontSize="small" />
             <input
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
               onKeyDown={enterPressHandle}
-              placeholder={
-                location.pathname.includes('search') ? '등록할 책 검색하기' : '나의 책 검색하기'
-              }
+              placeholder="Search Books"
             />
-          )}
-          <button
+          </InputWrapper>
+          <Button
+            variant="clear"
             onClick={() => {
               navigate('/my');
             }}
           >
-            Logs
-          </button>
-          <button>Login</button>
+            My Logs
+          </Button>
+          <Button
+            variant={isAuthenticated ? 'clear' : 'solid'}
+            onClick={
+              isAuthenticated
+                ? logout
+                : () => {
+                    navigate('/auth');
+                  }
+            }
+          >
+            {isAuthenticated ? 'Log Out' : 'Log In'}
+          </Button>
         </NavigationBox>
       </ContentBox>
     </Wrapper>
@@ -70,9 +84,8 @@ const Wrapper = styled.div`
   z-index: 10;
   width: 100vw;
   height: var(--header-height);
-  padding: 30px;
-  // TODO: 스크롤, 라우터 주소에 맞춰서 색상 지정
-  /* background-color: rgba(0, 0, 0, 0.5); */
+  padding: 21px 30px;
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const ContentBox = styled.div`
@@ -86,8 +99,8 @@ const ContentBox = styled.div`
 
 const Checkita = styled.div`
   color: #fff;
-  font-size: 35px;
-  font-weight: 700;
+  font-size: 30px;
+  font-weight: 900;
   line-height: normal;
   cursor: pointer;
 `;
@@ -95,12 +108,32 @@ const Checkita = styled.div`
 const NavigationBox = styled.div`
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 8px;
+`;
 
-  & > button {
-    font-size: 24px;
-    color: var(--sub-text-color-2);
-    font-weight: 700;
+const InputWrapper = styled.div`
+  border-radius: 17.712px;
+  background: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+
+  & > input {
+    width: 100%;
+    height: 35px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #000;
+    font-size: 16px;
+    line-height: normal;
+    color: var(--main-text-color);
+
+    &::placeholder {
+      color: var(--main-text-color);
+      opacity: 0.7;
+    }
   }
 `;
 
