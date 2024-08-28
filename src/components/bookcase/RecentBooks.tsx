@@ -93,6 +93,7 @@ const ImgSlider = styled.div`
 `;
 
 const BookBox = styled.div`
+  max-width: calc(100% / 4);
   height: fit-content;
   flex: 1 1 100%;
   background-color: var(--wrapper-color);
