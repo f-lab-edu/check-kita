@@ -67,6 +67,7 @@ const clear = defineStyle({
 
   _hover: {
     backgroundColor: 'rbga(255, 255, 255, 0)',
+    textDecoration: 'underline',
   },
 
   _disabled: {

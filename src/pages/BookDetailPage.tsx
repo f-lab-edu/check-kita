@@ -110,7 +110,7 @@ function BookDetailPage() {
             {!!bookIsbn && (
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalAddBook onClose={onClose} bookIsbn={bookIsbn} />
+                <ModalAddBook onClose={onClose} bookInfo={bookInfo} bookIsbn={bookIsbn} />
               </Modal>
             )}
           </>

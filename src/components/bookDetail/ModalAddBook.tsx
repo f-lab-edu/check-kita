@@ -28,16 +28,16 @@ import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 interface ModalAddBookProps {
   onClose: () => void;
   bookIsbn: string;
+  bookInfo: SearchBook;
 }
 
-function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
+function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {
   const [modalType, setModalType] = useState<ModalType>('save');
   const [recordType, setRecordType] = useState<BookRecordType>('already');
   const [alreadyBook, setAlreadyBook] = useState<AlreadyBook>(INIT_ALREADYBOOK);
   const [ingBook, setIngBook] = useState<IngBook>(INIT_INGBOOK);
   const [wantBook, setWantBook] = useState<WantBook>(INIT_WANTBOOK);
 
-  const bookInfo: SearchBook | undefined = queryClient.getQueryData(['book', bookIsbn]);
   const bookRecord: MyBook | undefined = queryClient.getQueryData(['record', bookIsbn]);
 
   const updateRecord = useMutation({
