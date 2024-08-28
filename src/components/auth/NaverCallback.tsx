@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import * as api from '../../shared/services/authService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 function NaverCallback() {
   const code = new URL(window.location.href).searchParams.get('code');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const goToBack = (success: boolean = true) => {
     if (!success) {
@@ -27,6 +29,7 @@ function NaverCallback() {
 
         const userInfo = await api.getNaverUserInfo(token);
         const result = await api.saveUser(userInfo);
+        login(userInfo);
 
         goToBack(result);
       })
