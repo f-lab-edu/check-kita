@@ -9,7 +9,6 @@ import {
   deleteDoc,
   serverTimestamp,
   limit,
-  orderBy,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
@@ -138,7 +137,10 @@ export async function getMonthlyRecordCount(month: number): Promise<number> {
  * @param month
  * @return {Promise<Map<string, MyBook[]>>}
  */
-export async function getMonthlyRecords(month: number): Promise<Map<string, MyBook[]>> {
+export async function getMonthlyRecords(
+  userId: string,
+  month: number
+): Promise<Map<string, MyBook[]>> {
   try {
     const year = new Date().getFullYear();
     const startDate = new Date(year, month - 1, 1);
@@ -146,6 +148,7 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
 
     const q = query(
       collection(db, 'myBooks'),
+      where('userId', '==', userId),
       where('createdAt', '>=', startDate),
       where('createdAt', '<', endDate)
     );
@@ -156,6 +159,7 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
 
     for (const doc of querySnapshot.docs) {
       const record = {
+        userId: doc.data().userId,
         id: doc.data().id,
         title: doc.data().title,
         author: doc.data().author,
@@ -175,6 +179,9 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
         books.set(recordKey, [record]);
       }
     }
+
+    console.log('야호!', books);
+
     return books;
   } catch (e) {
     return new Map();

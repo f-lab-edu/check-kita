@@ -7,15 +7,20 @@ import { convertDateMapKey, convertDateToDisplayFormat } from '../../shared/util
 import AddIcon from '@mui/icons-material/Add';
 import DetailBook from './DetailBook';
 import { Tooltip } from '@chakra-ui/react';
+import { useAuth } from '../../contexts/AuthContext';
 
 function MontlyCalendar() {
+  const { user } = useAuth();
   const TODAY = new Date();
   const viewMonth = TODAY.getMonth() + 1;
   const [selectedDate, setSelectedDate] = useState(TODAY);
 
   const { data, isLoading } = useQuery({
     queryKey: ['calendar', viewMonth],
-    queryFn: () => api.getMonthlyRecords(viewMonth),
+    queryFn: async () => {
+      if (!user) return;
+      return await api.getMonthlyRecords(user.id, viewMonth);
+    },
   });
 
   const renderRecords = ({ date }: { date: Date }) => {
