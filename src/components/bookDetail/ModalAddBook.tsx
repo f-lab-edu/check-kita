@@ -20,7 +20,7 @@ import { match } from 'ts-pattern';
 import { queryClient } from '../../main';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { splitBookAuthor } from '../../shared/utils';
+import { generateId, splitBookAuthor } from '../../shared/utils';
 import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants/constants';
 import { ModalType } from '../../shared/interfaces/common.interface';
 import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
@@ -102,10 +102,11 @@ function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {
       }
 
       const selectedBookInfo = {
-        id: bookInfo.isbn,
+        id: generateId(),
         title: bookInfo.title,
         author: splitBookAuthor(bookInfo.author),
         image: bookInfo.image,
+        isbn: bookInfo.isbn,
       };
 
       const saveBook: MyBook = {

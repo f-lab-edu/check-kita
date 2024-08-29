@@ -20,7 +20,8 @@ export interface SelectedBookInfo {
 }
 
 export interface MyBook {
-  id?: number;
+  id?: string;
+  isbn: number;
   userId: string;
   title?: string;
   author?: string[];

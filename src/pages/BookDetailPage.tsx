@@ -13,7 +13,7 @@ import Container from '../elements/Container';
 import { useAuth } from '../contexts/AuthContext';
 
 function BookDetailPage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -23,7 +23,9 @@ function BookDetailPage() {
   const { data: myBook, isLoading } = useQuery({
     queryKey: ['record', bookIsbn],
     queryFn: async () => {
-      const result = await api.getMyBookInfoByBookId(Number(bookIsbn));
+      if (!user) return;
+
+      const result = await api.getMyBookInfoByBookIsbn(user.id, Number(bookIsbn));
 
       return result;
     },

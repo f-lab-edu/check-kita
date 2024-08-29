@@ -71,19 +71,24 @@ export async function getAllMyBooks(
 
 /**
  * 책 아이디로 내 책 정보 가져오기
- * @param {number} bookId
+ * @param {number} isbn
  */
-export async function getMyBookInfoByBookId(bookId: number): Promise<MyBook> {
+export async function getMyBookInfoByBookIsbn(userId: string, isbn: number): Promise<MyBook> {
   try {
-    const docRef = doc(db, 'myBooks', String(bookId));
-    const docSnap = await getDoc(docRef);
+    const q = query(
+      collection(db, 'myBooks'),
+      where('userId', '==', userId),
+      where('isbn', '==', isbn)
+    );
 
-    if (!docSnap.exists()) return INIT_NOT_EXISTS_RECORD;
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot);
 
-    const result = docSnap.data() as MyBook;
-    if (!result) return INIT_NOT_EXISTS_RECORD;
+    if (querySnapshot.empty) return INIT_NOT_EXISTS_RECORD;
 
-    return convertTimestamps(result);
+    const doc = querySnapshot.docs[0];
+    const data = doc.data() as MyBook;
+    return convertTimestamps(data);
   } catch (e) {
     return INIT_NOT_EXISTS_RECORD;
   }
@@ -109,7 +114,7 @@ export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
  * @param month
  * @return {Promise<number>}
  */
-export async function getMonthlyRecordCount(month: number): Promise<number> {
+export async function getMonthlyRecordCount(userId: string, month: number): Promise<number> {
   try {
     const year = new Date().getFullYear();
     const startDate = new Date(year, month - 1, 1);
@@ -117,6 +122,7 @@ export async function getMonthlyRecordCount(month: number): Promise<number> {
 
     const q = query(
       collection(db, 'myBooks'),
+      where('userId', '==', userId),
       where('createdAt', '>=', startDate),
       where('createdAt', '<', endDate)
       // OPTIMIZE: myBook 인터페이스 변경 - nested하게 저장한 recordType 바깥으로 빼기

@@ -7,10 +7,12 @@ export const INIT_RECORD_DETAIL = {
 };
 
 export const INIT_NOT_EXISTS_RECORD = {
+  userId: '',
   id: undefined,
   title: undefined,
   author: undefined,
   image: undefined,
+  isbn: -1,
   readingRecord: undefined,
 };
 

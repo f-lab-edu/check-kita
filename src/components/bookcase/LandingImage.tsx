@@ -2,8 +2,10 @@ import styled from 'styled-components';
 import Container from '../../elements/Container';
 import { Button } from '@chakra-ui/react';
 import SearchBox from './SearchBox';
+import { useNavigate } from 'react-router-dom';
 
 function LandingImage() {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <ImgWrapper>
@@ -24,7 +26,14 @@ function LandingImage() {
             <br />
             기록을 확인할 수 있는 서비스입니다.
           </Description>
-          <Button marginTop={30}>Browse My Records</Button>
+          <Button
+            marginTop={30}
+            onClick={() => {
+              navigate('/my');
+            }}
+          >
+            Browse My Records
+          </Button>
           <CharacterBox>
             <InfoText>
               Already Books

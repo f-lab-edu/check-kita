@@ -11,7 +11,7 @@ import { Tab, TabList, Tabs } from '@chakra-ui/react';
 import { useAuth } from '../contexts/AuthContext';
 
 function BookcasePage() {
-  const { user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const selectedTabStyle = { color: 'white', bg: 'brand.500' };
 
   // TODO: 첫번째 이외에 10개씩 가지고 와서 페이지네이션 하기
@@ -26,10 +26,9 @@ function BookcasePage() {
   return (
     <Wrapper>
       <LandingImage />
-      <RecentBooks></RecentBooks>
+      {isAuthenticated && <RecentBooks></RecentBooks>}
       <Container>
         <Title>All My Recorded Books</Title>
-
         <BooksContainer>
           {match(isLoading)
             .with(true, () => <Loading />)

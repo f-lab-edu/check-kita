@@ -3,20 +3,24 @@ import * as api from '../../shared/services/myBookService';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import styled from 'styled-components';
+import { useAuth } from '../../contexts/AuthContext';
 
 Chart.register(...registerables);
 
 function MontlyGraph() {
+  const { user } = useAuth();
   const thisMonth = new Date().getMonth() + 1;
   const viewMonth = [thisMonth - 2, thisMonth - 1, thisMonth];
 
   const { data, isLoading } = useQuery({
     queryKey: ['montlyCount'],
     queryFn: async () => {
+      if (!user) return;
+
       const results = [];
 
       for (const month of viewMonth) {
-        const result = await api.getMonthlyRecordCount(month);
+        const result = await api.getMonthlyRecordCount(user.id, month);
         results.push(result);
       }
       return results;
