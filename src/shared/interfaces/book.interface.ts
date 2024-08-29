@@ -2,14 +2,14 @@ import { Timestamp } from 'firebase/firestore';
 
 export interface SearchBook {
   title: string;
-  link: string;
+  link?: string;
   image: string;
   author: string;
   discount?: number;
-  description: string;
+  description?: string;
   publisher: string;
   isbn: number;
-  pubdate: string;
+  pubdate?: string;
 }
 
 export interface SelectedBookInfo {

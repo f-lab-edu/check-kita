@@ -28,7 +28,7 @@ import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
 interface ModalAddBookProps {
   onClose: () => void;
   bookIsbn: string;
-  bookInfo: SearchBook;
+  bookInfo?: SearchBook;
 }
 
 function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {

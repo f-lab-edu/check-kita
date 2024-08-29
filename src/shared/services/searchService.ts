@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { parseBookXml } from '../utils';
 import { SearchBook } from '../interfaces/book.interface';
+import { storage } from '../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const api = axios.create({
   baseURL: '/api',
@@ -77,3 +79,17 @@ export async function searchBookByIsbn(isbn: number): Promise<null | SearchBook>
     return null;
   }
 }
+
+export const imageUpload = async (image: File) => {
+  try {
+    if (!image) return;
+
+    const storageRef = ref(storage, `images/${image.name}`);
+    await uploadBytes(storageRef, image);
+    const downloadURL = await getDownloadURL(storageRef);
+
+    return downloadURL;
+  } catch (e) {
+    throw new Error('imageUpload Error');
+  }
+};

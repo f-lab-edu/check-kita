@@ -3,14 +3,15 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import SearchResultBook from '../components/search/SearchBook';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Tab, TabList, Tabs } from '@chakra-ui/react';
+import { Button, Tab, TabList, Tabs, useDisclosure } from '@chakra-ui/react';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
+import CustomAddBook from '../components/search/CustomAddBook';
 
 function SearchBookPage() {
   const selectedTabStyle = { color: 'white', bg: 'brand.500' };
-
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search');
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { data: searchResult, isLoading } = useQuery({
     queryKey: ['search', search],
@@ -40,10 +41,11 @@ function SearchBookPage() {
         <SearchText>
           <strong>'{search}'</strong> 검색 결과 총 <strong>{searchResultCount}</strong>건
         </SearchText>
-        <Button variant="clear">
+        <Button variant="clear" onClick={onOpen}>
           <SearchOffIcon fontSize="small" />
           원하는 책이 없으신가요? 직접 입력하기
         </Button>
+        <CustomAddBook onClose={onClose} isOpen={isOpen} />
       </TextWrapper>
       {!isLoading && (
         <ResultList>
