@@ -9,6 +9,7 @@ import Container from '../elements/Container';
 import RecentBooks from '../components/bookcase/RecentBooks';
 import { Tab, TabList, Tabs } from '@chakra-ui/react';
 import { useAuth } from '../contexts/AuthContext';
+import imgMordCard from '../assets/images/bookcase/img_card.jpg';
 
 function BookcasePage() {
   const { isAuthenticated, user } = useAuth();
@@ -18,7 +19,7 @@ function BookcasePage() {
   const { data: myBooks, isLoading } = useQuery({
     queryKey: ['myBooks', 'all'],
     queryFn: async () => {
-      if (!user) return;
+      if (!user) return [];
       return await getAllMyBooks(user.id, 'all', 9);
     },
   });
@@ -43,7 +44,7 @@ function BookcasePage() {
                   </TabList>
                 </Tabs>
                 <BookList>
-                  <MoreCard>
+                  <MoreCard img={imgMordCard}>
                     <Slogan>Have A Book Day.</Slogan>
                     <div>
                       <strong>Checkita!</strong>에 기록한 책 확인하러 가기
@@ -89,9 +90,13 @@ const BookList = styled.div`
   gap: 20px 10px;
 `;
 
-const MoreCard = styled.div`
+interface MoreCardProps {
+  img: string;
+}
+
+const MoreCard = styled.div<MoreCardProps>`
   border-radius: 4px;
-  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/bookcase/img_card.jpg');
+  background-image: urls(${(props) => props.img});
   background-size: cover;
   padding: 24px 12px;
   font-family: 'HakgyoansimWooju';

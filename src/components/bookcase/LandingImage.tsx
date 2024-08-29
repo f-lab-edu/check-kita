@@ -3,17 +3,15 @@ import Container from '../../elements/Container';
 import { Button } from '@chakra-ui/react';
 import SearchBox from './SearchBox';
 import { useNavigate } from 'react-router-dom';
+import imgLibrary from '../../assets/images/bookcase/img_library.jpg';
+import imgCharacter from '../../assets/images/bookcase/img_character.png';
 
 function LandingImage() {
   const navigate = useNavigate();
   return (
     <Wrapper>
       <ImgWrapper>
-        <BackgroundImg
-          src={`${import.meta.env.VITE_APP_IMAGEPATH}/bookcase/img_library.jpg`}
-          width={window.innerWidth}
-          alt="랜딩 배경 이미지"
-        />
+        <BackgroundImg src={imgLibrary} width={window.innerWidth} alt="랜딩 배경 이미지" />
         <Filter />
       </ImgWrapper>
       <Container>
@@ -43,7 +41,7 @@ function LandingImage() {
               Ing Books
               <br />+ 100
             </InfoText>
-            <Character />
+            <Character src={imgCharacter} alt="캐릭터" />
           </CharacterBox>
         </ContentBox>
       </Container>
@@ -152,12 +150,9 @@ const InfoText = styled.p`
   }
 `;
 
-const Character = styled.div`
+const Character = styled.img`
   width: 100%;
   aspect-ratio: 700/415;
-  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/bookcase/img_character.png');
-  background-size: cover;
-  background-position: center;
 `;
 
 export default LandingImage;

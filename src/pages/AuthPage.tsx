@@ -2,6 +2,9 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { KAKAO_AUTH_URL, NAVER_AUTH_URL } from '../shared/constants/auth';
+import libraryImg from '../assets/images/bookcase/img_library.jpg';
+import naverLoginImg from '../assets/images/img_naver_login.png';
+import kakaoLoginImg from '../assets/images/img_kakao_login.png';
 
 function AuthPage() {
   const [searchParams] = useSearchParams();
@@ -24,7 +27,7 @@ function AuthPage() {
     <Wrapper>
       <MainContainer>
         <ImgWrapper>
-          <img src="/src/assets/images/bookcase/img_library.jpg" alt="이미지" width={400} />
+          <img src={libraryImg} alt="이미지" width={400} />
           <TextContainer>
             <span>HAVE A BOOK DAY!</span>
             <span>
@@ -38,8 +41,8 @@ function AuthPage() {
           <Title>SIGN UP NOW</Title>
           <SubText>로그인 후 나의 독서 현황을 기록해 보세요!</SubText>
           <ButtonContainer>
-            <img onClick={naverLogin} src="/src/assets/images/img_naver_login.png" />
-            <img onClick={kakaoLogin} src="/src/assets/images/img_kakao_login.png" />
+            <img onClick={naverLogin} src={naverLoginImg} />
+            <img onClick={kakaoLogin} src={kakaoLoginImg} />
           </ButtonContainer>
         </ContentWrapper>
       </MainContainer>
