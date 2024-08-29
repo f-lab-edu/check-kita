@@ -68,7 +68,7 @@ function DetailBook({ record }: DetailBookProps) {
   };
 
   const goToDetail = () => {
-    navigate(`/book/${record.id}`);
+    navigate(`/book/${record.isbn}`);
   };
 
   return (

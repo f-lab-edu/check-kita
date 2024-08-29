@@ -30,6 +30,8 @@ function RecentBooks() {
 
   if (!isAuthenticated) return;
 
+  console.log(data);
+
   return (
     <Wrapper>
       <Container>
@@ -52,11 +54,11 @@ function RecentBooks() {
                       ))}
                     </BookAuthor>
                     <BookRecordTypeBox>
-                      {book.id && (
+                      {book.isbn && (
                         <Button
                           width={'100%'}
                           onClick={() => {
-                            goToBookDetail(String(book.id));
+                            goToBookDetail(String(book.isbn));
                           }}
                         >
                           <RecordTypeIcon

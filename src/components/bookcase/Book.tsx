@@ -11,7 +11,7 @@ function Book({ myBook }: BookProps) {
   const navigate = useNavigate();
 
   const goToBookDetail = () => {
-    navigate(`/book/${myBook.id}`);
+    navigate(`/book/${myBook.isbn}`);
   };
 
   return (

@@ -5,7 +5,6 @@ import {
   collection,
   query,
   where,
-  getDoc,
   deleteDoc,
   serverTimestamp,
   limit,
@@ -23,10 +22,12 @@ export async function updateMyBook(saveBook: MyBook) {
   try {
     const { id } = saveBook;
 
-    setDoc(doc(db, 'myBooks', id), { ...saveBook, createdAt: serverTimestamp() }).catch((e) => {
-      console.log(e);
-      // TODO: 에러 핸들링
-    });
+    setDoc(doc(db, 'myBooks', String(id)), { ...saveBook, createdAt: serverTimestamp() }).catch(
+      (e) => {
+        console.log(e);
+        // TODO: 에러 핸들링
+      }
+    );
   } catch (e) {
     console.log(e);
     // TODO: 에러 핸들링
@@ -61,6 +62,7 @@ export async function getAllMyBooks(
     title: doc.data().title,
     author: doc.data().author,
     image: doc.data().image,
+    isbn: doc.data().isbn,
     readingRecord: doc.data().readingRecord,
   }));
 
@@ -170,6 +172,7 @@ export async function getMonthlyRecords(
         image: doc.data().image,
         readingRecord: doc.data().readingRecord,
         createdAt: doc.data().createdAt,
+        isbn: doc.data().isbn,
       };
 
       const createdAt = record.createdAt.toDate();
@@ -177,14 +180,12 @@ export async function getMonthlyRecords(
 
       if (books.has(recordKey)) {
         const targetDateRecords = books.get(recordKey);
-        targetDateRecords?.push(record);
+        targetDateRecords?.push(convertTimestamps(record));
         targetDateRecords && books.set(recordKey, targetDateRecords);
       } else {
-        books.set(recordKey, [record]);
+        books.set(recordKey, [convertTimestamps(record)]);
       }
     }
-
-    console.log('야호!', books);
 
     return books;
   } catch (e) {
