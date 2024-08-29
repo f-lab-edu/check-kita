@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from '../../contexts/AuthContext';
 
 function MemoBox() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showedMemoIndex, setShowedMemoIndex] = useState<number>(-1);
@@ -23,11 +23,13 @@ function MemoBox() {
   const { data: memos } = useQuery({
     queryKey: ['memos', bookIsbn],
     queryFn: async () => {
-      const result = await api.getMemosByBookId(Number(bookIsbn));
+      if (!user) return;
+
+      const result = await api.getMemosByBookId(user.id, Number(bookIsbn));
 
       return result;
     },
-    enabled: !!bookIsbn,
+    enabled: !!bookIsbn && !!user,
     retry: false,
   });
 
