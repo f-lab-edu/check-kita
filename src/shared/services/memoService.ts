@@ -75,17 +75,21 @@ export async function deleteMemoByMemoId(memoId: string): Promise<boolean> {
 /**
  * 전체 메모 가져오기
  */
-export async function getAllMemos(count: number = 10): Promise<Memo[]> {
-  const q = query(collection(db, 'memos'), orderBy('createdAt'), limit(count));
+export async function getAllMemos(userId: string, count: number = 10): Promise<Memo[]> {
+  try {
+    const q = query(collection(db, 'memos'), where('userId', '==', userId), limit(count));
 
-  const querySnapshot = await getDocs(q);
-  const memos: Memo[] = querySnapshot.docs.map((doc) => ({
-    userId: doc.data().userId,
-    bookId: doc.data().bookId,
-    memoId: doc.data().memoId,
-    content: doc.data().content,
-    createdAt: doc.data().createdAt,
-  }));
+    const querySnapshot = await getDocs(q);
+    const memos: Memo[] = querySnapshot.docs.map((doc) => ({
+      userId: doc.data().userId,
+      bookId: doc.data().bookId,
+      memoId: doc.data().memoId,
+      content: doc.data().content,
+      createdAt: doc.data().createdAt,
+    }));
 
-  return memos;
+    return memos;
+  } catch (e) {
+    console.log(e);
+  }
 }

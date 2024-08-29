@@ -43,20 +43,23 @@ export async function updateMyBook(saveBook: MyBook) {
  * @returns
  */
 export async function getAllMyBooks(
+  userId: string,
   recordType: BookRecordType | 'all' = 'all',
   count: number = 50
 ): Promise<MyBook[]> {
   const q =
     recordType === 'all'
-      ? query(collection(db, 'myBooks'), orderBy('createdAt'), limit(count))
+      ? query(collection(db, 'myBooks'), where('userId', '==', userId), limit(count))
       : query(
           collection(db, 'myBooks'),
+          where('userId', '==', userId),
           where('readingRecord.recordType', '==', recordType),
           limit(count)
         );
 
   const querySnapshot = await getDocs(q);
   const books: MyBook[] = querySnapshot.docs.map((doc) => ({
+    userId: doc.data().userId,
     id: doc.data().id,
     title: doc.data().title,
     author: doc.data().author,

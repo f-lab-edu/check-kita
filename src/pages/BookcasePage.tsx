@@ -8,14 +8,19 @@ import LandingImage from '../components/bookcase/LandingImage';
 import Container from '../elements/Container';
 import RecentBooks from '../components/bookcase/RecentBooks';
 import { Tab, TabList, Tabs } from '@chakra-ui/react';
+import { useAuth } from '../contexts/AuthContext';
 
 function BookcasePage() {
+  const { user } = useAuth();
   const selectedTabStyle = { color: 'white', bg: 'brand.500' };
 
   // TODO: 첫번째 이외에 10개씩 가지고 와서 페이지네이션 하기
   const { data: myBooks, isLoading } = useQuery({
     queryKey: ['myBooks', 'all'],
-    queryFn: () => getAllMyBooks('all', 9),
+    queryFn: async () => {
+      if (!user) return;
+      return await getAllMyBooks(user.id, 'all', 9);
+    },
   });
 
   return (

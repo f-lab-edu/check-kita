@@ -9,18 +9,26 @@ import RecordTypeIcon from '../common/RecordTypeIcon';
 import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 function RecentBooks() {
+  const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+
   const { data, isLoading } = useQuery({
     queryKey: ['myBooks', 'all', 4],
-    queryFn: () => getAllMyBooks('all', 4),
-  });
+    queryFn: async () => {
+      if (!user) return;
 
-  const navigate = useNavigate();
+      return await getAllMyBooks(user.id, 'all', 4);
+    },
+  });
 
   const goToBookDetail = (bookIsbn: string) => {
     navigate(`/book/${bookIsbn}`);
   };
+
+  if (!isAuthenticated) return;
 
   return (
     <Wrapper>

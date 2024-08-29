@@ -2,11 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import * as api from '../../shared/services/myBookService';
 import Book from '../bookcase/Book';
+import { useAuth } from '../../contexts/AuthContext';
 
 function AllRecords() {
+  const { user } = useAuth();
   const { data: myBooks } = useQuery({
     queryKey: ['myBooks', 'all'],
-    queryFn: () => api.getAllMyBooks('all', 10),
+    queryFn: async () => {
+      if (!user) return;
+      return await api.getAllMyBooks(user.id, 'all', 9);
+    },
   });
 
   return (

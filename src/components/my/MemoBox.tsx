@@ -3,12 +3,20 @@ import * as api from '../../shared/services/memoService';
 import styled from 'styled-components';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { convertDateToDisplayFormat } from '../../shared/utils';
+import { useAuth } from '../../contexts/AuthContext';
 
 function MemoBox() {
+  const { user } = useAuth();
+
   const { data } = useQuery({
     queryKey: ['all memo'],
-    queryFn: () => api.getAllMemos(),
+    queryFn: async () => {
+      if (!user) return;
+      return await api.getAllMemos(user.id);
+    },
   });
+
+  console.log(data);
 
   return (
     <Wrapper>
