@@ -28,7 +28,7 @@ function ModalUpdateMemo({ hanldeModalClose, updateTarget }: ModalUpdateMemoProp
 
       return await api.updateMemo({
         userId: user.id,
-        bookId: Number(bookIsbn),
+        bookIsbn: Number(bookIsbn),
         memoId: generateId(),
         content: memo,
       });
@@ -49,7 +49,7 @@ function ModalUpdateMemo({ hanldeModalClose, updateTarget }: ModalUpdateMemoProp
 
       return await api.updateMemo({
         userId: user.id,
-        bookId: Number(bookIsbn),
+        bookIsbn: Number(bookIsbn),
         memoId: String(updateTarget?.memoId),
         content: memo,
       });

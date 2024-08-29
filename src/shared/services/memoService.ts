@@ -33,22 +33,22 @@ export async function updateMemo(memo: Memo) {
 /**
  * 메모 정보 가져오기
  */
-export async function getMemosByBookId(
+export async function getMemosByBookIsbn(
   userId: string,
-  bookId: number,
+  bookIsbn: number,
   count: number = 10
 ): Promise<Memo[]> {
   const q = query(
     collection(db, 'memos'),
     where('userId', '==', userId),
-    where('bookId', '==', bookId),
+    where('bookIsbn', '==', bookIsbn),
     limit(count)
   );
 
   const querySnapshot = await getDocs(q);
   const memos: Memo[] = querySnapshot.docs.map((doc) => ({
     userId: doc.data().userId,
-    bookId: doc.data().bookId,
+    bookIsbn: doc.data().bookIsbn,
     memoId: doc.data().memoId,
     content: doc.data().content,
     createdAt: doc.data().createdAt,

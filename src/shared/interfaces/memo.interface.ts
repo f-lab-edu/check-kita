@@ -2,7 +2,7 @@ import { Timestamp } from 'firebase/firestore';
 
 export interface Memo {
   userId: string;
-  bookId: number;
+  bookIsbn: number;
   memoId: string;
   content: string;
   createdAt?: Timestamp;

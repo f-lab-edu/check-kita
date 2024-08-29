@@ -25,7 +25,7 @@ function MemoBox() {
     queryFn: async () => {
       if (!user) return;
 
-      const result = await api.getMemosByBookId(user.id, Number(bookIsbn));
+      const result = await api.getMemosByBookIsbn(user.id, Number(bookIsbn));
 
       return result;
     },
