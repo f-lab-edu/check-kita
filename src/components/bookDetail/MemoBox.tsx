@@ -3,19 +3,22 @@ import styled from 'styled-components';
 import ModalUpdateMemo from './ModalUpdateMemo';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import * as api from '../../shared/services/memoService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { queryClient } from '../../main';
 import { Memo } from '../../shared/interfaces/memo.interface';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useAuth } from '../../contexts/AuthContext';
 
 function MemoBox() {
+  const { isAuthenticated } = useAuth();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showedMemoIndex, setShowedMemoIndex] = useState<number>(-1);
   const [updateTarget, setUpdateTarget] = useState<Memo>();
+  const navigate = useNavigate();
 
   const { data: memos } = useQuery({
     queryKey: ['memos', bookIsbn],
@@ -55,7 +58,17 @@ function MemoBox() {
       <Wrapper>
         <Flex justify={'space-between'}>
           <DescriptionTitle>메모</DescriptionTitle>
-          <Button onClick={onOpen} size="mdIcon" variant="goast">
+          <Button
+            onClick={
+              isAuthenticated
+                ? onOpen
+                : () => {
+                    navigate('/auth');
+                  }
+            }
+            size="mdIcon"
+            variant="goast"
+          >
             <AddIcon />
           </Button>
         </Flex>

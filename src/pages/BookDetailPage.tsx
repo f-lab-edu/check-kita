@@ -10,8 +10,10 @@ import { useEffect, useState } from 'react';
 import { splitBookAuthor } from '../shared/utils';
 import MemoBox from '../components/bookDetail/MemoBox';
 import Container from '../elements/Container';
+import { useAuth } from '../contexts/AuthContext';
 
 function BookDetailPage() {
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,16 +47,25 @@ function BookDetailPage() {
     },
   });
 
-  const isRecordedBook = () => {
-    if (isLoading || !myBook || !myBook.id) return false;
-    return true;
-  };
-
   useEffect(() => {
     if (!!bookInfo?.author) {
       setAuthors(splitBookAuthor(bookInfo.author));
     }
   }, [bookInfo?.author]);
+
+  const isRecordedBook = () => {
+    if (isLoading || !myBook || !myBook.id) return false;
+    return true;
+  };
+
+  const openAddModal = () => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+
+    onOpen();
+  };
 
   return (
     <Wrapper>
@@ -64,7 +75,7 @@ function BookDetailPage() {
             <BookTopInfo>
               <ImgContainer>
                 <img src={bookInfo?.image} width={200} />
-                <Button onClick={onOpen}>{isRecordedBook() ? '수정하기' : '저장하기'}</Button>
+                <Button onClick={openAddModal}>{isRecordedBook() ? '수정하기' : '저장하기'}</Button>
               </ImgContainer>
               <BookInfoBox>
                 <BookTitle>{bookInfo?.title}</BookTitle>

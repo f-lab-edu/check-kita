@@ -21,6 +21,7 @@ export interface SelectedBookInfo {
 
 export interface MyBook {
   id?: number;
+  userId: string;
   title?: string;
   author?: string[];
   image?: string;
