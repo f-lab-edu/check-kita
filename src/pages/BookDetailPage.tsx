@@ -33,15 +33,15 @@ function BookDetailPage() {
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
     queryKey: ['book', bookIsbn],
     queryFn: async (): Promise<SearchBook> => {
-      const result = await api.searchBookByIsbn(Number(bookIsbn));
+      const searchResult = await api.searchBookByIsbn(Number(bookIsbn));
+      if (searchResult) return searchResult;
 
-      if (result === null) {
-        alert('데이터 불러오기 실패!');
-        navigate(-1);
-        throw new Error('[BookDetailPage] searchBookByIsbn failed');
-      }
+      const customResult = await api.getCustomBookByBookId(Number(bookIsbn));
+      if (customResult) return customResult;
 
-      return result;
+      alert('데이터 불러오기 실패!');
+      navigate(-1);
+      throw new Error('[BookDetailPage] searchBookByIsbn failed');
     },
   });
 
@@ -84,10 +84,12 @@ function BookDetailPage() {
                   </p>
                 </BookPublisingInfoTop>
                 <BookPublisingInfoBottom>
-                  <InfoBox>
-                    <p>출간일</p>
-                    <p>{bookInfo?.pubdate}</p>
-                  </InfoBox>
+                  {bookInfo?.pubdate && (
+                    <InfoBox>
+                      <p>출간일</p>
+                      <p>{bookInfo?.pubdate}</p>
+                    </InfoBox>
+                  )}
                   <InfoBox>
                     <p>ISBN</p>
                     <p>{bookInfo?.isbn}</p>
@@ -100,11 +102,13 @@ function BookDetailPage() {
                 )}
               </BookInfoBox>
             </BookTopInfo>
-            <BookInfoBottom>
-              <DescriptionTitle>작품 소개</DescriptionTitle>
-              <HorizontalLine margin="0 0 16px"></HorizontalLine>
-              <p>{bookInfo?.description}</p>
-            </BookInfoBottom>
+            {bookInfo?.description && (
+              <BookInfoBottom>
+                <DescriptionTitle>작품 소개</DescriptionTitle>
+                <HorizontalLine margin="0 0 16px"></HorizontalLine>
+                <p>{bookInfo?.description}</p>
+              </BookInfoBottom>
+            )}
             <MemoBox />
             {/* 기록 업데이트 모달 */}
             {!!bookIsbn && (

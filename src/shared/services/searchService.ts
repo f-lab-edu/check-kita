@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { parseBookXml } from '../utils';
 import { SearchBook } from '../interfaces/book.interface';
-import { storage } from '../firebase';
+import { db, storage } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { doc, getDoc } from 'firebase/firestore';
 
 const api = axios.create({
   baseURL: '/api',
@@ -93,3 +94,29 @@ export const imageUpload = async (image: File) => {
     throw new Error('imageUpload Error');
   }
 };
+
+/**
+ * 수동으로 추가한 책 정보 가져오기
+ * @param {number} bookId
+ */
+export async function getCustomBookByBookId(bookId: number): Promise<SearchBook | null> {
+  try {
+    const docRef = doc(db, 'myBooks', String(bookId));
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return null;
+
+    const result = docSnap.data() as SearchBook;
+    if (!result) return null;
+
+    return {
+      title: result.title,
+      author: result.author,
+      image: result.image,
+      isbn: result.isbn,
+      publisher: result.publisher,
+    };
+  } catch (e) {
+    return null;
+  }
+}
