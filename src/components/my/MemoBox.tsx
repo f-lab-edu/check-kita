@@ -16,8 +16,6 @@ function MemoBox() {
     },
   });
 
-  console.log(data);
-
   return (
     <Wrapper>
       <Title>메모 모아 보기</Title>

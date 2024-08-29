@@ -74,3 +74,32 @@ export async function deleteMemoByReviewId(reviewId: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * 전체 리뷰 가져오기
+ */
+export async function getAllReviewsByUserId(userId: string, count: number = 10): Promise<Review[]> {
+  try {
+    const q = query(
+      collection(db, 'reviews'),
+      where('userId', '==', userId),
+      orderBy('createdAt'),
+      limit(count)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const reviews: Review[] = querySnapshot.docs.map((doc) => ({
+      userId: doc.data().userId,
+      bookIsbn: doc.data().bookIsbn,
+      reviewId: doc.data().memoId,
+      content: doc.data().content,
+      nickname: doc.data().nickname,
+      createdAt: doc.data().createdAt,
+    }));
+
+    return reviews;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+}

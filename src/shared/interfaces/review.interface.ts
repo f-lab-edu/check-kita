@@ -8,7 +8,3 @@ export interface Review {
   nickname: string;
   createdAt?: Timestamp;
 }
-
-export interface BookReviews {
-  memos: Review[];
-}

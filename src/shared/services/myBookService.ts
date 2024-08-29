@@ -82,8 +82,6 @@ export async function getMyBookInfoByBookIsbn(userId: string, isbn: number): Pro
     );
 
     const querySnapshot = await getDocs(q);
-    console.log(querySnapshot);
-
     if (querySnapshot.empty) return INIT_NOT_EXISTS_RECORD;
 
     const doc = querySnapshot.docs[0];

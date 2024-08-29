@@ -7,7 +7,3 @@ export interface Memo {
   content: string;
   createdAt?: Timestamp;
 }
-
-export interface BookMemos {
-  memos: Memo[];
-}

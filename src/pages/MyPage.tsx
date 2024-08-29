@@ -3,6 +3,7 @@ import MontlyGraph from '../components/my/MontlyGraph';
 import MontlyCalendar from '../components/my/MontlyCalendar';
 import MemoBox from '../components/my/MemoBox';
 import AllRecords from '../components/my/AllRecords';
+import ReviewBox from '../components/my/ReviewBox';
 
 function MyPage() {
   return (
@@ -16,7 +17,9 @@ function MyPage() {
           <ContentBox>
             <MemoBox />
           </ContentBox>
-          <ContentBox>리뷰자리</ContentBox>
+          <ContentBox>
+            <ReviewBox />
+          </ContentBox>
         </Container>
       </TopWrapper>
       <BottomWrapper>
