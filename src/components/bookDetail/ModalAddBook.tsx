@@ -24,6 +24,7 @@ import { splitBookAuthor } from '../../shared/utils';
 import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants/constants';
 import { ModalType } from '../../shared/interfaces/common.interface';
 import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ModalAddBookProps {
   onClose: () => void;
@@ -32,6 +33,7 @@ interface ModalAddBookProps {
 }
 
 function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {
+  const { user } = useAuth();
   const [modalType, setModalType] = useState<ModalType>('save');
   const [recordType, setRecordType] = useState<BookRecordType>('already');
   const [alreadyBook, setAlreadyBook] = useState<AlreadyBook>(INIT_ALREADYBOOK);
@@ -93,7 +95,7 @@ function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {
    */
   const updateBookRecord = async (recordDetail: BookRecordDetail) => {
     try {
-      if (!bookInfo) {
+      if (!bookInfo || !user) {
         // TODO: 알럿띄우기
         onClose();
         return;
@@ -107,6 +109,7 @@ function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {
       };
 
       const saveBook: MyBook = {
+        userId: user.id,
         ...selectedBookInfo,
         readingRecord: {
           recordType,

@@ -9,6 +9,7 @@ import { generateId } from '../../shared/utils';
 import { Memo } from '../../shared/interfaces/memo.interface';
 import { ModalType } from '../../shared/interfaces/common.interface';
 import DoneIcon from '@mui/icons-material/Done';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ModalUpdateMemoProps {
   hanldeModalClose: () => void;
@@ -16,17 +17,22 @@ interface ModalUpdateMemoProps {
 }
 
 function ModalUpdateMemo({ hanldeModalClose, updateTarget }: ModalUpdateMemoProps) {
+  const { user } = useAuth();
   const { bookIsbn } = useParams();
   const [memo, setMemo] = useState<string>('');
   const [modalType, setModalType] = useState<ModalType>('save');
 
   const addMemo = useMutation({
-    mutationFn: () =>
-      api.updateMemo({
+    mutationFn: async () => {
+      if (!user) return;
+
+      return await api.updateMemo({
+        userId: user.id,
         bookId: Number(bookIsbn),
         memoId: generateId(),
         content: memo,
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
       alert('추가 성공!');
@@ -38,12 +44,16 @@ function ModalUpdateMemo({ hanldeModalClose, updateTarget }: ModalUpdateMemoProp
   });
 
   const updateMemoByMemoId = useMutation({
-    mutationFn: () =>
-      api.updateMemo({
+    mutationFn: async () => {
+      if (!user) return;
+
+      return await api.updateMemo({
+        userId: user.id,
         bookId: Number(bookIsbn),
         memoId: String(updateTarget?.memoId),
         content: memo,
-      }),
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memos', bookIsbn] });
       alert('수정 성공!');
