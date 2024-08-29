@@ -23,12 +23,10 @@ export async function updateMyBook(saveBook: MyBook) {
   try {
     const { id } = saveBook;
 
-    setDoc(doc(db, 'myBooks', String(id)), { ...saveBook, createdAt: serverTimestamp() }).catch(
-      (e) => {
-        console.log(e);
-        // TODO: 에러 핸들링
-      }
-    );
+    setDoc(doc(db, 'myBooks', id), { ...saveBook, createdAt: serverTimestamp() }).catch((e) => {
+      console.log(e);
+      // TODO: 에러 핸들링
+    });
   } catch (e) {
     console.log(e);
     // TODO: 에러 핸들링
@@ -99,7 +97,7 @@ export async function getMyBookInfoByBookIsbn(userId: string, isbn: number): Pro
  * @param {number} bookId
  * @return {Promise<boolean>}
  */
-export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
+export async function deleteRecordByBookId(bookId: string): Promise<boolean> {
   try {
     await deleteDoc(doc(db, 'myBooks', String(bookId)));
 

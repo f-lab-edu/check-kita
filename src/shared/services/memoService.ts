@@ -77,7 +77,12 @@ export async function deleteMemoByMemoId(memoId: string): Promise<boolean> {
  */
 export async function getAllMemos(userId: string, count: number = 10): Promise<Memo[]> {
   try {
-    const q = query(collection(db, 'memos'), where('userId', '==', userId), limit(count));
+    const q = query(
+      collection(db, 'memos'),
+      where('userId', '==', userId),
+      orderBy('createdAt'),
+      limit(count)
+    );
 
     const querySnapshot = await getDocs(q);
     const memos: Memo[] = querySnapshot.docs.map((doc) => ({
@@ -91,5 +96,6 @@ export async function getAllMemos(userId: string, count: number = 10): Promise<M
     return memos;
   } catch (e) {
     console.log(e);
+    return [];
   }
 }

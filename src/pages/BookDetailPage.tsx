@@ -110,8 +110,8 @@ function BookDetailPage() {
                 </BookPublisingInfoBottom>
 
                 {/* 나의 책 기록 */}
-                {!!myBook?.readingRecord && bookIsbn && (
-                  <BookRecordBox bookRecord={myBook.readingRecord} bookIsbn={bookIsbn} />
+                {!!myBook?.readingRecord && myBook.id && (
+                  <BookRecordBox bookRecord={myBook.readingRecord} bookId={myBook.id} />
                 )}
               </BookInfoBox>
             </BookTopInfo>
