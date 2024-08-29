@@ -11,6 +11,7 @@ import { splitBookAuthor } from '../shared/utils';
 import MemoBox from '../components/bookDetail/MemoBox';
 import Container from '../elements/Container';
 import { useAuth } from '../contexts/AuthContext';
+import ReviewBox from '../components/bookDetail/ReviewBox';
 
 function BookDetailPage() {
   const { isAuthenticated, user } = useAuth();
@@ -123,6 +124,7 @@ function BookDetailPage() {
               </BookInfoBottom>
             )}
             <MemoBox />
+            <ReviewBox />
             {/* 기록 업데이트 모달 */}
             {!!bookIsbn && (
               <Modal isOpen={isOpen} onClose={onClose}>

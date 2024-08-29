@@ -59,7 +59,7 @@ export async function getMemosByBookIsbn(
 
 /**
  * 메모 아이디로 메모 삭제
- * @param {string} bookId
+ * @param {string} memoId
  * @return {Promise<boolean>}
  */
 export async function deleteMemoByMemoId(memoId: string): Promise<boolean> {

@@ -16,6 +16,7 @@ function MyPage() {
           <ContentBox>
             <MemoBox />
           </ContentBox>
+          <ContentBox>리뷰자리</ContentBox>
         </Container>
       </TopWrapper>
       <BottomWrapper>
@@ -31,7 +32,7 @@ const Wrapper = styled.div`
   min-width: 768px;
   max-width: 1154px;
   min-height: 100%;
-  padding: var(--header-height) 24px 0;
+  padding: calc(30px + var(--header-height)) 24px 0;
   margin: auto;
 `;
 
@@ -48,7 +49,7 @@ const Container = styled.div`
 `;
 
 const ContentBox = styled.div`
-  flex: 1 1 510px;
+  flex: 1 1 255px;
 `;
 
 const BottomWrapper = styled.div`

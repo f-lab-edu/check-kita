@@ -151,7 +151,7 @@ const MemoList = styled.div`
 
 const MemoContainer = styled.div`
   background-color: var(--wrapper-color);
-  padding: 8px;
+  padding: 12px;
   border-radius: 6px;
   display: flex;
   gap: 12px;
