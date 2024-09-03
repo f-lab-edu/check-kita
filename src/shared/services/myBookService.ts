@@ -7,12 +7,16 @@ import {
   where,
   deleteDoc,
   serverTimestamp,
+  orderBy,
   limit,
+  startAfter,
+  endBefore,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
 import { INIT_NOT_EXISTS_RECORD } from '../constants/constants';
 import { convertDateMapKey, convertTimestamps } from '../utils';
+import { PageNationFirebase } from '../interfaces/common.interface';
 
 /**
  * 책 추가하기, 수정하기
@@ -43,30 +47,49 @@ export async function updateMyBook(saveBook: MyBook) {
 export async function getAllMyBooks(
   userId: string,
   recordType: BookRecordType | 'all' = 'all',
-  count: number = 50
+  pagenationInfo: PageNationFirebase
 ): Promise<MyBook[]> {
-  const q =
-    recordType === 'all'
-      ? query(collection(db, 'myBooks'), where('userId', '==', userId), limit(count))
-      : query(
-          collection(db, 'myBooks'),
-          where('userId', '==', userId),
-          where('readingRecord.recordType', '==', recordType),
-          limit(count)
-        );
+  try {
+    let baseQuery = query(
+      collection(db, 'myBooks'),
+      where('userId', '==', userId),
+      orderBy('createdAt')
+    );
 
-  const querySnapshot = await getDocs(q);
-  const books: MyBook[] = querySnapshot.docs.map((doc) => ({
-    userId: doc.data().userId,
-    id: doc.data().id,
-    title: doc.data().title,
-    author: doc.data().author,
-    image: doc.data().image,
-    isbn: doc.data().isbn,
-    readingRecord: doc.data().readingRecord,
-  }));
+    // 타입이 있을 경우
+    if (recordType !== 'all')
+      baseQuery = query(baseQuery, where('readingRecord.recordType', '==', recordType));
 
-  return books;
+    if (pagenationInfo.action === 'PREV' && pagenationInfo.firstTimestamp) {
+      baseQuery = query(
+        baseQuery,
+        endBefore(pagenationInfo.firstTimestamp),
+        limit(pagenationInfo.count)
+      );
+    } else if (pagenationInfo.action === 'NEXT') {
+      baseQuery = query(
+        baseQuery,
+        startAfter(pagenationInfo.lastTimestamp),
+        limit(pagenationInfo.count)
+      );
+    }
+
+    const querySnapshot = await getDocs(baseQuery);
+    const books: MyBook[] = querySnapshot.docs.map((doc) => ({
+      userId: doc.data().userId,
+      id: doc.data().id,
+      title: doc.data().title,
+      author: doc.data().author,
+      image: doc.data().image,
+      isbn: doc.data().isbn,
+      createdAt: doc.data().createdAt,
+      readingRecord: doc.data().readingRecord,
+    }));
+
+    return books;
+  } catch (e) {
+    return [];
+  }
 }
 
 /**

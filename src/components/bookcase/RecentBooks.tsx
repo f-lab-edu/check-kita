@@ -10,17 +10,25 @@ import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useState } from 'react';
+import { PageNationFirebase } from '../../shared/interfaces/common.interface';
 
 function RecentBooks() {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const [pagenationInfo, _] = useState<PageNationFirebase>({
+    action: 'NEXT',
+    count: 4,
+    firstTimestamp: null,
+    lastTimestamp: null,
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ['myBooks', 'all', 4],
     queryFn: async () => {
       if (!user) return;
 
-      return await getAllMyBooks(user.id, 'all', 4);
+      return await getAllMyBooks(user.id, 'all', pagenationInfo);
     },
   });
 
@@ -29,8 +37,6 @@ function RecentBooks() {
   };
 
   if (!isAuthenticated) return;
-
-  console.log(data);
 
   return (
     <Wrapper>
