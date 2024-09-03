@@ -2,18 +2,25 @@ import Calendar from 'react-calendar';
 import * as api from '../../shared/services/myBookService';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { convertDateMapKey, convertDateToDisplayFormat } from '../../shared/utils';
 import AddIcon from '@mui/icons-material/Add';
 import DetailBook from './DetailBook';
-import { Tooltip } from '@chakra-ui/react';
+import { Button, Flex, Tooltip } from '@chakra-ui/react';
 import { useAuth } from '../../contexts/AuthContext';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { MyBook } from '../../shared/interfaces/book.interface';
+
+const ITEMS_PER_PAGE = 4;
 
 function MontlyCalendar() {
   const { user } = useAuth();
   const TODAY = new Date();
   const viewMonth = TODAY.getMonth() + 1;
   const [selectedDate, setSelectedDate] = useState(TODAY);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [viewedData, setViewedData] = useState<MyBook[]>([]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['calendar', viewMonth],
@@ -70,6 +77,24 @@ function MontlyCalendar() {
     setSelectedDate(changedDate);
   };
 
+  const getSlicedCurrentPage = (target: MyBook[], currentPage: number) => {
+    if (currentPage < 1) return [];
+
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    return target.slice(startIndex, startIndex + 4);
+  };
+
+  useEffect(() => {
+    if (!data) return;
+
+    let changed = data.get(convertDateMapKey(selectedDate));
+    changed = changed ? changed : [];
+    changed = getSlicedCurrentPage(changed, currentPage);
+
+    setViewedData(changed);
+  }, [data, selectedDate, currentPage]);
+
   if (isLoading) return;
 
   return (
@@ -84,17 +109,44 @@ function MontlyCalendar() {
         <SelectedDate>
           <strong>{convertDateToDisplayFormat(selectedDate)}</strong> 기록 현황
         </SelectedDate>
-        {!!data && (
-          <DateRecords>
-            {/* TODO: data 개수 많아지면 어떻게 할 지 고민하기 */}
-            {!!data.get(convertDateMapKey(selectedDate)) &&
-              data
-                .get(convertDateMapKey(selectedDate))
-                ?.map((record, index) => (
+        <Flex
+          flexDirection={'column'}
+          gap={'12px'}
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          minHeight={'484px'}
+        >
+          {!!data && (
+            <DateRecords>
+              {!!viewedData &&
+                viewedData?.map((record, index) => (
                   <DetailBook record={record} key={`DetailBook-${index}`} />
                 ))}
-          </DateRecords>
-        )}
+            </DateRecords>
+          )}
+          <Flex alignItems={'center'}>
+            <Button
+              variant="goast"
+              size={'mdIcon'}
+              isDisabled={currentPage === 1}
+              onClick={() => {
+                setCurrentPage((prev) => (prev === 1 ? prev : prev - 1));
+              }}
+            >
+              <ChevronLeftIcon />
+            </Button>
+            <Button
+              variant="goast"
+              size={'mdIcon'}
+              onClick={() => {
+                setCurrentPage(currentPage + 1);
+              }}
+              isDisabled={ITEMS_PER_PAGE > Number(viewedData?.length)}
+            >
+              <ChevronRightIcon />
+            </Button>
+          </Flex>
+        </Flex>
       </CalendarDetailRecord>
     </Wrapper>
   );
@@ -126,9 +178,10 @@ const SelectedDate = styled.div`
 `;
 
 const DateRecords = styled.div`
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, auto));
-  grid-auto-rows: 1fr 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: 1fr;
   gap: 8px;
   padding: 8px;
 `;

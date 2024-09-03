@@ -8,6 +8,7 @@ import {
 } from '../../shared/interfaces/book.interface';
 import { convertDateToDisplayFormat } from '../../shared/utils';
 import { useNavigate } from 'react-router-dom';
+import { textOverflowStyles } from '../../shared/styles/common';
 
 interface DetailBookProps {
   record: MyBook;
@@ -84,6 +85,7 @@ function DetailBook({ record }: DetailBookProps) {
 }
 
 const Wrapper = styled.div`
+  height: 200px;
   padding: 12px 8px;
   border-radius: var(--wrapper-border-radius);
   background-color: var(--background-color);
@@ -110,6 +112,7 @@ const BookTitle = styled.div`
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
+  ${textOverflowStyles(2)}
 `;
 
 const BookAuthor = styled.div`
