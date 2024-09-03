@@ -1,4 +1,13 @@
-import { Timestamp } from 'firebase/firestore';
+import { PageNationFirebase } from './interfaces/common.interface';
+import {
+  DocumentData,
+  endBefore,
+  limit,
+  query,
+  Query,
+  startAfter,
+  Timestamp,
+} from 'firebase/firestore';
 import { SearchBook } from './interfaces/book.interface';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -93,4 +102,16 @@ export const convertTimestamps = (obj: any): any => {
     return newObj;
   }
   return obj;
+};
+
+export const setFirebaseQueryPagenation = (
+  baseQuery: Query<DocumentData, DocumentData>,
+  pagenationInfo: PageNationFirebase
+): Query<DocumentData, DocumentData> => {
+  if (pagenationInfo.action === 'PREV' && pagenationInfo.firstTimestamp)
+    return query(baseQuery, endBefore(pagenationInfo.firstTimestamp), limit(pagenationInfo.count));
+  if (pagenationInfo.action === 'NEXT')
+    return query(baseQuery, startAfter(pagenationInfo.lastTimestamp), limit(pagenationInfo.count));
+
+  return baseQuery;
 };

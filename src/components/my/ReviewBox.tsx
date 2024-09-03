@@ -1,34 +1,34 @@
 import { useQuery } from '@tanstack/react-query';
-import * as api from '../../shared/services/memoService';
+import * as api from '../../shared/services/reviewService';
 import styled from 'styled-components';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import { convertDateToDisplayFormat } from '../../shared/utils';
 import { useAuth } from '../../contexts/AuthContext';
 
-function MemoBox() {
+function ReviewBox() {
   const { user } = useAuth();
 
   const { data } = useQuery({
-    queryKey: ['all memo'],
+    queryKey: ['all reviews'],
     queryFn: async () => {
       if (!user) return;
-      return await api.getAllMemos(user.id);
+      return await api.getAllReviewsByUserId(user.id);
     },
   });
 
   return (
     <Wrapper>
-      <Title>메모 모아 보기</Title>
-      {data?.map((memo, index) => (
-        <ContentBox key={`ContentBox-${index}`}>
+      <Title>리뷰 모아 보기</Title>
+      {data?.map((review, index) => (
+        <ContentBox key={`ReviewBox-ContentBox-${index}`}>
           <div>
             <QuoteWrapper>
               <FormatQuoteIcon fontSize="small" />
             </QuoteWrapper>
-            <MemoContent>{memo.content}</MemoContent>
+            <ReviewContent>{review.content}</ReviewContent>
           </div>
-          {memo.createdAt && (
-            <CreatedAtText>{convertDateToDisplayFormat(memo.createdAt.toDate())}</CreatedAtText>
+          {review.createdAt && (
+            <CreatedAtText>{convertDateToDisplayFormat(review.createdAt.toDate())}</CreatedAtText>
           )}
         </ContentBox>
       ))}
@@ -62,7 +62,7 @@ const ContentBox = styled.div`
   }
 `;
 
-const MemoContent = styled.span`
+const ReviewContent = styled.span`
   color: var(--sub-text-color-1);
   font-size: 16px;
 `;
@@ -80,4 +80,4 @@ const CreatedAtText = styled.div`
   text-align: end;
 `;
 
-export default MemoBox;
+export default ReviewBox;

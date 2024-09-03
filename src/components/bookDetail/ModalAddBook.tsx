@@ -20,24 +20,26 @@ import { match } from 'ts-pattern';
 import { queryClient } from '../../main';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { splitBookAuthor } from '../../shared/utils';
-import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants';
+import { generateId, splitBookAuthor } from '../../shared/utils';
+import { INIT_ALREADYBOOK, INIT_INGBOOK, INIT_WANTBOOK } from '../../shared/constants/constants';
 import { ModalType } from '../../shared/interfaces/common.interface';
 import AlreadyBookRecordBox from '../search/AlreadyBookRecordBox';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ModalAddBookProps {
   onClose: () => void;
   bookIsbn: string;
+  bookInfo?: SearchBook;
 }
 
-function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
+function ModalAddBook({ onClose, bookIsbn, bookInfo }: ModalAddBookProps) {
+  const { user } = useAuth();
   const [modalType, setModalType] = useState<ModalType>('save');
   const [recordType, setRecordType] = useState<BookRecordType>('already');
   const [alreadyBook, setAlreadyBook] = useState<AlreadyBook>(INIT_ALREADYBOOK);
   const [ingBook, setIngBook] = useState<IngBook>(INIT_INGBOOK);
   const [wantBook, setWantBook] = useState<WantBook>(INIT_WANTBOOK);
 
-  const bookInfo: SearchBook | undefined = queryClient.getQueryData(['book', bookIsbn]);
   const bookRecord: MyBook | undefined = queryClient.getQueryData(['record', bookIsbn]);
 
   const updateRecord = useMutation({
@@ -93,20 +95,22 @@ function ModalAddBook({ onClose, bookIsbn }: ModalAddBookProps) {
    */
   const updateBookRecord = async (recordDetail: BookRecordDetail) => {
     try {
-      if (!bookInfo) {
+      if (!bookInfo || !user) {
         // TODO: 알럿띄우기
         onClose();
         return;
       }
 
       const selectedBookInfo = {
-        id: bookInfo.isbn,
+        id: generateId(),
         title: bookInfo.title,
         author: splitBookAuthor(bookInfo.author),
         image: bookInfo.image,
+        isbn: bookInfo.isbn,
       };
 
       const saveBook: MyBook = {
+        userId: user.id,
         ...selectedBookInfo,
         readingRecord: {
           recordType,

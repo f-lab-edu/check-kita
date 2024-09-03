@@ -2,14 +2,14 @@ import { Timestamp } from 'firebase/firestore';
 
 export interface SearchBook {
   title: string;
-  link: string;
+  link?: string;
   image: string;
   author: string;
   discount?: number;
-  description: string;
+  description?: string;
   publisher: string;
   isbn: number;
-  pubdate: string;
+  pubdate?: string;
 }
 
 export interface SelectedBookInfo {
@@ -19,13 +19,22 @@ export interface SelectedBookInfo {
   image: string;
 }
 
+//FIXME: 커스텀 책
 export interface MyBook {
-  id?: number;
+  id?: string;
+  isbn: number; // 필요?
   title?: string;
   author?: string[];
   image?: string;
+
+  //FIXME: 분리하기
+  // 레코드
+  // 유저가 저장한 정보
+  // 레코드 아이디
+  userId: string;
   readingRecord?: ReadingRecord;
   createdAt?: Timestamp;
+  // bookIsbn - customBook에서는 Id?
 }
 
 export type BookRecordType = 'already' | 'ing' | 'want';

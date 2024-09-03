@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { parseBookXml } from '../utils';
 import { SearchBook } from '../interfaces/book.interface';
+import { db, storage } from '../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { doc, getDoc } from 'firebase/firestore';
 
 const api = axios.create({
   baseURL: '/api',
@@ -28,7 +31,6 @@ export const searchBooks = (
     })
     .then((res) => {
       if (res.status === 200) {
-        console.log(res);
         return res.data.items;
       }
     })
@@ -73,6 +75,46 @@ export async function searchBookByIsbn(isbn: number): Promise<null | SearchBook>
     if (!res || !res.data || res.status !== 200) return null;
 
     return parseBookXml(res.data);
+  } catch (e) {
+    return null;
+  }
+}
+
+export const imageUpload = async (image: File) => {
+  try {
+    if (!image) return;
+
+    const storageRef = ref(storage, `images/${image.name}`);
+    await uploadBytes(storageRef, image);
+    const downloadURL = await getDownloadURL(storageRef);
+
+    return downloadURL;
+  } catch (e) {
+    throw new Error('imageUpload Error');
+  }
+};
+
+/**
+ * 수동으로 추가한 책 정보 가져오기
+ * @param {number} bookId
+ */
+export async function getCustomBookByBookId(bookId: number): Promise<SearchBook | null> {
+  try {
+    const docRef = doc(db, 'myBooks', String(bookId));
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) return null;
+
+    const result = docSnap.data() as SearchBook;
+    if (!result) return null;
+
+    return {
+      title: result.title,
+      author: result.author,
+      image: result.image,
+      isbn: result.isbn,
+      publisher: result.publisher,
+    };
   } catch (e) {
     return null;
   }

@@ -10,8 +10,11 @@ import { useEffect, useState } from 'react';
 import { splitBookAuthor } from '../shared/utils';
 import MemoBox from '../components/bookDetail/MemoBox';
 import Container from '../elements/Container';
+import { useAuth } from '../contexts/AuthContext';
+import ReviewBox from '../components/bookDetail/ReviewBox';
 
 function BookDetailPage() {
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -21,7 +24,9 @@ function BookDetailPage() {
   const { data: myBook, isLoading } = useQuery({
     queryKey: ['record', bookIsbn],
     queryFn: async () => {
-      const result = await api.getMyBookInfoByBookId(Number(bookIsbn));
+      if (!user) return;
+
+      const result = await api.getMyBookInfoByBookIsbn(user.id, Number(bookIsbn));
 
       return result;
     },
@@ -33,28 +38,37 @@ function BookDetailPage() {
   const { data: bookInfo, isLoading: bookInfoIsLoading } = useQuery({
     queryKey: ['book', bookIsbn],
     queryFn: async (): Promise<SearchBook> => {
-      const result = await api.searchBookByIsbn(Number(bookIsbn));
+      const searchResult = await api.searchBookByIsbn(Number(bookIsbn));
+      if (searchResult) return searchResult;
 
-      if (result === null) {
-        alert('데이터 불러오기 실패!');
-        navigate(-1);
-        throw new Error('[BookDetailPage] searchBookByIsbn failed');
-      }
+      const customResult = await api.getCustomBookByBookId(Number(bookIsbn));
+      if (customResult) return customResult;
 
-      return result;
+      alert('데이터 불러오기 실패!');
+      navigate(-1);
+      throw new Error('[BookDetailPage] searchBookByIsbn failed');
     },
   });
-
-  const isRecordedBook = () => {
-    if (isLoading || !myBook || !myBook.id) return false;
-    return true;
-  };
 
   useEffect(() => {
     if (!!bookInfo?.author) {
       setAuthors(splitBookAuthor(bookInfo.author));
     }
   }, [bookInfo?.author]);
+
+  const isRecordedBook = () => {
+    if (isLoading || !myBook || !myBook.id) return false;
+    return true;
+  };
+
+  const openAddModal = () => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+
+    onOpen();
+  };
 
   return (
     <Wrapper>
@@ -64,7 +78,7 @@ function BookDetailPage() {
             <BookTopInfo>
               <ImgContainer>
                 <img src={bookInfo?.image} width={200} />
-                <Button onClick={onOpen}>{isRecordedBook() ? '수정하기' : '저장하기'}</Button>
+                <Button onClick={openAddModal}>{isRecordedBook() ? '수정하기' : '저장하기'}</Button>
               </ImgContainer>
               <BookInfoBox>
                 <BookTitle>{bookInfo?.title}</BookTitle>
@@ -84,10 +98,12 @@ function BookDetailPage() {
                   </p>
                 </BookPublisingInfoTop>
                 <BookPublisingInfoBottom>
-                  <InfoBox>
-                    <p>출간일</p>
-                    <p>{bookInfo?.pubdate}</p>
-                  </InfoBox>
+                  {bookInfo?.pubdate && (
+                    <InfoBox>
+                      <p>출간일</p>
+                      <p>{bookInfo?.pubdate}</p>
+                    </InfoBox>
+                  )}
                   <InfoBox>
                     <p>ISBN</p>
                     <p>{bookInfo?.isbn}</p>
@@ -95,22 +111,25 @@ function BookDetailPage() {
                 </BookPublisingInfoBottom>
 
                 {/* 나의 책 기록 */}
-                {!!myBook?.readingRecord && bookIsbn && (
-                  <BookRecordBox bookRecord={myBook.readingRecord} bookIsbn={bookIsbn} />
+                {!!myBook?.readingRecord && myBook.id && (
+                  <BookRecordBox bookRecord={myBook.readingRecord} bookId={myBook.id} />
                 )}
               </BookInfoBox>
             </BookTopInfo>
-            <BookInfoBottom>
-              <DescriptionTitle>작품 소개</DescriptionTitle>
-              <HorizontalLine margin="0 0 16px"></HorizontalLine>
-              <p>{bookInfo?.description}</p>
-            </BookInfoBottom>
+            {bookInfo?.description && (
+              <BookInfoBottom>
+                <DescriptionTitle>작품 소개</DescriptionTitle>
+                <HorizontalLine margin="0 0 16px"></HorizontalLine>
+                <p>{bookInfo?.description}</p>
+              </BookInfoBottom>
+            )}
             <MemoBox />
+            <ReviewBox />
             {/* 기록 업데이트 모달 */}
             {!!bookIsbn && (
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalAddBook onClose={onClose} bookIsbn={bookIsbn} />
+                <ModalAddBook onClose={onClose} bookInfo={bookInfo} bookIsbn={bookIsbn} />
               </Modal>
             )}
           </>

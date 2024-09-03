@@ -17,17 +17,17 @@ import { queryClient } from '../../main';
 
 interface BookRecordBoxProps {
   bookRecord: ReadingRecord;
-  bookIsbn: string;
+  bookId: string;
 }
 
-function BookRecordBox({ bookRecord, bookIsbn }: BookRecordBoxProps) {
+function BookRecordBox({ bookRecord, bookId }: BookRecordBoxProps) {
   const { recordType, recordDetail } = bookRecord;
 
   // TODO: 알럿 먼저 띄우기
   const deleteRecord = useMutation({
-    mutationFn: () => api.deleteRecordByBookId(Number(bookIsbn)),
+    mutationFn: () => api.deleteRecordByBookId(bookId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['record', bookIsbn] });
+      queryClient.invalidateQueries({ queryKey: ['record', bookId] });
       alert('삭제 성공!');
     },
     onError: () => {

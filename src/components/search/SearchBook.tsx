@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { SearchBook } from '../../shared/interfaces/book.interface';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { textOverflowStyles } from '../../shared/styles/common';
 import { changedMoneyFormat, splitBookAuthor } from '../../shared/utils';
 import { useEffect, useState } from 'react';
@@ -27,13 +27,21 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
     navigate(`/book/${bookInfo.isbn}`);
   };
 
+  const goToSearchPage = (search: string) => {
+    const param = { search };
+    const searchString = createSearchParams(param).toString();
+
+    navigate({
+      pathname: '/search',
+      search: `?${searchString}`,
+    });
+  };
+
   useEffect(() => {
     if (!!bookInfo.author) {
       setAuthors(splitBookAuthor(bookInfo.author));
     }
   }, [bookInfo.author]);
-
-  // TODO: 작가, 출판사 누르면 검색하게 연결
 
   return (
     <BookWrapper key={bookInfo.isbn}>
@@ -50,12 +58,25 @@ function SearchResultBook({ bookInfo }: SearchResultBookProps) {
         <BookAuthor>
           {authors.map((bookAuthor, index) => (
             <span key={index}>
-              <span>{bookAuthor}</span>
+              <span
+                data-type="author"
+                onClick={() => {
+                  goToSearchPage(bookAuthor);
+                }}
+              >
+                {bookAuthor}
+              </span>
               {index !== authors.length - 1 && <span>, </span>}
             </span>
           ))}
         </BookAuthor>
-        <BookPublisher>{bookInfo.publisher}</BookPublisher>
+        <BookPublisher
+          onClick={() => {
+            goToSearchPage(bookInfo.publisher);
+          }}
+        >
+          {bookInfo.publisher}
+        </BookPublisher>
         <BookDesc lines={3} onClick={goToSearchBookDetail}>
           {bookInfo.description}
         </BookDesc>
@@ -118,6 +139,13 @@ const BookAuthor = styled.div`
   line-height: 1.2em;
   font-size: 14px;
   color: var(--sub-text-color-1);
+
+  span[data-type='author'] {
+    &:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--main-text-color);
+    }
+  }
 `;
 
 const BookPublisher = styled.div`
@@ -126,6 +154,11 @@ const BookPublisher = styled.div`
   font-size: 13px;
   color: var(--sub-text-color-2);
   overflow-wrap: break-word;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--main-text-color);
+  }
 `;
 
 const BookDesc = styled.div<TextOverflowStylesParams>`

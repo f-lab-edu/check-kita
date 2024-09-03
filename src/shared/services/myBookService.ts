@@ -5,16 +5,15 @@ import {
   collection,
   query,
   where,
-  getDoc,
   deleteDoc,
   serverTimestamp,
-  limit,
   orderBy,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
-import { INIT_NOT_EXISTS_RECORD } from '../constants';
-import { convertDateMapKey, convertTimestamps } from '../utils';
+import { INIT_NOT_EXISTS_RECORD } from '../constants/constants';
+import { convertDateMapKey, convertTimestamps, setFirebaseQueryPagenation } from '../utils';
+import { PageNationFirebase } from '../interfaces/common.interface';
 
 /**
  * 책 추가하기, 수정하기
@@ -43,45 +42,59 @@ export async function updateMyBook(saveBook: MyBook) {
  * @returns
  */
 export async function getAllMyBooks(
+  userId: string,
   recordType: BookRecordType | 'all' = 'all',
-  count: number = 50
+  pagenationInfo: PageNationFirebase
 ): Promise<MyBook[]> {
-  const q =
-    recordType === 'all'
-      ? query(collection(db, 'myBooks'), orderBy('createdAt'), limit(count))
-      : query(
-          collection(db, 'myBooks'),
-          where('readingRecord.recordType', '==', recordType),
-          limit(count)
-        );
+  try {
+    let baseQuery = query(
+      collection(db, 'myBooks'),
+      where('userId', '==', userId),
+      orderBy('createdAt')
+    );
 
-  const querySnapshot = await getDocs(q);
-  const books: MyBook[] = querySnapshot.docs.map((doc) => ({
-    id: doc.data().id,
-    title: doc.data().title,
-    author: doc.data().author,
-    image: doc.data().image,
-    readingRecord: doc.data().readingRecord,
-  }));
+    // 타입이 있을 경우
+    if (recordType !== 'all')
+      baseQuery = query(baseQuery, where('readingRecord.recordType', '==', recordType));
 
-  return books;
+    baseQuery = setFirebaseQueryPagenation(baseQuery, pagenationInfo);
+
+    const querySnapshot = await getDocs(baseQuery);
+    const books: MyBook[] = querySnapshot.docs.map((doc) => ({
+      userId: doc.data().userId,
+      id: doc.data().id,
+      title: doc.data().title,
+      author: doc.data().author,
+      image: doc.data().image,
+      isbn: doc.data().isbn,
+      createdAt: doc.data().createdAt,
+      readingRecord: doc.data().readingRecord,
+    }));
+
+    return books;
+  } catch (e) {
+    return [];
+  }
 }
 
 /**
  * 책 아이디로 내 책 정보 가져오기
- * @param {number} bookId
+ * @param {number} isbn
  */
-export async function getMyBookInfoByBookId(bookId: number): Promise<MyBook> {
+export async function getMyBookInfoByBookIsbn(userId: string, isbn: number): Promise<MyBook> {
   try {
-    const docRef = doc(db, 'myBooks', String(bookId));
-    const docSnap = await getDoc(docRef);
+    const q = query(
+      collection(db, 'myBooks'),
+      where('userId', '==', userId),
+      where('isbn', '==', isbn)
+    );
 
-    if (!docSnap.exists()) return INIT_NOT_EXISTS_RECORD;
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) return INIT_NOT_EXISTS_RECORD;
 
-    const result = docSnap.data() as MyBook;
-    if (!result) return INIT_NOT_EXISTS_RECORD;
-
-    return convertTimestamps(result);
+    const doc = querySnapshot.docs[0];
+    const data = doc.data() as MyBook;
+    return convertTimestamps(data);
   } catch (e) {
     return INIT_NOT_EXISTS_RECORD;
   }
@@ -92,7 +105,7 @@ export async function getMyBookInfoByBookId(bookId: number): Promise<MyBook> {
  * @param {number} bookId
  * @return {Promise<boolean>}
  */
-export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
+export async function deleteRecordByBookId(bookId: string): Promise<boolean> {
   try {
     await deleteDoc(doc(db, 'myBooks', String(bookId)));
 
@@ -107,7 +120,7 @@ export async function deleteRecordByBookId(bookId: number): Promise<boolean> {
  * @param month
  * @return {Promise<number>}
  */
-export async function getMonthlyRecordCount(month: number): Promise<number> {
+export async function getMonthlyRecordCount(userId: string, month: number): Promise<number> {
   try {
     const year = new Date().getFullYear();
     const startDate = new Date(year, month - 1, 1);
@@ -115,6 +128,7 @@ export async function getMonthlyRecordCount(month: number): Promise<number> {
 
     const q = query(
       collection(db, 'myBooks'),
+      where('userId', '==', userId),
       where('createdAt', '>=', startDate),
       where('createdAt', '<', endDate)
       // OPTIMIZE: myBook 인터페이스 변경 - nested하게 저장한 recordType 바깥으로 빼기
@@ -135,7 +149,10 @@ export async function getMonthlyRecordCount(month: number): Promise<number> {
  * @param month
  * @return {Promise<Map<string, MyBook[]>>}
  */
-export async function getMonthlyRecords(month: number): Promise<Map<string, MyBook[]>> {
+export async function getMonthlyRecords(
+  userId: string,
+  month: number
+): Promise<Map<string, MyBook[]>> {
   try {
     const year = new Date().getFullYear();
     const startDate = new Date(year, month - 1, 1);
@@ -143,6 +160,7 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
 
     const q = query(
       collection(db, 'myBooks'),
+      where('userId', '==', userId),
       where('createdAt', '>=', startDate),
       where('createdAt', '<', endDate)
     );
@@ -153,12 +171,14 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
 
     for (const doc of querySnapshot.docs) {
       const record = {
+        userId: doc.data().userId,
         id: doc.data().id,
         title: doc.data().title,
         author: doc.data().author,
         image: doc.data().image,
         readingRecord: doc.data().readingRecord,
         createdAt: doc.data().createdAt,
+        isbn: doc.data().isbn,
       };
 
       const createdAt = record.createdAt.toDate();
@@ -166,12 +186,13 @@ export async function getMonthlyRecords(month: number): Promise<Map<string, MyBo
 
       if (books.has(recordKey)) {
         const targetDateRecords = books.get(recordKey);
-        targetDateRecords?.push(record);
+        targetDateRecords?.push(convertTimestamps(record));
         targetDateRecords && books.set(recordKey, targetDateRecords);
       } else {
-        books.set(recordKey, [record]);
+        books.set(recordKey, [convertTimestamps(record)]);
       }
     }
+
     return books;
   } catch (e) {
     return new Map();

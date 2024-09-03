@@ -3,28 +3,33 @@ import styled from 'styled-components';
 import ModalUpdateMemo from './ModalUpdateMemo';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import * as api from '../../shared/services/memoService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { queryClient } from '../../main';
 import { Memo } from '../../shared/interfaces/memo.interface';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useAuth } from '../../contexts/AuthContext';
 
 function MemoBox() {
+  const { isAuthenticated, user } = useAuth();
   const { bookIsbn } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showedMemoIndex, setShowedMemoIndex] = useState<number>(-1);
   const [updateTarget, setUpdateTarget] = useState<Memo>();
+  const navigate = useNavigate();
 
   const { data: memos } = useQuery({
     queryKey: ['memos', bookIsbn],
     queryFn: async () => {
-      const result = await api.getMemosByBookId(Number(bookIsbn));
+      if (!user) return;
+
+      const result = await api.getMemosByBookIsbn(user.id, Number(bookIsbn));
 
       return result;
     },
-    enabled: !!bookIsbn,
+    enabled: !!bookIsbn && !!user,
     retry: false,
   });
 
@@ -55,7 +60,17 @@ function MemoBox() {
       <Wrapper>
         <Flex justify={'space-between'}>
           <DescriptionTitle>메모</DescriptionTitle>
-          <Button onClick={onOpen} size="mdIcon" variant="goast">
+          <Button
+            onClick={
+              isAuthenticated
+                ? onOpen
+                : () => {
+                    navigate('/auth');
+                  }
+            }
+            size="mdIcon"
+            variant="goast"
+          >
             <AddIcon />
           </Button>
         </Flex>
@@ -136,7 +151,7 @@ const MemoList = styled.div`
 
 const MemoContainer = styled.div`
   background-color: var(--wrapper-color);
-  padding: 8px;
+  padding: 12px;
   border-radius: 6px;
   display: flex;
   gap: 12px;

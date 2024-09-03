@@ -1,9 +1,10 @@
 import { Timestamp } from 'firebase/firestore';
 
-export interface Memo {
+export interface Review {
   userId: string;
-  bookIsbn: number;
-  memoId: string;
+  bookIsbn: string;
+  reviewId: string;
   content: string;
+  nickname: string;
   createdAt?: Timestamp;
 }

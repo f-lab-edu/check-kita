@@ -3,24 +3,40 @@ import Container from '../../elements/Container';
 import { useQuery } from '@tanstack/react-query';
 import { getAllMyBooks } from '../../shared/services';
 import { match } from 'ts-pattern';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 import { textOverflowStyles } from '../../shared/styles/common';
 import RecordTypeIcon from '../common/RecordTypeIcon';
 import { BookRecordTypeLabel } from '../../shared/enums/book.enum';
 import { Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useState } from 'react';
+import { PageNationFirebase } from '../../shared/interfaces/common.interface';
 
 function RecentBooks() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['myBooks', 'all', 4],
-    queryFn: () => getAllMyBooks('all', 4),
+  const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+  const [pagenationInfo, _] = useState<PageNationFirebase>({
+    action: 'NEXT',
+    count: 4,
+    firstTimestamp: null,
+    lastTimestamp: null,
   });
 
-  const navigate = useNavigate();
+  const { data, isLoading } = useQuery({
+    queryKey: ['myBooks', 'all', 4],
+    queryFn: async () => {
+      if (!user) return;
+
+      return await getAllMyBooks(user.id, 'all', pagenationInfo);
+    },
+  });
 
   const goToBookDetail = (bookIsbn: string) => {
     navigate(`/book/${bookIsbn}`);
   };
+
+  if (!isAuthenticated) return;
 
   return (
     <Wrapper>
@@ -44,11 +60,11 @@ function RecentBooks() {
                       ))}
                     </BookAuthor>
                     <BookRecordTypeBox>
-                      {book.id && (
+                      {book.isbn && (
                         <Button
                           width={'100%'}
                           onClick={() => {
-                            goToBookDetail(String(book.id));
+                            goToBookDetail(String(book.isbn));
                           }}
                         >
                           <RecordTypeIcon
@@ -93,6 +109,7 @@ const ImgSlider = styled.div`
 `;
 
 const BookBox = styled.div`
+  max-width: calc(100% / 4);
   height: fit-content;
   flex: 1 1 100%;
   background-color: var(--wrapper-color);

@@ -2,6 +2,9 @@ import { SetStateAction } from 'jotai';
 import { Dispatch } from 'react';
 import styled from 'styled-components';
 import { match } from 'ts-pattern';
+import imgOneStar from '../../assets/images/img_star_score.svg';
+import imgHalfStar from '../../assets/images/img_star_score_half.svg';
+import imgZeroStar from '../../assets/images/img_star_score_zero.svg';
 
 interface RatingProps {
   score: number;
@@ -36,12 +39,36 @@ function Rating({ score, setScore }: RatingProps) {
     const scoreMinusIndex = score - index;
 
     return match(scoreMinusIndex)
-      .with(0.5, () => <HalfStar key={`half-${index}`} onClick={starClicked} id={String(index)} />)
+      .with(0.5, () => (
+        <Star
+          key={`half-${index}`}
+          onClick={starClicked}
+          id={String(index)}
+          src={imgHalfStar}
+          alt="반점"
+        />
+      ))
       .when(
         (n) => n > 0,
-        () => <OneStar key={`one-${index}`} onClick={starClicked} id={String(index)} />
+        () => (
+          <Star
+            key={`one-${index}`}
+            onClick={starClicked}
+            id={String(index)}
+            src={imgOneStar}
+            alt="일점"
+          />
+        )
       )
-      .otherwise(() => <ZeroStar key={`zero-${index}`} onClick={starClicked} id={String(index)} />);
+      .otherwise(() => (
+        <Star
+          key={`zero-${index}`}
+          onClick={starClicked}
+          id={String(index)}
+          src={imgZeroStar}
+          alt="영점"
+        />
+      ));
   }
 
   return <Wrapper>{Array.from({ length: 5 }).map((_, index) => starScore(score, index))}</Wrapper>;
@@ -57,24 +84,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const Star = styled.div`
+const Star = styled.img`
   width: 25px;
   height: 25px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
-`;
-
-const OneStar = styled(Star)`
-  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/img_star_score.svg');
-`;
-
-const HalfStar = styled(Star)`
-  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/img_star_score_half.svg');
-`;
-const ZeroStar = styled(Star)`
-  background-image: url('${import.meta.env.VITE_APP_IMAGEPATH}/img_star_score_zero.svg');
 `;
 
 export default Rating;

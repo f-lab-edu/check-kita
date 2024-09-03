@@ -1,4 +1,5 @@
-import { AlreadyBook, IngBook, WantBook } from './interfaces/book.interface';
+import { AlreadyBook, IngBook, WantBook } from '../interfaces/book.interface';
+import { PageNationFirebase } from '../interfaces/common.interface';
 
 export const INIT_RECORD_DETAIL = {
   startDate: new Date(),
@@ -7,10 +8,12 @@ export const INIT_RECORD_DETAIL = {
 };
 
 export const INIT_NOT_EXISTS_RECORD = {
+  userId: '',
   id: undefined,
   title: undefined,
   author: undefined,
   image: undefined,
+  isbn: -1,
   readingRecord: undefined,
 };
 
@@ -32,3 +35,18 @@ export const INIT_WANTBOOK: WantBook = {
 };
 
 export const DAYS_OF_THE_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const INIT_SEARCH_BOOK = {
+  title: '',
+  image: '',
+  author: '',
+  publisher: '',
+  isbn: -1,
+};
+
+export const INIT_PAGENATION_INFO: PageNationFirebase = {
+  action: 'NEXT',
+  count: 9,
+  firstTimestamp: null,
+  lastTimestamp: null,
+};
