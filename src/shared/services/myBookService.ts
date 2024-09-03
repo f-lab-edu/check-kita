@@ -8,9 +8,6 @@ import {
   deleteDoc,
   serverTimestamp,
   orderBy,
-  limit,
-  startAfter,
-  endBefore,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
