@@ -12,28 +12,32 @@ import { useAuth } from '../contexts/AuthContext';
 import imgMordCard from '../assets/images/bookcase/img_card.jpg';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { INIT_PAGENATION_INFO } from '../shared/constants/constants';
 import { PageNationFirebase } from '../shared/interfaces/common.interface';
+import { BookRecordType } from '../shared/interfaces/book.interface';
 
 const ITEMS_PER_PAGE = 9;
+const TAB_BOOKTYPE_DATA = {
+  all: 0,
+  already: 1,
+  ing: 2,
+  want: 3,
+};
 
 function BookcasePage() {
   const { isAuthenticated, user } = useAuth();
   const selectedTabStyle = { color: 'white', bg: 'brand.500' };
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [bookType, setBookType] = useState<BookRecordType | 'all'>('all');
   const [pagenationInfo, setPagenationInfo] = useState<PageNationFirebase>(INIT_PAGENATION_INFO);
 
-  const {
-    data: myBooks,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ['myBooks', 'all', currentPage],
+  const { data: myBooks, isLoading } = useQuery({
+    queryKey: ['myBooks', bookType, currentPage],
     queryFn: async () => {
       if (!user) return [];
-      const result = await getAllMyBooks(user.id, 'all', pagenationInfo);
+      const result = await getAllMyBooks(user.id, bookType, pagenationInfo);
 
       if (result.length) {
         setPagenationInfo({
@@ -54,13 +58,14 @@ function BookcasePage() {
   };
 
   const handlePrevPage = () => {
-    setPagenationInfo({ ...pagenationInfo, action: 'PREV', count: 9 });
+    setPagenationInfo({ ...pagenationInfo, action: 'PREV' });
     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
-  useEffect(() => {
-    refetch();
-  }, [currentPage]);
+  const handleChangeBookType = (bookType: BookRecordType | 'all') => {
+    setPagenationInfo(INIT_PAGENATION_INFO);
+    setBookType(bookType);
+  };
 
   return (
     <Wrapper>
@@ -73,12 +78,40 @@ function BookcasePage() {
             .with(true, () => <Loading />)
             .otherwise(() => (
               <>
-                <Tabs variant="soft-rounded">
+                <Tabs variant="soft-rounded" index={TAB_BOOKTYPE_DATA[bookType]}>
                   <TabList>
-                    <Tab _selected={selectedTabStyle}>전체</Tab>
-                    <Tab _selected={selectedTabStyle}>읽은 책</Tab>
-                    <Tab _selected={selectedTabStyle}>읽고 있는 책</Tab>
-                    <Tab _selected={selectedTabStyle}>읽고 싶은 책</Tab>
+                    <Tab
+                      _selected={selectedTabStyle}
+                      onClick={() => {
+                        handleChangeBookType('all');
+                      }}
+                    >
+                      전체
+                    </Tab>
+                    <Tab
+                      _selected={selectedTabStyle}
+                      onClick={() => {
+                        handleChangeBookType('already');
+                      }}
+                    >
+                      읽은 책
+                    </Tab>
+                    <Tab
+                      _selected={selectedTabStyle}
+                      onClick={() => {
+                        handleChangeBookType('ing');
+                      }}
+                    >
+                      읽고 있는 책
+                    </Tab>
+                    <Tab
+                      _selected={selectedTabStyle}
+                      onClick={() => {
+                        handleChangeBookType('want');
+                      }}
+                    >
+                      읽고 싶은 책
+                    </Tab>
                   </TabList>
                 </Tabs>
                 <Flex flexDirection={'column'} gap={'12px'} alignItems={'center'}>
