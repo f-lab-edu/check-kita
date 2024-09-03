@@ -19,15 +19,22 @@ export interface SelectedBookInfo {
   image: string;
 }
 
+//FIXME: 커스텀 책
 export interface MyBook {
   id?: string;
-  isbn: number;
-  userId: string;
+  isbn: number; // 필요?
   title?: string;
   author?: string[];
   image?: string;
+
+  //FIXME: 분리하기
+  // 레코드
+  // 유저가 저장한 정보
+  // 레코드 아이디
+  userId: string;
   readingRecord?: ReadingRecord;
   createdAt?: Timestamp;
+  // bookIsbn - customBook에서는 Id?
 }
 
 export type BookRecordType = 'already' | 'ing' | 'want';

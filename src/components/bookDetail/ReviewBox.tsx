@@ -126,7 +126,7 @@ function ReviewBox() {
           </DescriptionTitle>
           <HorizontalLine margin="0 0 16px"></HorizontalLine>
 
-          {!!reviews &&
+          {!!reviews?.length &&
             reviews.map((review, index) => (
               <ReviewContainer key={index}>
                 <Flex

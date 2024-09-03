@@ -15,7 +15,7 @@ import {
 import { db } from '../firebase';
 import { BookRecordType, MyBook } from '../interfaces/book.interface';
 import { INIT_NOT_EXISTS_RECORD } from '../constants/constants';
-import { convertDateMapKey, convertTimestamps } from '../utils';
+import { convertDateMapKey, convertTimestamps, setFirebaseQueryPagenation } from '../utils';
 import { PageNationFirebase } from '../interfaces/common.interface';
 
 /**
@@ -60,19 +60,7 @@ export async function getAllMyBooks(
     if (recordType !== 'all')
       baseQuery = query(baseQuery, where('readingRecord.recordType', '==', recordType));
 
-    if (pagenationInfo.action === 'PREV' && pagenationInfo.firstTimestamp) {
-      baseQuery = query(
-        baseQuery,
-        endBefore(pagenationInfo.firstTimestamp),
-        limit(pagenationInfo.count)
-      );
-    } else if (pagenationInfo.action === 'NEXT') {
-      baseQuery = query(
-        baseQuery,
-        startAfter(pagenationInfo.lastTimestamp),
-        limit(pagenationInfo.count)
-      );
-    }
+    baseQuery = setFirebaseQueryPagenation(baseQuery, pagenationInfo);
 
     const querySnapshot = await getDocs(baseQuery);
     const books: MyBook[] = querySnapshot.docs.map((doc) => ({

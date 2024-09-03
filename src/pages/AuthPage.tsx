@@ -27,7 +27,7 @@ function AuthPage() {
     <Wrapper>
       <MainContainer>
         <ImgWrapper>
-          <img src={libraryImg} alt="이미지" width={400} />
+          <img src={libraryImg} alt="library image" width={400} />
           <TextContainer>
             <span>HAVE A BOOK DAY!</span>
             <span>

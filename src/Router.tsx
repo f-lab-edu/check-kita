@@ -42,7 +42,7 @@ const router = createBrowserRouter([
       // 나의 기록
       {
         path: 'my',
-        element: <ProtectedRoute element={<MyPage />}></ProtectedRoute>,
+        element: <ProtectedRoute element={<MyPage />} />,
       },
       {
         path: 'auth',

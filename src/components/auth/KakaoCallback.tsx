@@ -35,7 +35,7 @@ function KakaoCallback() {
       })
       .catch((e) => {
         goToBack(false);
-        throw new Error(e);
+        throw e;
       });
   }, [code]);
 

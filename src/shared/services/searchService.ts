@@ -31,7 +31,6 @@ export const searchBooks = (
     })
     .then((res) => {
       if (res.status === 200) {
-        console.log(res);
         return res.data.items;
       }
     })

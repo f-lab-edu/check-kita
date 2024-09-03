@@ -17,7 +17,6 @@ export function getKakaoToken(code: string) {
     },
   })
     .then((res) => {
-      console.log('getKaKaoToken', res);
       return res.data.access_token;
     })
     .catch((e) => {
@@ -97,7 +96,6 @@ export function getNaverUserInfo(token: string): Promise<User> {
     },
   })
     .then((res) => {
-      console.log('getNaverUser', res);
       const {
         data: {
           response: { id, nickname, profile_image },
