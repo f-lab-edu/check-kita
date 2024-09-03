@@ -2,44 +2,42 @@
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 100;
-  src: url('assets/fonts/pretendard/Pretendard-Thin.woff') format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-Thin.woff') format('woff');
 }
 
 @font-face {
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 200;
-  src: url('assets/fonts/pretendard/Pretendard-ExtraLight.woff') format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-ExtraLight.woff') format('woff');
 }
 
 @font-face {
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 300;
-  src: url('assets/fonts/pretendard/Pretendard-Light.woff') format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-Light.woff') format('woff');
 }
 
 @font-face {
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 400;
-  src: url('assets/fonts/pretendard/Pretendard-Regular.woff') format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-Regular.woff') format('woff');
 }
 
 @font-face {
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 500;
-  src: url('../../assets/fonts/pretendard/Pretendard-Medium.woff')
-    format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-Medium.woff') format('woff');
 }
 
 @font-face {
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 600;
-  src: url('../../assets/fonts/pretendard/Pretendard-SemiBold.woff')
-    format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-SemiBold.woff') format('woff');
 }
 
 @font-face {
@@ -53,8 +51,7 @@
   font-family: 'pretendard';
   font-style: normal;
   font-weight: 800;
-  src: url('../../assets/fonts/pretendard/Pretendard-ExtraBold.woff')
-    format('woff');
+  src: url('../../assets/fonts/pretendard/Pretendard-ExtraBold.woff') format('woff');
 }
 
 @font-face {
@@ -63,3 +60,15 @@
   font-weight: 900;
   src: url('../../assets/fonts/pretendard/Pretendard-Black.woff') format('woff');
 }
+
+@font-face {
+  font-family: 'Galmuri14';
+  src: url('../../assets/fonts/Galmuri14/Galmuri14.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'HakgyoansimWooju';
+  src: url('../../assets/fonts/HakgyoansimWoojuR/HakgyoansimWoojuR.ttf') format('truetype');
+}
+
+/* TODO: font variables로 관리하기 */

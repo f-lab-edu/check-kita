@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import SearchIcon from '@mui/icons-material/Search';
+import { useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
-function Header() {
-  const location = useLocation();
-
+function SearchBox() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
@@ -30,28 +29,45 @@ function Header() {
 
   return (
     <Wrapper>
-      헤더
+      <SearchIcon fontSize="large" />
       <input
         value={search}
+        placeholder="Search Books"
         onChange={(e) => {
           setSearch(e.target.value);
         }}
         onKeyDown={enterPressHandle}
-        placeholder={
-          location.pathname.includes('search')
-            ? '등록할 책 검색하기'
-            : '나의 책 검색하기'
-        }
       />
-      {/* TODO: 실시간 검색 결과 팝오버로 보여주기 */}
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  width: 100%;
-  border: 10px solid blue;
+  margin-top: 30px;
+  width: 50%;
+  padding: 8px 16px;
+  border-radius: 17.712px;
+  background: rgba(255, 255, 255, 0.4);
   display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & > input {
+    width: 100%;
+    height: 35px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #000;
+    font-size: 28px;
+    line-height: normal;
+    color: var(--main-text-color);
+
+    &::placeholder {
+      color: var(--main-text-color);
+      opacity: 0.7;
+    }
+  }
 `;
 
-export default Header;
+export default SearchBox;

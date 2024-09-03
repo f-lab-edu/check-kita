@@ -1,9 +1,11 @@
 @import './shared/styles/_reset.css';
 @import './shared/styles/variables.css';
 @import './shared/styles/font.css';
+@import './shared/styles/react-calendar.scss';
 
 * {
   box-sizing: border-box;
-  font-family: 'pretendard', sans-serif !important;
+  font-family: 'pretendard', sans-serif;
   word-break: keep-all;
+  color: var(--main-text-color);
 }

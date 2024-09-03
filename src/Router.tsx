@@ -2,13 +2,22 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from './App';
 import BookcasePage from './pages/BookcasePage';
 import SearchBookPage from './pages/SearchBookPage';
-import SearchBookDetailPage from './pages/SearchBookDetailPage';
-import MyBookPage from './pages/MyBookPage';
+import BookDetailPage from './pages/BookDetailPage';
 import MyPage from './pages/MyPage';
+import AuthPage from './pages/AuthPage';
+import KakaoCallback from './components/auth/KakaoCallback';
+import NaverCallback from './components/auth/NaverCallback';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/common/ProtectedRoute';
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    ),
     children: [
       {
         path: '',
@@ -18,7 +27,6 @@ const router = createBrowserRouter([
       {
         path: 'bookcase',
         element: <BookcasePage />,
-        children: [{ path: ':bookId', element: <MyBookPage /> }],
       },
 
       // 도서 검색
@@ -28,25 +36,25 @@ const router = createBrowserRouter([
       },
       {
         path: 'book/:bookIsbn',
-        element: <SearchBookDetailPage />,
+        element: <BookDetailPage />,
       },
 
-      // TODO: 아래 라우터 구조 변경될 가능성이 있음
       // 나의 기록
       {
         path: 'my',
-        element: <MyPage />,
-        children: [
-          {
-            path: 'home',
-          },
-          {
-            path: 'library/:libraryType',
-          },
-          {
-            path: 'memo',
-          },
-        ],
+        element: <ProtectedRoute element={<MyPage />} />,
+      },
+      {
+        path: 'auth',
+        element: <AuthPage />,
+      },
+      {
+        path: 'kakao/callback',
+        element: <KakaoCallback />,
+      },
+      {
+        path: 'naver/callback',
+        element: <NaverCallback />,
       },
     ],
   },
