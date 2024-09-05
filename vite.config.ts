@@ -14,7 +14,7 @@ export default defineConfig({
         ws: true,
       },
       '/naver/token': {
-        target: 'https://nid.naver.com/oauth2.0/token	',
+        target: 'https://nid.naver.com/oauth2.0/token',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/naver\/token/, ''),
         secure: false,
