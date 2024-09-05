@@ -8,6 +8,22 @@
       "source": "/api/search-book-by-isbn",
       "destination": "https://openapi.naver.com/v1/search/book_adv.xml"
     },
+    {
+      "source": "/naver/get-user",
+      "destination": "https://openapi.naver.com/v1/nid/me"
+    },
+    {
+      "source": "/naver/token",
+      "destination": "https://nid.naver.com/oauth2.0/token"
+    },
+    {
+      "source": "/kakao/get-user",
+      "destination": "https://kapi.kakao.com/v2/user/me"
+    },
+    {
+      "source": "/kakao/token",
+      "destination": "https://kauth.kakao.com/oauth/token"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
